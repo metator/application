@@ -3,6 +3,7 @@ class Attribute
 {
     protected $name;
     protected $options;
+    protected $price_modifiers=array();
 
     function __construct($params=array())
     {
@@ -19,9 +20,12 @@ class Attribute
         $this->name = $name;
     }
 
-    function addOption($option)
+    function addOption($option, $params=array())
     {
         $this->options[] = $option;
+        if(isset($params['price_modifier'])) {
+            $this->price_modifiers[$option] = $params['price_modifier'];
+        }
     }
 
     function options()
@@ -45,5 +49,19 @@ class Attribute
     function value()
     {
         return $this->value;
+    }
+
+    function modifyPrice($price)
+    {
+        if(!isset($this->price_modifiers[$this->value()])) {
+            return $price;
+        }
+        $price_modifier = $this->price_modifiers[$this->value()];
+        return $price_modifier->modify($price);
+    }
+
+    function hasPriceModifier()
+    {
+        return isset($this->price_modifiers[$this->value()]);
     }
 }
