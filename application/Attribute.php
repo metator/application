@@ -66,6 +66,11 @@ class Attribute
         return !in_array($value, $this->options);
     }
 
+    function hasOption($option)
+    {
+        return in_array($option, $this->options);
+    }
+
     function value()
     {
         return $this->value;
@@ -80,8 +85,20 @@ class Attribute
         return $price_modifier->modify($price);
     }
 
+    /**
+     * Whether or not this attribute is going to modify the price based on the value selected.
+     * @return bool
+     */
     function hasPriceModifier()
     {
         return isset($this->price_modifiers[$this->value()]);
+    }
+
+    function priceModifierForOption($option)
+    {
+        if(!isset($this->price_modifiers[$option])) {
+            return false;
+        }
+        return $this->price_modifiers[$option];
     }
 }

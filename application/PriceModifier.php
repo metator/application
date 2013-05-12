@@ -31,8 +31,11 @@ class PriceModifier
         return $price;
     }
 
-    function flatFee($fee)
+    function flatFee($fee=null)
     {
+        if(is_null($fee)) {
+            return $this->flat_fee;
+        }
         $this->flat_fee = $fee;
     }
 

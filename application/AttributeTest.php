@@ -25,11 +25,24 @@ class AttributeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array(), $attribute->options(), 'should have no options');
     }
 
+    function testShouldNotHaveOption()
+    {
+        $attribute = new Attribute;
+        $this->assertFalse($attribute->hasOption('foo'), 'should not have option');
+    }
+
     function testShouldAddOption()
     {
         $attribute = new Attribute;
         $attribute->addOption('red');
         $this->assertEquals(array('red'),$attribute->options(),'should add option');
+    }
+
+    function testShouldHaveOption()
+    {
+        $attribute = new Attribute;
+        $attribute->addOption('foo');
+        $this->assertTrue($attribute->hasOption('foo'), 'should have option');
     }
 
     function testShouldAddMultipleOptions()
@@ -75,6 +88,22 @@ class AttributeTest extends PHPUnit_Framework_TestCase
         $attribute->setValue('red');
         $price = $attribute->modifyPrice(5);
         $this->assertEquals(5, $price, 'should not modify price');
+    }
+
+    function testShouldNotHavePriceModifierOption()
+    {
+        $attribute = new Attribute;
+        $attribute->addOption('red');
+        $this->assertFalse($attribute->priceModifierForOption('red'), 'should not have flat fee for option');
+    }
+
+    function testShouldHavePriceModifierForOption()
+    {
+        $attribute = new Attribute;
+        $attribute->addOption('red', array(
+            'flat_fee'=>5
+        ));
+        $this->assertEquals(5, $attribute->priceModifierForOption('red')->flatFee(), 'should have flat fee for option');
     }
 
     function testShouldModifyPriceFlatFee()
