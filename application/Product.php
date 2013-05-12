@@ -102,43 +102,44 @@ class Product
             $attribute = new Attribute(array('name'=>$attribute));
         }
 
-        // if $params['options'] are set loop over them and add them to the attribute, and also see if there are price
-        // modifiers for each option, if so create them & inject them into the product.
-        if(is_array($params) && isset($params['options']) && is_array($params['options'])) {
-            foreach($params['options'] as $optionKey=>$optionValue) {
+        // if there are no $params['options'] set, just add the Attribute
+        if(!is_array($params) || !isset($params['options']) || !is_array($params['options'])) {
+            $this->attributes[] = $attribute;
+            return;
+        }
 
-                // there are no price modifiers, just add a simple option
-                if(is_string($optionValue)) {
-                    $attribute->addOption($optionValue);
-                    continue;
-                }
+        //  we need to add options (ex. "red", "blue") and possibly price modifiers
+        foreach($params['options'] as $optionKey=>$optionValue) {
 
-                // there are price modifiers, create them & inject them into the product
-                $this->addOptionToAttribute($attribute, $optionKey, $optionValue);
+            // there are no price modifiers, just add a simple option
+            if(is_string($optionValue)) {
+                $attribute->addOption($optionValue);
+                continue;
             }
+
+            // there are price modifiers, create them & inject them into the product
+            $attribute->addOption($optionKey);
+            $attributeName = $attribute->name();
+            $this->addPriceModifiersForOption($attributeName, $optionKey, $optionValue);
         }
 
         $this->attributes[] = $attribute;
-        return;
     }
 
-    function addOptionToAttribute($attribute, $optionKey, $optionValue)
+    function addPriceModifiersForOption($attributeName, $value, $priceModifiers)
     {
-        $attribute->addOption($optionKey);
-        $attributeName = $attribute->name();
-
-        if(isset($optionValue['flat_fee'])) {
+        if(isset($priceModifiers['flat_fee'])) {
             $price_modifier = new PriceModifier(array(
-                'flat_fee'=>$optionValue['flat_fee']
+                'flat_fee'=>$priceModifiers['flat_fee']
             ));
-            $this->price_modifiers[$attributeName][$optionKey] = $price_modifier;
+            $this->price_modifiers[$attributeName][$value] = $price_modifier;
         }
 
-        if(isset($optionValue['percentage'])) {
+        if(isset($priceModifiers['percentage'])) {
             $price_modifier = new PriceModifier(array(
-                'percentage'=>$optionValue['percentage']
+                'percentage'=>$priceModifiers['percentage']
             ));
-            $this->price_modifiers[$attributeName][$optionKey] = $price_modifier;
+            $this->price_modifiers[$attributeName][$value] = $price_modifier;
         }
     }
 
