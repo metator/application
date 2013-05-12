@@ -23,8 +23,17 @@ class Attribute
     function addOption($option, $params=array())
     {
         $this->options[] = $option;
-        if(isset($params['price_modifier'])) {
-            $this->price_modifiers[$option] = $params['price_modifier'];
+        if(isset($params['flat_fee'])) {
+            $price_modifier = new PriceModifier(array(
+                'flat_fee'=>$params['flat_fee']
+            ));
+            $this->price_modifiers[$option] = $price_modifier;
+        }
+        if(isset($params['percentage'])) {
+            $price_modifier = new PriceModifier(array(
+                'percentage'=>$params['percentage']
+            ));
+            $this->price_modifiers[$option] = $price_modifier;
         }
     }
 

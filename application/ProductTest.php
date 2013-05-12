@@ -110,9 +110,7 @@ class ProductTest extends PHPUnit_Framework_TestCase
             'name'=>'Color'
         ));
         $attribute->addOption('red', array(
-            'price_modifier'=>new PriceModifier(array(
-                'flat_fee'=>5
-            ))
+            'flat_fee'=>5
         ));
         $product->addAttribute($attribute);
         $product->attribute('Color')->setValue('red');
@@ -130,9 +128,7 @@ class ProductTest extends PHPUnit_Framework_TestCase
             'name'=>'Color'
         ));
         $color->addOption('red', array(
-            'price_modifier'=>new PriceModifier(array(
-                'flat_fee'=>5
-            ))
+            'flat_fee'=>5
         ));
 
         // add "size" attribute
@@ -140,9 +136,7 @@ class ProductTest extends PHPUnit_Framework_TestCase
             'name'=>'Size'
         ));
         $size->addOption('large', array(
-            'price_modifier'=>new PriceModifier(array(
-                'flat_fee'=>5
-            ))
+            'flat_fee'=>5
         ));
         $product->addAttribute($color);
         $product->addAttribute($size);
