@@ -226,6 +226,18 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(5, $product->priceModifierFor('Color','red')->flatFee(), 'should get flat fee when using attribute object');
     }
 
+    function testShouldAddMarkupToExistingAttribute()
+    {
+        $product = new Product;
+        $product->addAttribute('color',array(
+            'options'=>array('red')
+        ));
+        $product->addPriceModifiersForOption('color','red',array(
+           'percentage'=>5
+        ));
+        $this->assertEquals(5, $product->priceModifierFor('color','red')->percentage(), 'should add markup to existing attribute');
+    }
+
     function testShouldNotModifyPrice()
     {
         $product = new Product;

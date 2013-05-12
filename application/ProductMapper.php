@@ -22,7 +22,7 @@ class ProductMapper
         ));
         $product_id = $this->db->lastInsertId();
         $this->associateAttributeToProduct($product_id, $product->attributes());
-        //$this->savePriceModifiers($product_id, $product);
+        $this->savePriceModifiers($product_id, $product);
         return $product_id;
     }
 
@@ -50,12 +50,11 @@ class ProductMapper
     {
         foreach($product->attributes() as $attribute) {
             foreach($attribute->options() as $option) {
-                $n = $attribute->name();
                 $this->db->insert('product_attribute_pricemodifiers',array(
                     'product_id'=>$product_id,
                     'attribute_id'=>$attribute->id(),
                     'attribute_option_id'=>$attribute->optionId($option),
-                    'flat_fee'=>$product->priceModifierFor($attribute->name(), $option)->flatFee()
+                    'flat_fee'=>$product->hasPriceModifier('color',$option) ? $product->priceModifierFor($attribute->name(), $option)->flatFee() : 0
                 ));
             }
         }
@@ -70,7 +69,7 @@ class ProductMapper
         $data = $select->query()->fetch();
         $product = new Product($data);
         $this->loadAttributes($product);
-        //$this->loadPriceModifiers($product);
+        $this->loadPriceModifiers($product);
         return $product;
     }
 
@@ -93,7 +92,12 @@ class ProductMapper
                 $select = $this->db->select()
                     ->from('product_attribute_pricemodifiers',array('flat_fee','percentage'))
                     ->where('attribute_option_id=?',$attribute->optionId($option));
-                echo $select;
+                $row = $select->query()->fetch();
+
+                $product->addPriceModifiersForOption($attribute->name(), $option, array(
+                    'flat_fee'=>$row['flat_fee'],
+                    'percentage'=>$row['percentage']
+                ));
 
             }
         }

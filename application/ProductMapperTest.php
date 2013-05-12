@@ -66,16 +66,14 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array('blue','red'), $loaded_product->attribute('color')->options(), 'should save attribute options');
     }
 
-    function testShouldSaveConfigurableAttribute()
+    function testShouldSaveConfigurableAttributeFlatFee()
     {
-        return $this->markTestIncomplete();
         $product = new Product(array('name'=>'widget'));
 
         // add "color" attribute
         $product->addAttribute('color',array(
             'options'=>array(
-                'red' => array('flat_fee'=>5),
-                'blue' => array('percentage'=>10)
+                'red' => array('flat_fee'=>5)
             )
         ));
 
@@ -89,6 +87,5 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
 
         $new_product = $product_mapper->load($id);
         $this->assertEquals(5,$new_product->priceModifierFor('color','red')->flatFee(), 'should save price modifier');
-        $this->assertEquals(10,$new_product->priceModifierFor('color','blue')->percentage(), 'should save price modifier');
     }
 }
