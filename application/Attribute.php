@@ -68,12 +68,21 @@ class Attribute
         return $this->options;
     }
 
-    function setValue($value)
+    function hasOption($option)
     {
-        if($this->isInvalidValue($value)) {
-            throw new Exception('Invalid value for attribute');
+        return in_array($option, $this->options);
+    }
+
+    function modifyPrice($selectedOption, $price)
+    {
+        if($this->isInvalidValue($selectedOption)) {
+            throw new Exception('Invalid value for $selectedOption');
         }
-        $this->value = $value;
+        if(!isset($this->price_modifiers[$selectedOption])) {
+            return $price;
+        }
+        $price_modifier = $this->price_modifiers[$selectedOption];
+        return $price_modifier->modify($price);
     }
 
     function isInvalidValue($value)
@@ -81,32 +90,14 @@ class Attribute
         return !in_array($value, $this->options);
     }
 
-    function hasOption($option)
-    {
-        return in_array($option, $this->options);
-    }
-
-    function value()
-    {
-        return $this->value;
-    }
-
-    function modifyPrice($price)
-    {
-        if(!isset($this->price_modifiers[$this->value()])) {
-            return $price;
-        }
-        $price_modifier = $this->price_modifiers[$this->value()];
-        return $price_modifier->modify($price);
-    }
-
     /**
-     * Whether or not this attribute is going to modify the price based on the value selected.
+     * Whether or not this attribute is going to modify the price based on the selected option.
+     * @param string $selectedOption the name of the selected option
      * @return bool
      */
-    function hasPriceModifier()
+    function hasPriceModifier($selectedOption)
     {
-        return isset($this->price_modifiers[$this->value()]);
+        return isset($this->price_modifiers[$selectedOption]);
     }
 
     function priceModifierForOption($option)

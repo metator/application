@@ -113,6 +113,29 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($product->hasAttribute('color'),'should add attribute by string');
     }
 
+    function testShouldHaveValueForAttribute()
+    {
+        $product = new Product;
+        $product->addAttribute('color');
+        $product->setAttributeValue('color','red');
+        $this->assertEquals('red',$product->attributeValue('color'),'should set attribute value');
+    }
+
+    function testShouldHaveDifferentValuesForSameAttributeTwoProducts()
+    {
+        $product1 = new Product;
+        $product2 = new Product;
+        $attribute = new Attribute(array(
+            'name'=>'color'
+        ));
+        $product1->addAttribute($attribute);
+        $product2->addAttribute($attribute);
+        $product1->setAttributeValue('color','red');
+        $product2->setAttributeValue('color','blue');
+        $this->assertEquals('red',$product1->attributeValue('color'),'should have different values for same attribute different products');
+        $this->assertEquals('blue',$product2->attributeValue('color'),'should have different values for same attribute different products');
+    }
+
     function testShouldAddAttributeOptionsByArray()
     {
         $product = new Product;
@@ -134,7 +157,7 @@ class ProductTest extends PHPUnit_Framework_TestCase
             'flat_fee'=>5
         ));
         $product->addAttribute($attribute);
-        $product->attribute('Color')->setValue('red');
+        $product->setAttributeValue('Color','red');
         $this->assertEquals(10, $product->price(), 'should modify price');
     }
 
@@ -161,8 +184,8 @@ class ProductTest extends PHPUnit_Framework_TestCase
         ));
         $product->addAttribute($color);
         $product->addAttribute($size);
-        $product->attribute('Color')->setValue('red');
-        $product->attribute('Size')->setValue('large');
+        $product->setAttributeValue('Color','red');
+        $product->setAttributeValue('Size','large');
         $this->assertEquals(15, $product->price(), 'should modify price with multiple attributes');
     }
 

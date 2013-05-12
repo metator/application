@@ -77,39 +77,18 @@ class AttributeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array('red','blue','green'),$attribute->options(),'should add multiple options');
     }
 
-    function testShouldSetValue()
-    {
-        $attribute = new Attribute;
-        $attribute->addOption('red');
-        $attribute->addOption('blue');
-        $attribute->setValue('red');
-        $this->assertEquals('red',$attribute->value(),'should set value');
-    }
-
     function testShouldNotHavePriceModifier()
     {
         $attribute = new Attribute;
         $attribute->addOption('red');
-        $attribute->setValue('red');
-        $this->assertFalse($attribute->hasPriceModifier(), 'should not have price modifier');
-    }
-
-    function testShouldHavePriceModifier()
-    {
-        $attribute = new Attribute;
-        $attribute->addOption('red', array(
-            'flat_fee'=>5
-        ));
-        $attribute->setValue('red');
-        $this->assertTrue($attribute->hasPriceModifier(), 'should have price modifier');
+        $this->assertFalse($attribute->hasPriceModifier('red'), 'should not have price modifier');
     }
 
     function testShouldNotModifyPrice()
     {
         $attribute = new Attribute;
         $attribute->addOption('red');
-        $attribute->setValue('red');
-        $price = $attribute->modifyPrice(5);
+        $price = $attribute->modifyPrice('red',5);
         $this->assertEquals(5, $price, 'should not modify price');
     }
 
@@ -135,8 +114,7 @@ class AttributeTest extends PHPUnit_Framework_TestCase
         $attribute->addOption('red', array(
             'flat_fee'=>5
         ));
-        $attribute->setValue('red');
-        $price = $attribute->modifyPrice(5);
+        $price = $attribute->modifyPrice('red',5);
         $this->assertEquals(10, $price, 'should modify price by flat fee');
     }
 
@@ -146,8 +124,7 @@ class AttributeTest extends PHPUnit_Framework_TestCase
         $attribute->addOption('red', array(
             'percentage'=>10
         ));
-        $attribute->setValue('red');
-        $price = $attribute->modifyPrice(10);
+        $price = $attribute->modifyPrice('red',10);
         $this->assertEquals(11, $price, 'should modify price by percentage');
     }
 
@@ -166,7 +143,7 @@ class AttributeTest extends PHPUnit_Framework_TestCase
     function testShouldDisallowInvalidValue()
     {
         $attribute = new Attribute;
-        $attribute->setValue('invalid');
+        $attribute->modifyPrice('invalid',null);
     }
 
 }

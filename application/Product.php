@@ -8,6 +8,7 @@ class Product
 {
     protected $name;
     protected $attributes = array();
+    protected $attribute_values = array();
 
     function __construct($params=array())
     {
@@ -35,7 +36,8 @@ class Product
     {
         $price = $this->price;
         foreach($this->attributes() as $attribute) {
-            $price = $attribute->modifyPrice($price);
+            $value = $this->attributeValue($attribute->name());
+            $price = $attribute->modifyPrice($value,$price);
         }
         return $price;
     }
@@ -133,6 +135,16 @@ class Product
             }
         }
         throw new Exception('This product does not have the requested attribute');
+    }
+
+    function attributeValue($attribute)
+    {
+        return $this->attribute_values[$attribute];
+    }
+
+    function setAttributeValue($attribute,$value)
+    {
+        $this->attribute_values[$attribute] = $value;
     }
 
     /**
