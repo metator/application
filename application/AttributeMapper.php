@@ -55,6 +55,7 @@ class AttributeMapper
         $result = $select->query();
         while($data = $result->fetch()) {
             $attribute->addOption($data['name']);
+            $attribute->setOptionId($data['name'], $data['id']);
         }
     }
 }
