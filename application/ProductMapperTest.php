@@ -30,9 +30,35 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('widget', $new_product->name(), 'should save name');
     }
 
-    function testShouldSaveAttributes()
+    function testShouldSaveAttribute()
     {
         return $this->markTestIncomplete();
+        $product = new Product(array('name'=>'widget'));
+        $product->addAttribute('color');
+
+        // save product !
+        $product_mapper = new ProductMapper($this->db);
+        $id = $product_mapper->save($product);
+
+        $loaded_product = $product_mapper->load($id);
+        $this->assertTrue( $loaded_product->hasAttribute('color'), 'should save attribute');
+    }
+
+    function testShouldSaveAttributeOptions()
+    {
+        return $this->markTestIncomplete();
+
+        $product = new Product(array('name'=>'widget'));
+        $product->addAttribute('color',array(
+            'options'=>array('red','blue')
+        ));
+
+        // save product !
+        $product_mapper = new ProductMapper($this->db);
+        $id = $product_mapper->save($product);
+
+        $loaded_product = $product_mapper->load($id);
+        $this->assertEquals(array('red','blue'), $loaded_product->attribute('color')->options(), 'should save attribute options');
     }
 
     function testShouldSaveConfigurableAttribute()
