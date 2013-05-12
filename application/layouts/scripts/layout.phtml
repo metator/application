@@ -30,6 +30,44 @@
             padding-top:10px;
             padding-bottom:10px;
         }
+        .zend_form{
+            background:#fff;
+            width:460px;
+            padding:0;
+            overflow:auto;
+        }
+
+        .zend_form dt{
+            padding:0;
+            clear:both;
+            width:30%;
+            float:left;
+            text-align:right;
+            margin:5px 5px 5px 0;
+        }
+
+        .zend_form dd{
+            padding:0;
+            float:left;
+            width:68%;
+            margin:5px 2px 5px 0;
+        }
+
+        .zend_form p{
+            padding:0;
+            margin:0;
+        }
+
+        .zend_form input, .zend_form textarea{
+            margin:0 0 2px 0;
+            padding:0;
+        }
+
+        .submit{
+            float:right;
+        }
+
+        .required:before{content:'*'}
     </style>
 </head>
 <body>
@@ -59,33 +97,11 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span3">
-            <div class="well sidebar-nav">
-                <ul class="nav nav-list">
-                    <li class="nav-header">Sidebar</li>
-                    <li class="active"><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li class="nav-header">Sidebar</li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li class="nav-header">Sidebar</li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                </ul>
-            </div><!--/.well -->
+            <?php echo $this->layout()->navigation ?>
         </div><!--/span-->
         <div class="span9">
-
             <?php echo $this->layout()->splash ?>
-
             <?php echo $this->layout()->content ?>
-
         </div><!--/span-->
     </div><!--/row-->
 

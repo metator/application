@@ -10,5 +10,6 @@ class IndexController extends Zend_Controller_Action
 
         $this->render('index','splash');
         $this->render('product/list','default',true);
+        $this->render('navigation','navigation',true);
     }
 }
