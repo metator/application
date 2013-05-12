@@ -96,17 +96,23 @@ class Product
             throw new Exception('You may not add an attribute twice');
         }
 
-        // string/array factory - create the object & inject it w/ price modifiers
+        // if $attribute is a string, turn it into an object
         if(is_string($attribute)) {
             $attribute = new Attribute(array('name'=>$attribute));
         }
 
+        // if $params['options'] are set loop over them and add them to the attribute, and also see if there are price
+        // modifiers for each option, if so create them & inject them into the product.
         if(is_array($params) && isset($params['options']) && is_array($params['options'])) {
             foreach($params['options'] as $optionKey=>$optionValue) {
+
+                // there are no price modifiers, just add a simple option
                 if(is_string($optionValue)) {
                     $attribute->addOption($optionValue);
                     continue;
                 }
+
+                // there are price modifiers, create them & inject them into the product
                 $this->addOptionToAttribute($attribute, $optionKey, $optionValue);
             }
         }
