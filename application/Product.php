@@ -174,7 +174,7 @@ class Product
         if($this->attribute($attribute)->isInvalidValue($selectedOption)) {
             throw new Exception('Invalid value for $selectedOption');
         }
-        if(!isset($this->price_modifiers[$attribute][$selectedOption])) {
+        if(!$this->hasPriceModifier($attribute, $selectedOption)) {
             return $price;
         }
         $price_modifier = $this->price_modifiers[$attribute][$selectedOption];
