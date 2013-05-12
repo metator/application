@@ -42,6 +42,14 @@ class Product
         $this->attributes[] = $attribute;
     }
 
+    /**
+     * Check if this product has the requested attribute.
+     *
+     * $attributeToCheckFor may be either a string element type, or an object of type Attribute
+     *
+     * @param  string|Attribute $attributeToCheckFor
+     * @return bool whether this product has the attribute
+     */
     function hasAttribute($attributeToCheckFor)
     {
         if(is_string($attributeToCheckFor)) {
