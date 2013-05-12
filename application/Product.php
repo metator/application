@@ -36,7 +36,28 @@ class Product
 
     function addAttribute($attribute)
     {
+        if($this->hasAttribute($attribute)) {
+            throw new Exception('You may not add an attribute twice');
+        }
         $this->attributes[] = $attribute;
+    }
+
+    function hasAttribute($attributeToCheckFor)
+    {
+        if(is_string($attributeToCheckFor)) {
+            foreach($this->attributes as $attribute) {
+                if($attributeToCheckFor == $attribute->name()) {
+                    return true;
+                }
+            }
+        } else {
+            foreach($this->attributes as $attribute) {
+                if($attributeToCheckFor == $attribute) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /** @return Attribute */

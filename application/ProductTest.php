@@ -43,6 +43,45 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $this->assertSame($attribute, $product->attributes()[0], 'should add attribute');
     }
 
+    function testShouldHaveAttributeName()
+    {
+        $product = new Product;
+        $attribute = new Attribute(array(
+            'name'=>'Color'
+        ));
+        $product->addAttribute($attribute);
+        $this->assertTrue($product->hasAttribute('Color'), 'should have attribute name');
+    }
+
+    function testShouldHaveAttributeObject()
+    {
+        $product = new Product;
+        $attribute = new Attribute(array(
+            'name'=>'Color'
+        ));
+        $product->addAttribute($attribute);
+        $this->assertTrue($product->hasAttribute($attribute), 'should have attribute object');
+    }
+
+    function testShouldNotHaveAttribute()
+    {
+        $product = new Product;
+        $this->assertFalse($product->hasAttribute('Color'), 'should not have attribute');
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    function testShouldDisallowDuplicateAttributes()
+    {
+        $product = new Product;
+        $attribute = new Attribute(array(
+            'name'=>'Color'
+        ));
+        $product->addAttribute($attribute);
+        $product->addAttribute($attribute);
+    }
+
     function testShouldGetAttribute()
     {
         $product = new Product;
