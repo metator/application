@@ -10,6 +10,7 @@ class Product
     protected $name;
     protected $attributes = array();
     protected $attribute_values = array();
+    protected $price_modifiers = array();
 
     function __construct($params=array())
     {
@@ -51,8 +52,9 @@ class Product
     {
         $price = $this->price;
         foreach($this->attributes() as $attribute) {
-            $value = $this->attributeValue($attribute->name());
-            $price = $attribute->modifyPrice($value,$price);
+            $attributeName = $attribute->name();
+            $value = $this->attributeValue($attributeName);
+            $price = $this->modifyPrice($attributeName,$value,$price);
         }
         return $price;
     }
@@ -93,19 +95,37 @@ class Product
         if($this->hasAttribute($attribute)) {
             throw new Exception('You may not add an attribute twice');
         }
+
+        // string/array factory - create the object & inject it w/ price modifiers
         if(is_string($attribute)) {
             $attribute = new Attribute(array('name'=>$attribute));
-            if(is_array($params) && isset($params['options']) && is_array($params['options'])) {
-                foreach($params['options'] as $paramKey=>$option) {
-                    if(is_string($option)) {
-                        $attribute->addOption($option);
-                    } else {
-                        $attribute->addOption($paramKey, $option);
+        }
+
+        if(is_array($params) && isset($params['options']) && is_array($params['options'])) {
+            foreach($params['options'] as $paramKey=>$option) {
+                if(is_string($option)) {
+                    $attribute->addOption($option);
+                } else {
+                    $attribute->addOption($paramKey);
+                    $attributeName = $attribute->name();
+                    if(isset($option['flat_fee'])) {
+                        $price_modifier = new PriceModifier(array(
+                            'flat_fee'=>$option['flat_fee']
+                        ));
+                        $this->price_modifiers[$attributeName][$paramKey] = $price_modifier;
+                    }
+                    if(isset($option['percentage'])) {
+                        $price_modifier = new PriceModifier(array(
+                            'percentage'=>$option['percentage']
+                        ));
+                        $this->price_modifiers[$attributeName][$paramKey] = $price_modifier;
                     }
                 }
             }
         }
+
         $this->attributes[] = $attribute;
+        return;
     }
 
     /**
@@ -134,6 +154,33 @@ class Product
         return false;
     }
 
+    function modifyPrice($attribute, $selectedOption, $price)
+    {
+        if($this->attribute($attribute)->isInvalidValue($selectedOption)) {
+            throw new Exception('Invalid value for $selectedOption');
+        }
+        if(!isset($this->price_modifiers[$attribute][$selectedOption])) {
+            return $price;
+        }
+        $price_modifier = $this->price_modifiers[$attribute][$selectedOption];
+        return $price_modifier->modify($price);
+    }
+
+    /**
+     * Whether or not this attribute is going to modify the price based on the selected option.
+     * @param string $selectedOption the name of the selected option
+     * @return bool
+     */
+    function hasPriceModifier($attribute,$selectedOption)
+    {
+        return isset($this->price_modifiers[$attribute][$selectedOption]);
+    }
+
+    function priceModifierFor($attribute,$value)
+    {
+        return $this->price_modifiers[$attribute][$value];
+    }
+
     /**
      * Gets the requested attribute by it's name, throws an exception if it doesn't exist. Call hasAttribute()
      * to check if it exists before asking for it.
@@ -149,7 +196,7 @@ class Product
                 return $attribute;
             }
         }
-        throw new Exception('This product does not have the requested attribute');
+        throw new Exception("This product does not have the requested attribute [$attributeName]");
     }
 
     function attributeValue($attribute)

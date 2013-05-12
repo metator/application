@@ -15,7 +15,6 @@ class Attribute
     protected $id;
     protected $name;
     protected $options = array();
-    protected $price_modifiers=array();
 
     function __construct($params=array())
     {
@@ -49,18 +48,6 @@ class Attribute
     function addOption($option, $params=array())
     {
         $this->options[] = $option;
-        if(isset($params['flat_fee'])) {
-            $price_modifier = new PriceModifier(array(
-                'flat_fee'=>$params['flat_fee']
-            ));
-            $this->price_modifiers[$option] = $price_modifier;
-        }
-        if(isset($params['percentage'])) {
-            $price_modifier = new PriceModifier(array(
-                'percentage'=>$params['percentage']
-            ));
-            $this->price_modifiers[$option] = $price_modifier;
-        }
     }
 
     function options()
@@ -73,38 +60,18 @@ class Attribute
         return in_array($option, $this->options);
     }
 
-    function modifyPrice($selectedOption, $price)
-    {
-        if($this->isInvalidValue($selectedOption)) {
-            throw new Exception('Invalid value for $selectedOption');
-        }
-        if(!isset($this->price_modifiers[$selectedOption])) {
-            return $price;
-        }
-        $price_modifier = $this->price_modifiers[$selectedOption];
-        return $price_modifier->modify($price);
-    }
-
     function isInvalidValue($value)
     {
         return !in_array($value, $this->options);
     }
 
-    /**
-     * Whether or not this attribute is going to modify the price based on the selected option.
-     * @param string $selectedOption the name of the selected option
-     * @return bool
-     */
-    function hasPriceModifier($selectedOption)
-    {
-        return isset($this->price_modifiers[$selectedOption]);
-    }
 
-    function priceModifierForOption($option)
-    {
-        if(!isset($this->price_modifiers[$option])) {
-            return false;
-        }
-        return $this->price_modifiers[$option];
-    }
+//
+//    function priceModifierForOption($option)
+//    {
+//        if(!isset($this->price_modifiers[$option])) {
+//            return false;
+//        }
+//        return $this->price_modifiers[$option];
+//    }
 }

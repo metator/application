@@ -30,8 +30,6 @@ class AttributeMapper
             $this->db->insert('attribute_option',array(
                 'attribute_id'=>$attribute_id,
                 'name'=>$option,
-                'flat_fee'=>$attribute->priceModifierForOption($option) ? $attribute->priceModifierForOption($option)->flatFee() : 0,
-                'percentage'=>$attribute->priceModifierForOption($option) ? $attribute->priceModifierForOption($option)->percentage() : 0
             ));
         }
     }
@@ -55,10 +53,7 @@ class AttributeMapper
             ->where('attribute_id=?',$attribute_id);
         $result = $select->query();
         while($data = $result->fetch()) {
-            $attribute->addOption($data['name'], array(
-                'flat_fee'=>$data['flat_fee'],
-                'percentage'=>$data['percentage'],
-            ));
+            $attribute->addOption($data['name']);
         }
     }
 }
