@@ -6,6 +6,29 @@
 */
 class ProductTest extends PHPUnit_Framework_TestCase
 {
+    function testShouldSetIDThroughConstructor()
+    {
+        $product = new Product(array('id'=>1));
+        $this->assertEquals(1,$product->id(),'should set ID through constructor');
+    }
+
+    function testShouldSetIDThroughSetter()
+    {
+        $product = new Product();
+        $product->setId(1);
+        $this->assertEquals(1,$product->id(),'should set ID through setter');
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    function testShouldDisallowChangingID()
+    {
+        $product = new Product();
+        $product->setId(1);
+        $product->setId(2);
+    }
+    
     function testShouldSetNameThroughConstructor()
     {
         $product = new Product(array('name'=>'widget'));

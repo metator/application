@@ -6,14 +6,29 @@
  */
 class Product
 {
+    protected $id;
     protected $name;
     protected $attributes = array();
     protected $attribute_values = array();
 
     function __construct($params=array())
     {
+        $this->id = isset($params['id']) ? $params['id'] : '';
         $this->name = isset($params['name']) ? $params['name'] : '';
         $this->price = isset($params['price']) ? $params['price'] : '';
+    }
+
+    function id()
+    {
+        return $this->id;
+    }
+
+    function setId($id)
+    {
+        if($this->id()>0) {
+            throw new Exception('You may not change the ID after it is already set');
+        }
+        $this->id=$id;
     }
 
     function name()

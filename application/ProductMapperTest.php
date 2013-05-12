@@ -32,9 +32,12 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
 
     function testShouldSaveAttribute()
     {
-        return $this->markTestIncomplete();
         $product = new Product(array('name'=>'widget'));
         $product->addAttribute('color');
+
+        // save attribute
+        $attribute_mapper = new AttributeMapper($this->db);
+        $attribute_mapper->save($product->attribute('color'));
 
         // save product !
         $product_mapper = new ProductMapper($this->db);

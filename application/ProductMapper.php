@@ -36,7 +36,12 @@ class ProductMapper
 
     function saveAttributes($product_id, $attributes)
     {
-
+        foreach($attributes as $attribute) {
+            $this->db->insert('product_attribute',array(
+                'product_id'=>$product_id,
+                'attribute_id'=>$attribute->id()
+            ));
+        }
     }
 
     function load($product_id)
@@ -46,6 +51,26 @@ class ProductMapper
             ->where('id=?',$product_id)
             ->limit(1);
         $data = $select->query()->fetch();
-        return new Product($data);
+        $product = new Product($data);
+        $this->loadAttributes($product);
+        return $product;
+    }
+
+    function loadAttributes($product)
+    {
+        $select = $this->db->select()
+            ->from('product_attribute',array('attribute_id'))
+            ->where('product_id=?',$product->id());
+        $result = $select->query();
+        while($attributeID = $result->fetchColumn()) {
+            $attribute = $this->loadAttribute($attributeID);
+            $product->addAttribute($attribute);
+        }
+    }
+
+    function loadAttribute($attributeID)
+    {
+        $attribute_mapper = new AttributeMapper($this->db);
+        return $attribute_mapper->load($attributeID);
     }
 }
