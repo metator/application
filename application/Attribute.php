@@ -12,6 +12,7 @@
  */
 class Attribute
 {
+    protected $id;
     protected $name;
     protected $options = array();
     protected $price_modifiers=array();
@@ -19,6 +20,20 @@ class Attribute
     function __construct($params=array())
     {
         $this->name = isset($params['name']) ? $params['name'] : '';
+        $this->id = isset($params['id']) ? $params['id'] : '';
+    }
+
+    function id()
+    {
+        return $this->id;
+    }
+
+    function setId($id)
+    {
+        if($this->id()>0) {
+            throw new Exception('You may not change the ID after it is already set');
+        }
+        $this->id=$id;
     }
 
     function name()

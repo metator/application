@@ -6,6 +6,29 @@
  */
 class AttributeTest extends PHPUnit_Framework_TestCase
 {
+    function testShouldSetIDThroughConstructor()
+    {
+        $attribute = new Attribute(array('id'=>1));
+        $this->assertEquals(1,$attribute->id(),'should set ID through constructor');
+    }
+
+    function testShouldSetIDThroughSetter()
+    {
+        $attribute = new Attribute();
+        $attribute->setId(1);
+        $this->assertEquals(1,$attribute->id(),'should set ID through setter');
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    function testShouldDisallowChangingID()
+    {
+        $attribute = new Attribute();
+        $attribute->setId(1);
+        $attribute->setId(2);
+    }
+
     function testShouldSetNameThroughConstructor()
     {
         $attribute = new Attribute(array('name'=>'color'));

@@ -18,6 +18,17 @@ class AttributeMapperTest extends PHPUnit_Framework_TestCase
         $this->db->rollback();
     }
 
+    function testShouldAssignAttributeId()
+    {
+        $attribute = new Attribute(array(
+            'name'=>'Color'
+        ));
+        $mapper = new AttributeMapper($this->db);
+        $id = $mapper->save($attribute);
+        $this->assertTrue($id>0, 'should assign an attribute ID');
+        $this->assertEquals($id, $attribute->id(), 'should assign attribute ID');
+    }
+
     function testShouldSaveAttributeName()
     {
         $attribute = new Attribute(array(
@@ -78,4 +89,3 @@ class AttributeMapperTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0,$newAttribute->priceModifierForOption('red')->flatFee(), 'should not have flat_fee');
     }
 }
-

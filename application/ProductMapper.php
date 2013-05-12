@@ -13,12 +13,30 @@ class ProductMapper
         $this->db = $db;
     }
 
+    /** @param Product */
     function save($product)
     {
         $this->db->insert('product',array(
-            'name'=>$product->name()
+            'name'=>$product->name(),
+            'attributes'=>$this->serializeAttributes($product->attributes())
         ));
-        return $this->db->lastInsertId();
+        $product_id = $this->db->lastInsertId();
+        $this->saveAttributes($product_id, $product->attributes());
+        return $product_id;
+    }
+
+    function serializeAttributes($attributes)
+    {
+        $attributesArray = array();
+        foreach($attributes as $attribute) {
+            $attributesArray[$attribute->id()] = $attribute->options();
+        }
+        return Zend_Json::encode($attributesArray);
+    }
+
+    function saveAttributes($product_id, $attributes)
+    {
+
     }
 
     function load($product_id)

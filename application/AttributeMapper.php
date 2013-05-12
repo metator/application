@@ -14,6 +14,7 @@ class AttributeMapper
             'name'=>$attribute->name()
         ));
         $attribute_id = $this->db->lastInsertId();
+        $attribute->setId($attribute_id);
         $this->saveOptions($attribute_id,$attribute);
         return $attribute_id;
     }
