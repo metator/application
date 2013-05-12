@@ -68,6 +68,7 @@ class Product
                 return $attribute;
             }
         }
+        throw new Exception('This product does not have the requested attribute');
     }
 
     function attributes()

@@ -92,6 +92,15 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $this->assertSame($attribute, $product->attribute('Color'), 'should get attribute');
     }
 
+    /**
+     * @expectedException Exception
+     */
+    function testShouldNotGetInvalidAttribute()
+    {
+        $product = new Product;
+        $product->attribute('invalid');
+    }
+
     function testShouldModifyPrice()
     {
         $product = new Product(array(
