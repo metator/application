@@ -69,17 +69,15 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
     function testShouldSaveConfigurableAttribute()
     {
         return $this->markTestIncomplete();
-
         $product = new Product(array('name'=>'widget'));
 
         // add "color" attribute
-        $color = new Attribute(array(
-            'name'=>'Color'
+        $product->addAttribute('color',array(
+            'options'=>array(
+                'red' => array('flat_fee'=>5),
+                'blue'
+            )
         ));
-        $color->addOption('red', array(
-            'flat_fee'=>5
-        ));
-        $color->addOption('blue');
 
         // save attribute "color" !
         $attribute_mapper = new AttributeMapper($this->db);

@@ -1,15 +1,9 @@
 <div class="well sidebar-nav">
     <ul class="nav nav-list">
-        <li class="nav-header">Product</li>
-        <li class="active"><a href="#">Edit</a></li>
-        <li><a href="#">List</a></li>
-        <li><a href="#">Delete</a></li>
-        <li><a href="#">Create</a></li>
-        <li class="nav-header">Categories</li>
-        <li><a href="#">List</a></li>
-        <li><a href="#">Edit</a></li>
-        <li><a href="#">Delete</a></li>
-        <li><a href="#">Create</a></li>
+        <li class="nav-header">Catalog</li>
+        <li <?=$this->controller=='product' ? 'class="active"' : ''?>><a href="/product/manage">Manage Products</a></li>
+        <li <?=$this->controller=='category' ? 'class="active"' : ''?>><a href="/category/manage">Manage Categories</a></li>
+        <li <?=$this->controller=='attribute' ? 'class="active"' : ''?>><a href="/attribute/manage">Manage Attributes</a></li>
         <li class="nav-header">System</li>
         <li><a href="#">Cache</a></li>
         <li><a href="#">Search Index</a></li>
