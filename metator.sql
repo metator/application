@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS `attribute` (
 CREATE TABLE IF NOT EXISTS `attribute_option` (
   `attribute_id` int(5) NOT NULL,
   `name` varchar(25) NOT NULL,
-  `flat_fee` float NOT NULL,
-  `percentage` int(3) NOT NULL,
+  `flat_fee` float NULL,
+  `percentage` int(3) NULL,
   UNIQUE KEY `attribute_id` (`attribute_id`,`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -46,6 +46,14 @@ class PriceModifierTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(11, $new, 'should add percentage to price');
     }
 
+    function testShouldGetPercentage()
+    {
+        $price_modifier = new PriceModifier(array(
+            'percentage'=>5.15
+        ));
+        $this->assertEquals(5.15,$price_modifier->percentage(),'should get percentage');
+    }
+
     function testShouldAddPercentageThroughConstructor()
     {
         $price_modifier = new PriceModifier(array(

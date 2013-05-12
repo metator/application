@@ -97,13 +97,13 @@ class AttributeTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($attribute->priceModifierForOption('red'), 'should not have flat fee for option');
     }
 
-    function testShouldHavePriceModifierForOption()
+    function testShouldGetFlatFee()
     {
         $attribute = new Attribute;
         $attribute->addOption('red', array(
             'flat_fee'=>5
         ));
-        $this->assertEquals(5, $attribute->priceModifierForOption('red')->flatFee(), 'should have flat fee for option');
+        $this->assertEquals(5, $attribute->priceModifierForOption('red')->flatFee(), 'should get flat fee');
     }
 
     function testShouldModifyPriceFlatFee()
@@ -126,6 +126,15 @@ class AttributeTest extends PHPUnit_Framework_TestCase
         $attribute->setValue('red');
         $price = $attribute->modifyPrice(10);
         $this->assertEquals(11, $price, 'should modify price by percentage');
+    }
+
+    function testShouldGetPercentage()
+    {
+        $attribute = new Attribute;
+        $attribute->addOption('red', array(
+            'percentage'=>5
+        ));
+        $this->assertEquals(5, $attribute->priceModifierForOption('red')->percentage(), 'should get percentage');
     }
 
     /**

@@ -52,21 +52,30 @@ class AttributeMapperTest extends PHPUnit_Framework_TestCase
         $attribute->addOption('red', array(
             'flat_fee'=>10
         ));
-        $attribute->setValue('red');
 
         // save !
         $mapper = new AttributeMapper($this->db);
         $id = $mapper->save($attribute);
         $newAttribute = $mapper->load($id);
 
-        $newAttribute->setValue('red');
-
-        $this->assertEquals(20, $newAttribute->modifyPrice(10), 'should save flat_fee markup');
+        $this->assertEquals(10, $newAttribute->priceModifierForOption('red')->flatFee(), 'should save flat_fee markup');
+        $this->assertEquals(0,$newAttribute->priceModifierForOption('red')->percentage(), 'should not have percentage');
     }
 
     function testShouldSaveOptionPercentage()
     {
-        return $this->markTestIncomplete();
+        $attribute = new Attribute;
+        $attribute->addOption('red', array(
+            'percentage'=>11
+        ));
+
+        // save !
+        $mapper = new AttributeMapper($this->db);
+        $id = $mapper->save($attribute);
+        $newAttribute = $mapper->load($id);
+
+        $this->assertEquals(11, $newAttribute->priceModifierForOption('red')->percentage(), 'should save percentage markup');
+        $this->assertEquals(0,$newAttribute->priceModifierForOption('red')->flatFee(), 'should not have flat_fee');
     }
 }
 

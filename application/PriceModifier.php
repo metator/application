@@ -39,8 +39,11 @@ class PriceModifier
         $this->flat_fee = $fee;
     }
 
-    function percentage($percent)
+    function percentage($percent=null)
     {
+        if(is_null($percent)) {
+            return $this->percentage;
+        }
         $this->percentage = $percent;
     }
 }
