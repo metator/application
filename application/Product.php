@@ -102,30 +102,37 @@ class Product
         }
 
         if(is_array($params) && isset($params['options']) && is_array($params['options'])) {
-            foreach($params['options'] as $paramKey=>$option) {
-                if(is_string($option)) {
-                    $attribute->addOption($option);
-                } else {
-                    $attribute->addOption($paramKey);
-                    $attributeName = $attribute->name();
-                    if(isset($option['flat_fee'])) {
-                        $price_modifier = new PriceModifier(array(
-                            'flat_fee'=>$option['flat_fee']
-                        ));
-                        $this->price_modifiers[$attributeName][$paramKey] = $price_modifier;
-                    }
-                    if(isset($option['percentage'])) {
-                        $price_modifier = new PriceModifier(array(
-                            'percentage'=>$option['percentage']
-                        ));
-                        $this->price_modifiers[$attributeName][$paramKey] = $price_modifier;
-                    }
+            foreach($params['options'] as $optionKey=>$optionValue) {
+                if(is_string($optionValue)) {
+                    $attribute->addOption($optionValue);
+                    continue;
                 }
+                $this->addOptionToAttribute($attribute, $optionKey, $optionValue);
             }
         }
 
         $this->attributes[] = $attribute;
         return;
+    }
+
+    function addOptionToAttribute($attribute, $optionKey, $optionValue)
+    {
+        $attribute->addOption($optionKey);
+        $attributeName = $attribute->name();
+
+        if(isset($optionValue['flat_fee'])) {
+            $price_modifier = new PriceModifier(array(
+                'flat_fee'=>$optionValue['flat_fee']
+            ));
+            $this->price_modifiers[$attributeName][$optionKey] = $price_modifier;
+        }
+
+        if(isset($optionValue['percentage'])) {
+            $price_modifier = new PriceModifier(array(
+                'percentage'=>$optionValue['percentage']
+            ));
+            $this->price_modifiers[$attributeName][$optionKey] = $price_modifier;
+        }
     }
 
     /**
