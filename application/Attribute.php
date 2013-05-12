@@ -15,6 +15,7 @@ class Attribute
     protected $id;
     protected $name;
     protected $options = array();
+    protected $option_ids = array();
 
     function __construct($params=array())
     {
@@ -65,13 +66,13 @@ class Attribute
         return !in_array($value, $this->options);
     }
 
+    function optionId($option)
+    {
+        return $this->option_ids[$option];
+    }
 
-//
-//    function priceModifierForOption($option)
-//    {
-//        if(!isset($this->price_modifiers[$option])) {
-//            return false;
-//        }
-//        return $this->price_modifiers[$option];
-//    }
+    function setOptionId($option,$id)
+    {
+        $this->option_ids[$option] = $id;
+    }
 }

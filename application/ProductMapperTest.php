@@ -75,20 +75,20 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $product->addAttribute('color',array(
             'options'=>array(
                 'red' => array('flat_fee'=>5),
-                'blue'
+                'blue' => array('percentage'=>10)
             )
         ));
 
         // save attribute "color" !
         $attribute_mapper = new AttributeMapper($this->db);
-        $color_attribute_id = $attribute_mapper->save($product->attribute('color'));
+        $attribute_mapper->save($product->attribute('color'));
 
         // save product !
         $product_mapper = new ProductMapper($this->db);
         $id = $product_mapper->save($product);
 
         $new_product = $product_mapper->load($id);
-        $this->assertEquals(5,$new_product->attribute('color')->priceModifierForOption('red')->flatFee(), 'should save price modifier for color');
-        $this->assertEquals(10,$new_product->attribute('color')->priceModifierForOption('red')->percentage(), 'should save price modifier for size');
+        $this->assertEquals(5,$new_product->priceModifierFor('color','red')->flatFee(), 'should save price modifier');
+        $this->assertEquals(10,$new_product->priceModifierFor('color','blue')->percentage(), 'should save price modifier');
     }
 }

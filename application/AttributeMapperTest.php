@@ -56,4 +56,20 @@ class AttributeMapperTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($newAttribute->hasOption('red'), 'should save attribute options');
         $this->assertTrue($newAttribute->hasOption('blue'), 'should save attribute options');
     }
+
+    function testShouldAssignOptionIds()
+    {
+        $attribute = new Attribute(array(
+            'name'=>'Color'
+        ));
+        $attribute->addOption('red');
+        $attribute->addOption('blue');
+
+        // save !
+        $mapper = new AttributeMapper($this->db);
+        $mapper->save($attribute);
+
+        $this->assertTrue($attribute->optionId('red')>0, 'should assign an attribute ID');
+        $this->assertTrue($attribute->optionId('blue')>0, 'should assign an attribute ID');
+    }
 }

@@ -31,6 +31,7 @@ class AttributeMapper
                 'attribute_id'=>$attribute_id,
                 'name'=>$option,
             ));
+            $attribute->setOptionId($option,$this->db->lastInsertId());
         }
     }
 
