@@ -1,17 +1,18 @@
-jQuery(document).ready(function() {
-    jQuery('.toggle_attribute').on('change',function(){
+$(document).ready(function() {
+    $('.toggle_attribute').on('change',function(){
         var attribute = $(this).metadata().attributeName;
-        var dd = jQuery('.configure_attribute_'+attribute).parents('dd');
+        var dd = $('.configure_attribute_'+attribute).parents('dd');
         var dt = dd.prev('dt');
 
-        if('no'==jQuery(this).val()) {
+        if('no'==$(this).val()) {
             dd.hide();
             dt.hide();
         }
 
-        if('yes'==jQuery(this).val()) {
+        if('yes'==$(this).val()) {
             dd.show();
             dt.show();
         }
     });
+    $('.toggle_attribute').trigger('change');
 });
