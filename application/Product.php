@@ -76,8 +76,9 @@ class Product
      * have price modifiers attached (Ex. red costs $5 extra, blue costs 10% more)
      *
      * $attribute may either be a string or an object of type Attribute. If a string is given,
-     * an object of type Attribute will be created with the name given. If using a string for $attribute,
-     * you may pass an array of $params to configure the attribute with, for example:
+     * an object of type Attribute will be created with the name given.
+     *
+     * You may pass an array of $params to configure the attribute with, for example:
      *
      * $product->addAttribute('color', array(
      *    'options'=>array(
