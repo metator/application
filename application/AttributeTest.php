@@ -51,7 +51,9 @@ class AttributeTest extends PHPUnit_Framework_TestCase
     {
         $attribute = new Attribute;
         $attribute->addOption('red', array(
-            'price_modifier'=>new PriceModifier(array('flat_fee'=>5))
+            'price_modifier'=>new PriceModifier(array(
+                'flat_fee'=>5
+            ))
         ));
         $attribute->setValue('red');
         $this->assertTrue($attribute->hasPriceModifier(), 'should have price modifier');
@@ -70,7 +72,9 @@ class AttributeTest extends PHPUnit_Framework_TestCase
     {
         $attribute = new Attribute;
         $attribute->addOption('red', array(
-            'price_modifier'=>new PriceModifier(array('flat_fee'=>5))
+            'price_modifier'=>new PriceModifier(array(
+                'flat_fee'=>5
+            ))
         ));
         $attribute->setValue('red');
         $price = $attribute->modifyPrice(5);

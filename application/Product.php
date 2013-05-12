@@ -2,6 +2,7 @@
 class Product
 {
     protected $name;
+    protected $attributes = array();
 
     function __construct($params=array())
     {
@@ -21,11 +22,35 @@ class Product
 
     function price()
     {
-        return $this->price;
+        $price = $this->price;
+        foreach($this->attributes() as $attribute) {
+            $price = $attribute->modifyPrice($price);
+        }
+        return $price;
     }
 
     function setPrice($price)
     {
         $this->price = $price;
+    }
+
+    function addAttribute($attribute)
+    {
+        $this->attributes[] = $attribute;
+    }
+
+    /** @return Attribute */
+    function attribute($attributeName)
+    {
+        foreach($this->attributes as $attribute) {
+            if($attributeName == $attribute->name()) {
+                return $attribute;
+            }
+        }
+    }
+
+    function attributes()
+    {
+        return $this->attributes;
     }
 }
