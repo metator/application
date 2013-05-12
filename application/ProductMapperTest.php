@@ -33,6 +33,11 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
     function testShouldSaveAttributes()
     {
         return $this->markTestIncomplete();
+    }
+
+    function testShouldSaveConfigurableAttribute()
+    {
+        return $this->markTestIncomplete();
 
         $product = new Product(array('name'=>'widget'));
 

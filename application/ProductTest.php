@@ -106,6 +106,22 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $product->attribute('invalid');
     }
 
+    function testShouldAddAttributeByString()
+    {
+        $product = new Product;
+        $product->addAttribute('color');
+        $this->assertTrue($product->hasAttribute('color'),'should add attribute by string');
+    }
+
+    function testShouldAddAttributeOptionsByArray()
+    {
+        $product = new Product;
+        $product->addAttribute('color', array(
+            'options'=>array('red','blue')
+        ));
+        $this->assertEquals(array('red','blue'),$product->attribute('color')->options(),'should add attribute options by array');
+    }
+
     function testShouldModifyPrice()
     {
         $product = new Product(array(
@@ -148,5 +164,18 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $product->attribute('Color')->setValue('red');
         $product->attribute('Size')->setValue('large');
         $this->assertEquals(15, $product->price(), 'should modify price with multiple attributes');
+    }
+
+    function testShouldAddPriceModifiersForOptionsByArray()
+    {
+        $product = new Product;
+        $product->addAttribute('color', array(
+            'options'=>array(
+                'red'=>array('flat_fee'=>5),
+                'blue'=>array('percentage'=>10)
+            )
+        ));
+        $this->assertEquals(5,$product->attribute('color')->priceModifierForOption('red')->flatFee(),'should add flat fee price modifier by array');
+        $this->assertEquals(10,$product->attribute('color')->priceModifierForOption('blue')->percentage(),'should add percentage price modifier by array');
     }
 }

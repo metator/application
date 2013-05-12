@@ -25,6 +25,12 @@ class Product
         $this->name = $name;
     }
 
+    /**
+     * Returns the price for this product as configured. For example if this is a T-Shirt with an attribute called
+     * "size" and you have declared "large" T-Shirts cost 10% more, this method will return the base price passed
+     * to setPrice() after applying the 10% markup (if the customer configured the product as "large")
+     * @return float
+     */
     function price()
     {
         $price = $this->price;
@@ -34,15 +40,53 @@ class Product
         return $price;
     }
 
+    /**
+     * Sets the price for this product, which can be modified if the product is configurable. For example if you
+     * add an attribute called "size" to a T-Shirt product, you may declare that 'large' T-Shirts cost 10% more.
+     * In that case this is actually the "base" price not the final price used.
+     *
+     * @param float $price
+     */
     function setPrice($price)
     {
         $this->price = $price;
     }
 
-    function addAttribute($attribute)
+    /**
+     * Add an attribute to this product. Ex "color", attributes have options ex. "red", "blue" which may
+     * have price modifiers attached (Ex. red costs $5 extra, blue costs 10% more)
+     *
+     * $attribute may either be a string or an object of type Attribute. If a string is given,
+     * an object of type Attribute will be created with the name given. If using a string for $attribute,
+     * you may pass an array of $params to configure the attribute with, for example:
+     *
+     * $product->addAttribute('color', array(
+     *    'options'=>array(
+     *         'red'=>array('flat_fee'=>5),
+     *         'blue'=>array('percentage'=>10)
+     *     )
+     * ));
+     *
+     * @param string|Attribute $attribute
+     * @param array $params
+     * @throws Exception
+     */
+    function addAttribute($attribute, $params=array())
     {
         if($this->hasAttribute($attribute)) {
             throw new Exception('You may not add an attribute twice');
+        }
+        if(is_string($attribute)) {
+            $attribute = new Attribute(array('name'=>$attribute));
+            if(is_array($params) && isset($params['options']) && is_array($params['options'])) {
+                foreach($params['options'] as $paramKey=>$option) {
+                    if(is_string($option)) {
+                        $attribute->addOption($option);
+                    } else {
+                        $attribute->addOption($paramKey, $option);
+                    }
+                }
+            }
         }
         $this->attributes[] = $attribute;
     }
@@ -73,7 +117,14 @@ class Product
         return false;
     }
 
-    /** @return Attribute */
+    /**
+     * Gets the requested attribute by it's name, throws an exception if it doesn't exist. Call hasAttribute()
+     * to check if it exists before asking for it.
+     *
+     * @param $attributeName
+     * @return Attribute
+     * @throws Exception
+     */
     function attribute($attributeName)
     {
         foreach($this->attributes as $attribute) {
@@ -84,6 +135,10 @@ class Product
         throw new Exception('This product does not have the requested attribute');
     }
 
+    /**
+     * Get an array of Attribute objects for this product
+     * @return array
+     */
     function attributes()
     {
         return $this->attributes;
