@@ -1,4 +1,14 @@
 <?php
+/**
+ * Metator (http://metator.com/)
+ * @copyright  Copyright (c) 2013 Vehicle Fits, llc
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+/**
+ * PriceModifier is a class to represent & calculate markups to prices. A flat fee or percentage markup is
+ * specified, then you can modify a price which entails adding the specified fee to said price.
+ */
 class PriceModifier
 {
     protected $flat_fee;

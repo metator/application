@@ -1,4 +1,15 @@
 <?php
+/**
+ * Metator (http://metator.com/)
+ * @copyright  Copyright (c) 2013 Vehicle Fits, llc
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+/**
+ * Attribute is a class to represent a product's attribute, such as "color" or "size". Attributes have options
+ * such as "red","blue","green" or "small","medium","large". These options can have price markups (flat fees & percentage)
+ * associated to them based on the value selected.
+ */
 class Attribute
 {
     protected $name;
