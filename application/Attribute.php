@@ -13,7 +13,7 @@
 class Attribute
 {
     protected $name;
-    protected $options;
+    protected $options = array();
     protected $price_modifiers=array();
 
     function __construct($params=array())

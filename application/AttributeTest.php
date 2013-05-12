@@ -19,6 +19,12 @@ class AttributeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('color',$attribute->name(), 'should set name through setter');
     }
 
+    function testShouldHaveNoOptions()
+    {
+        $attribute = new Attribute;
+        $this->assertEquals(array(), $attribute->options(), 'should have no options');
+    }
+
     function testShouldAddOption()
     {
         $attribute = new Attribute;
