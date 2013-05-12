@@ -7,4 +7,4 @@ Why yet another open source shopping cart? There is a need for online retailers 
 
 Existing solutions for this like Magento lack the ability to import this complex data, and are hard to modify beyond it's cookie cutter functionality.
 
-Metator aims to utilize unit testing with a philosophy that import/export comes before GUI, with an emphasis on providing command line utilities for the store owner. Furthermore an emphasis will be placed upon performance. Page load times will be quick, and importing large amounts of data will be quick.
+Metator aims to utilize unit testing with a philosophy that import/export comes before GUI, with an emphasis on providing command line utilities for common operations. Furthermore, an emphasis will be placed upon performance. Page load times, importing, and exporting will be quick, even with large datasets.
