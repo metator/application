@@ -54,7 +54,8 @@ class ProductMapper
                     'product_id'=>$product_id,
                     'attribute_id'=>$attribute->id(),
                     'attribute_option_id'=>$attribute->optionId($option),
-                    'flat_fee'=>$product->hasPriceModifier('color',$option) ? $product->priceModifierFor($attribute->name(), $option)->flatFee() : 0
+                    'flat_fee'=>$product->hasPriceModifier($attribute->name(),$option) ? $product->priceModifierFor($attribute->name(), $option)->flatFee() : 0,
+                    'percentage'=>$product->hasPriceModifier($attribute->name(),$option) ? $product->priceModifierFor($attribute->name(), $option)->percentage() : 0,
                 ));
             }
         }
