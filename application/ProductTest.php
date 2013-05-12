@@ -70,4 +70,36 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $product->attribute('Color')->setValue('red');
         $this->assertEquals(10, $product->price(), 'should modify price');
     }
+
+    function testShouldModifyPriceWithMultipleAttributes()
+    {
+        $product = new Product(array(
+            'price'=>5
+        ));
+
+        // add "color" attribute
+        $color = new Attribute(array(
+            'name'=>'Color'
+        ));
+        $color->addOption('red', array(
+            'price_modifier'=>new PriceModifier(array(
+                'flat_fee'=>5
+            ))
+        ));
+
+        // add "size" attribute
+        $size = new Attribute(array(
+            'name'=>'Size'
+        ));
+        $size->addOption('large', array(
+            'price_modifier'=>new PriceModifier(array(
+                'flat_fee'=>5
+            ))
+        ));
+        $product->addAttribute($color);
+        $product->addAttribute($size);
+        $product->attribute('Color')->setValue('red');
+        $product->attribute('Size')->setValue('large');
+        $this->assertEquals(15, $product->price(), 'should modify price with multiple attributes');
+    }
 }
