@@ -4,6 +4,12 @@ class PriceModifier
     protected $flat_fee;
     protected $percentage;
 
+    function __construct($params=array())
+    {
+        $this->flat_fee = isset($params['flat_fee']) ? $params['flat_fee'] : null;
+        $this->percentage = isset($params['percentage']) ? $params['percentage'] : null;
+    }
+
     function modify($price)
     {
         if($this->flat_fee) {

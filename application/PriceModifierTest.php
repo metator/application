@@ -16,10 +16,28 @@ class PriceModifierTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(10.30, $new, 'should add flat fee to price');
     }
 
+    function testShouldAddFlatFeeThroughConstructor()
+    {
+        $price_modifier = new PriceModifier(array(
+            'flat_fee'=>5.15
+        ));
+        $new = $price_modifier->modify(5.15);
+        $this->assertEquals(10.30, $new, 'should add flat fee to price');
+    }
+
     function testShouldAddPercentage()
     {
         $price_modifier = new PriceModifier;
         $price_modifier->percentage(10);
+        $new = $price_modifier->modify(10);
+        $this->assertEquals(11, $new, 'should add percentage to price');
+    }
+
+    function testShouldAddPercentageThroughConstructor()
+    {
+        $price_modifier = new PriceModifier(array(
+            'percentage'=>10
+        ));
         $new = $price_modifier->modify(10);
         $this->assertEquals(11, $new, 'should add percentage to price');
     }
