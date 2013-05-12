@@ -42,13 +42,13 @@ class Product_Form extends Zend_Form
     function addConfigurationElementsForAttributeOption($attribute,$option)
     {
         $this->addElement('radio',"attribute_{$attribute}_{$option}_pricemodifier_type",array(
-            'label'=>"{$attribute} {$option} Price Modifier Type",
+            'label'=>"{$attribute} {$option} Price",
             'multiOptions'=>array('none','flat_fee','percentage'),
             'separator' => '',
             'class'=>'configure_attribute_'.$attribute
         ));
         $this->addElement('text',"attribute_{$attribute}_{$option}_pricemodifier_amount",array(
-            'label'=>"{$attribute} {$option} Price Modifier Amount",
+            'label'=>"Amount",
             'separator' => '',
             'class'=>'configure_attribute_'.$attribute
         ));
