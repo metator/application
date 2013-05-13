@@ -1,0 +1,16 @@
+language: php
+
+services:
+  - mysql
+
+php:
+  - 5.4
+
+before_script:
+  - mysql -e 'create database metator'
+  - mysql metator < metator.sql
+  - curl -s http://getcomposer.org/installer | php -- --quiet
+  - php composer.phar install --dev
+
+script:
+  - vendor/bin/phpunit -c phpunit.xml.dist
