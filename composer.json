@@ -10,6 +10,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
+            "joshribakoff/php-csv-utils":"dev-master",
 	    "zendframework/zendframework1":"*"
     },
     "require-dev": {

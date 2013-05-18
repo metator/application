@@ -17,17 +17,15 @@ class ImportTest extends PHPUnit_Framework_TestCase
         $this->db->rollback();
     }
 
-    function testImportProductName()
+    function testShouldImportProduct()
     {
-        return $this->markTestIncomplete();
-
         $csv = "sku,name\n";
-        $csv.= "123,widget";
+        $csv.= "123,name";
 
-        $importer = new Importer;
-        $importer->import($csv);
+        $importer = new Importer($this->db);
+        $importer->importFromText($csv);
 
-        $this->assertTrue(false);
+        $this->assertTrue($this->productExists('123'), 'should import product');
     }
 
     function testImportProductAttributes()
@@ -107,5 +105,11 @@ class ImportTest extends PHPUnit_Framework_TestCase
         // the next one is the 3rd from the 1st attribute, 3rd value from the 2nd attribute & and 2nd value from 3rd
         // the next one is the 3rd from the 1st attribute, 3rd value from the 2nd attribute & and 3rd value from 3rd
 
+    }
+
+    function productExists($sku)
+    {
+        $product_mapper = new ProductMapper($this->db);
+        return $product_mapper->productExists($sku);
     }
 }

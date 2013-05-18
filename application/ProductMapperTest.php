@@ -185,4 +185,21 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
 
         $this->assertFalse($product_mapper->findBySku('bar'), 'should not find a non-existent sku');
     }
+
+    function testProductShouldNotExist()
+    {
+        $product = new Product(array('sku'=>'foo'));
+        $product_mapper = new ProductMapper($this->db);
+        $product_mapper->save($product);
+        $this->assertFalse($product_mapper->productExists('bar'),   'product should not exist');
+    }
+
+    function testProductShouldExist()
+    {
+        $product = new Product(array('sku'=>'foo'));
+        $product_mapper = new ProductMapper($this->db);
+        $product_mapper->save($product);
+        $this->assertTrue($product_mapper->productExists('foo'),    'product should exist');
+    }
+
 }

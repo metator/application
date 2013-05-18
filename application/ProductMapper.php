@@ -64,6 +64,16 @@ class ProductMapper
         }
     }
 
+    function productExists($sku)
+    {
+        $select = $this->db->select()
+            ->from('product',new Zend_Db_Expr('count(*)'))
+            ->where('sku=?',$sku)
+            ->limit(1);
+        $count = $select->query()->fetchColumn();
+        return $count > 0;
+    }
+
     function findBySKu($sku)
     {
         $select = $this->db->select()
