@@ -175,7 +175,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('sku123', $new_product->sku(), 'should find by sku');
     }
 
-    function testShoulNotdFindBySKU()
+    function testShouldNotFindBySKU()
     {
         $product = new Product(array('sku'=>'foo'));
 

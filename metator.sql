@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `attribute` (
   `id` int(15) NOT NULL AUTO_INCREMENT,
   `name` varchar(25) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=822 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=165 ;
 
 CREATE TABLE IF NOT EXISTS `attribute_option` (
   `id` int(15) NOT NULL AUTO_INCREMENT,
@@ -13,14 +13,15 @@ CREATE TABLE IF NOT EXISTS `attribute_option` (
   `name` varchar(25) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `attribute_id` (`attribute_id`,`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=168 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=209 ;
 
 CREATE TABLE IF NOT EXISTS `product` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
+  `sku` varchar(15) NOT NULL,
   `name` varchar(25) NOT NULL,
   `attributes` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=180 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=103 ;
 
 CREATE TABLE IF NOT EXISTS `product_attribute` (
   `product_id` int(8) NOT NULL,
