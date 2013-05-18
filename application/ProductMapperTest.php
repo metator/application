@@ -18,6 +18,18 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $this->db->rollback();
     }
 
+    function testShouldSaveSku()
+    {
+        $product = new Product(array('sku'=>'sku123'));
+
+        // save !
+        $product_mapper = new ProductMapper($this->db);
+        $id = $product_mapper->save($product);
+
+        $new_product = $product_mapper->load($id);
+        $this->assertEquals('sku123', $new_product->sku(), 'should save sku');
+    }
+
     function testShouldSaveName()
     {
         $product = new Product(array('name'=>'widget'));
@@ -149,5 +161,28 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(8,$new_product->priceModifierFor('color','blue')->flatFee(), 'should save price modifier');
         $this->assertEquals(5,$new_product->priceModifierFor('size','small')->percentage(), 'should save price modifier');
         $this->assertEquals(8,$new_product->priceModifierFor('size','large')->flatFee(), 'should save price modifier');
+    }
+
+    function testShouldFindBySKU()
+    {
+        $product = new Product(array('sku'=>'sku123'));
+
+        // save !
+        $product_mapper = new ProductMapper($this->db);
+        $product_mapper->save($product);
+
+        $new_product = $product_mapper->findBySku('sku123');
+        $this->assertEquals('sku123', $new_product->sku(), 'should find by sku');
+    }
+
+    function testShoulNotdFindBySKU()
+    {
+        $product = new Product(array('sku'=>'foo'));
+
+        // save !
+        $product_mapper = new ProductMapper($this->db);
+        $product_mapper->save($product);
+
+        $this->assertFalse($product_mapper->findBySku('bar'), 'should not find a non-existent sku');
     }
 }

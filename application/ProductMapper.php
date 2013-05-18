@@ -17,6 +17,7 @@ class ProductMapper
     function save($product)
     {
         $this->db->insert('product',array(
+            'sku'=>$product->sku(),
             'name'=>$product->name(),
             'attributes'=>$this->serializeAttributes($product->attributes())
         ));
@@ -63,6 +64,19 @@ class ProductMapper
         }
     }
 
+    function findBySKu($sku)
+    {
+        $select = $this->db->select()
+            ->from('product')
+            ->where('sku=?',$sku)
+            ->limit(1);
+        $data = $select->query()->fetch();
+        if(!$data) {
+            return false;
+        }
+        return $this->doLoad($data);
+    }
+
     function load($product_id)
     {
         $select = $this->db->select()
@@ -70,6 +84,11 @@ class ProductMapper
             ->where('id=?',$product_id)
             ->limit(1);
         $data = $select->query()->fetch();
+        return $this->doLoad($data);
+    }
+
+    function doLoad($data)
+    {
         $product = new Product($data);
         $this->loadAttributes($product);
         $this->loadPriceModifiers($product);

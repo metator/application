@@ -15,6 +15,7 @@ class Product
     function __construct($params=array())
     {
         $this->id = isset($params['id']) ? $params['id'] : '';
+        $this->sku = isset($params['sku']) ? $params['sku'] : '';
         $this->name = isset($params['name']) ? $params['name'] : '';
         $this->price = isset($params['price']) ? $params['price'] : '';
     }
@@ -30,6 +31,16 @@ class Product
             throw new Exception('You may not change the ID after it is already set');
         }
         $this->id=$id;
+    }
+
+    function sku()
+    {
+        return $this->sku;
+    }
+
+    function setSku($sku)
+    {
+        $this->sku = $sku;
     }
 
     function name()
