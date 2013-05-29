@@ -232,6 +232,9 @@ class Product
 
     function setAttributeValue($attribute,$value)
     {
+        if(!in_array($value,$this->attribute($attribute)->options())) {
+            throw new Exception("[$value] is not in the allowed options for [$attribute]");
+        }
         $this->attribute_values[$attribute] = $value;
     }
 

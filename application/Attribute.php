@@ -21,6 +21,7 @@ class Attribute
     {
         $this->name = isset($params['name']) ? $params['name'] : '';
         $this->id = isset($params['id']) ? $params['id'] : '';
+        $this->options = isset($params['options']) ? $params['options'] : array();
     }
 
     function id()

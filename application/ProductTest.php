@@ -149,10 +149,22 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($product->hasAttribute('color'),'should add attribute by string');
     }
 
-    function testShouldHaveValueForAttribute()
+    /**
+     * @expectedException Exception
+     */
+    function testShouldDisallowAttributeValueNotInOptions()
     {
         $product = new Product;
         $product->addAttribute('color');
+        $product->setAttributeValue('color','red');
+    }
+
+    function testShouldHaveValueForAttribute()
+    {
+        $product = new Product;
+        $product->addAttribute('color', array(
+            'options'=>array('red','blue')
+        ));
         $product->setAttributeValue('color','red');
         $this->assertEquals('red',$product->attributeValue('color'),'should set attribute value');
     }
@@ -162,7 +174,8 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $product1 = new Product;
         $product2 = new Product;
         $attribute = new Attribute(array(
-            'name'=>'color'
+            'name'=>'color',
+            'options'=>array('red','blue')
         ));
         $product1->addAttribute($attribute);
         $product2->addAttribute($attribute);
@@ -375,6 +388,25 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $product->setAttributeValue('Color','red');
         $product->setAttributeValue('Size','large');
         $this->assertEquals(15, $product->price(), 'should modify price with multiple attributes');
+    }
+
+    function testShouldDerivePossibleOptionsForConfigurableProduct()
+    {
+        $product1 = new Product;
+        $product2 = new Product;
+        $attribute = new Attribute(array(
+            'name'=>'color',
+            'options'=>array('red','blue','green')
+        ));
+        $product1->addAttribute($attribute);
+        $product2->addAttribute($attribute);
+        $product1->setAttributeValue('color','red');
+        $product2->setAttributeValue('color','blue');
+        $configurableProduct= new Product_Configurable;
+        $configurableProduct->addProduct($product1);
+        $configurableProduct->addProduct($product2);
+        $actual = $configurableProduct->attribute('color')->options();
+        $this->assertEquals(array('red','blue'), $actual, 'should derive configurable products options based on values for attribute in encapsulated products');
     }
 
 }

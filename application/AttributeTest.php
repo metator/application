@@ -77,4 +77,12 @@ class AttributeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array('red','blue','green'),$attribute->options(),'should add multiple options');
     }
 
+    function testShouldAddOptionsThroughConstructor()
+    {
+        $attribute = new Attribute(array(
+            'options'=>array('red','blue','green')
+        ));
+        $this->assertEquals(array('red','blue','green'),$attribute->options(),'should add options through constructor');
+    }
+
 }
