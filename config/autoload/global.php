@@ -14,9 +14,13 @@
 return array(
     'db' => array(
         'driver'         => 'Pdo',
-        'dsn'            => 'mysql:dbname=zf2tutorial;host=localhost',
+        'dsn'            => 'mysql:dbname=metator;host=localhost',
         'driver_options' => array(
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
+        ),
+        'db' => array(
+            'username' => 'YOUR USERNAME HERE',
+            'password' => 'YOUR PASSWORD HERE',
         ),
     ),
     'service_manager' => array(

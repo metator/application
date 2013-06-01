@@ -1,5 +1,6 @@
 <?php
 namespace Application;
+use Zend\Db\Sql\Sql;
 
 class AttributeMapper
 {
@@ -12,10 +13,17 @@ class AttributeMapper
 
     function save($attribute)
     {
-        $this->db->insert('attribute',array(
+        $adapter = $this->db;
+
+        $sql = new Sql($adapter);
+        $insert = $sql->insert('attribute')
+        ->values(array(
             'name'=>$attribute->name()
         ));
-        $attribute_id = $this->db->lastInsertId();
+        $string = $sql->getSqlStringForSqlObject($insert);
+        $adapter->query($string, $adapter::QUERY_MODE_EXECUTE);
+
+        $attribute_id = $adapter->getDriver()->getLastGeneratedValue();
         $attribute->setId($attribute_id);
         $this->saveOptions($attribute_id,$attribute);
         return $attribute_id;
@@ -29,21 +37,37 @@ class AttributeMapper
     {
         foreach($attribute->options() as $option)
         {
-            $this->db->insert('attribute_option',array(
-                'attribute_id'=>$attribute_id,
-                'name'=>$option,
-            ));
-            $attribute->setOptionId($option,$this->db->lastInsertId());
+            $adapter = $this->db;
+
+            $sql = new Sql($adapter);
+            $insert = $sql
+                ->insert('attribute_option')
+                ->values(array(
+                    'attribute_id'=>$attribute_id,
+                    'name'=>$option,
+                ));
+
+            $string = $sql->getSqlStringForSqlObject($insert);
+            $adapter->query($string, $adapter::QUERY_MODE_EXECUTE);
+
+            $id = $adapter->getDriver()->getLastGeneratedValue();
+            $attribute->setOptionId($option,$id);
         }
     }
 
     function load($attribute_id)
     {
-        $select = $this->db->select()
+        $adapter = $this->db;
+
+        $sql = new Sql($adapter);
+        $select = $sql
+            ->select()
             ->from('attribute')
-            ->where('id=?',$attribute_id)
+            ->where(array('id'=>$attribute_id))
             ->limit(1);
-        $data = $select->query()->fetch();
+        $string = $sql->getSqlStringForSqlObject($select);
+        $data = $adapter->query($string, $adapter::QUERY_MODE_EXECUTE)->toArray()[0];
+
         $attribute = new Attribute($data);
         $this->loadOptions($attribute_id, $attribute);
         return $attribute;
@@ -51,11 +75,18 @@ class AttributeMapper
 
     function loadOptions($attribute_id,$attribute)
     {
-        $select = $this->db->select()
+        $adapter = $this->db;
+
+        $sql = new Sql($adapter);
+        $select = $sql
+            ->select()
             ->from('attribute_option')
-            ->where('attribute_id=?',$attribute_id);
-        $result = $select->query();
-        while($data = $result->fetch()) {
+            ->where(array('attribute_id'=>$attribute_id));
+
+        $string = $sql->getSqlStringForSqlObject($select);
+        $result = $adapter->query($string, $adapter::QUERY_MODE_EXECUTE);
+
+        while($data = $result->current()) {
             $attribute->addOption($data['name']);
             $attribute->setOptionId($data['name'], $data['id']);
         }

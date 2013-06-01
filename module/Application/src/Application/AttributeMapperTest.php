@@ -11,13 +11,13 @@ class AttributeMapperTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $this->db = Zend_Registry::get('db');
-        $this->db->beginTransaction();
+        $this->db = phpunit_bootstrap::getServiceManager()->get('Zend\Db\Adapter\Adapter');
+        $this->db->getDriver()->getConnection()->beginTransaction();
     }
 
     function tearDown()
     {
-        $this->db->rollback();
+        $this->db->getDriver()->getConnection()->rollback();
     }
 
     function testShouldAssignAttributeId()
@@ -39,7 +39,7 @@ class AttributeMapperTest extends PHPUnit_Framework_TestCase
         $mapper = new AttributeMapper($this->db);
         $id = $mapper->save($attribute);
         $newAttribute = $mapper->load($id);
-        $this->assertEquals($newAttribute->name(), 'Color', 'should save attribute name');
+        $this->assertEquals('Color',$newAttribute->name(), 'should save attribute name');
     }
 
     function testShouldSaveAttributeOptions()
