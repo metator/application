@@ -1,0 +1,46 @@
+<?php
+/**
+ * Metator (http://metator.com/)
+ * @copyright  Copyright (c) 2013 Vehicle Fits, llc
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+class CategoryMapperTest extends PHPUnit_Framework_TestCase
+{
+
+    function setUp()
+    {
+        $this->db = Zend_Registry::get('db');
+        $this->db->beginTransaction();
+    }
+
+    function tearDown()
+    {
+        $this->db->rollback();
+    }
+
+    function testShouldSaveName()
+    {
+        $categoryMapper = new CategoryMapper($this->db);
+        $id = $categoryMapper->save(array(
+            'id'=>null,
+            'name'=>'foo'
+        ));
+        $category = $categoryMapper->load($id);
+        $this->assertEquals('foo',$category['name'],'should save a category name');
+    }
+
+    function testShouldUpdateName()
+    {
+        $categoryMapper = new CategoryMapper($this->db);
+        $id = $categoryMapper->save(array(
+            'id'=>null,
+            'name'=>'foo'
+        ));
+        $categoryMapper->save(array(
+            'id'=>$id,
+            'name'=>'foobar'
+        ));
+        $category = $categoryMapper->load($id);
+        $this->assertEquals('foobar',$category['name'],'should update a category name');
+    }
+}
