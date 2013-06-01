@@ -1,6 +1,7 @@
 <?php
 namespace Application;
 use Zend\Db\Sql\Sql;
+use Zend\Db\TableGateway\TableGateway;
 
 class AttributeMapper
 {
@@ -75,18 +76,10 @@ class AttributeMapper
 
     function loadOptions($attribute_id,$attribute)
     {
-        $adapter = $this->db;
+        $table = new TableGateway('attribute_option', $this->db);
+        $rowset = $table->select(array('attribute_id'=>$attribute_id));
 
-        $sql = new Sql($adapter);
-        $select = $sql
-            ->select()
-            ->from('attribute_option')
-            ->where(array('attribute_id'=>$attribute_id));
-
-        $string = $sql->getSqlStringForSqlObject($select);
-        $result = $adapter->query($string, $adapter::QUERY_MODE_EXECUTE);
-
-        while($data = $result->current()) {
+        while($data = $rowset->current()) {
             $attribute->addOption($data['name']);
             $attribute->setOptionId($data['name'], $data['id']);
         }
