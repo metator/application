@@ -33,6 +33,16 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('sku123', $new_product->sku(), 'should save sku');
     }
 
+    function testShouldAssignID()
+    {
+        $product = new Product(array('sku'=>'sku123'));
+
+        // save !
+        $product_mapper = new ProductMapper($this->db);
+        $id = $product_mapper->save($product);
+        $this->assertEquals($id, $product->id(), 'should assign ID to product');
+    }
+
     function testShouldSaveName()
     {
         $product = new Product(array('name'=>'widget'));
@@ -43,6 +53,20 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
 
         $new_product = $product_mapper->load($id);
         $this->assertEquals('widget', $new_product->name(), 'should save name');
+    }
+
+    function testShouldUpdateName()
+    {
+        $product = new Product(array('name'=>'widget'));
+
+        $product_mapper = new ProductMapper($this->db);
+        $id = $product_mapper->save($product);
+
+        $product->setName('foobar');
+        $product_mapper->save($product);
+
+        $product = $product_mapper->load($id);
+        $this->assertEquals('foobar',$product->name(), 'should update name of existing product');
     }
 
     function testShouldSaveAttribute()

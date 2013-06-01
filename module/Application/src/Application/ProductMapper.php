@@ -25,12 +25,22 @@ class ProductMapper
     /** @param Product */
     function save($product)
     {
-        $this->productTable->insert(array(
-            'sku'=>$product->sku(),
-            'name'=>$product->name(),
-            'attributes'=>$this->serializeAttributes($product->attributes())
-        ));
-        $product_id = $this->productTable->getLastInsertValue();
+        if($product->id()) {
+            $this->productTable->update(array(
+                'sku'=>$product->sku(),
+                'name'=>$product->name(),
+                'attributes'=>$this->serializeAttributes($product->attributes())
+            ), $product->id());
+            $product_id = $product->id();
+        } else {
+            $this->productTable->insert(array(
+                'sku'=>$product->sku(),
+                'name'=>$product->name(),
+                'attributes'=>$this->serializeAttributes($product->attributes())
+            ));
+            $product_id = $this->productTable->getLastInsertValue();
+            $product->setId($product_id);
+        }
         $this->associateAttributeToProduct($product_id, $product->attributes());
         $this->savePriceModifiers($product_id, $product);
         return $product_id;
