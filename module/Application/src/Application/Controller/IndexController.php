@@ -14,6 +14,8 @@ use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
 {
+    protected $productMapper;
+
     public function indexAction()
     {
         // Use an alternative layout
@@ -30,9 +32,23 @@ class IndexController extends AbstractActionController
 
         $comments = new ViewModel();
         $comments->setTemplate('application/product/list');
+        $comments->setVariable('products',$this->products());
         $result->addChild($comments, 'product_list');
 
-
         return $result;
+    }
+
+    function products()
+    {
+        //return $this->productMapper()->load(5);
+    }
+
+    function productMapper()
+    {
+        if (!$this->productMapper) {
+            $sm = $this->getServiceLocator();
+            $this->productMapper = $sm->get('Application\ProductMapper');
+        }
+        return $this->productMapper;
     }
 }
