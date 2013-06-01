@@ -58,4 +58,45 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
         $category = $categoryMapper->load($wheel_id);
         $this->assertEquals(array($car_id,$truck_id), $category['parents'], 'should have parents');
     }
+
+    function testShouldUpdateParents()
+    {
+        $categoryMapper = new CategoryMapper($this->db);
+        $car_id = $categoryMapper->save(array(
+            'name'=>'car'
+        ));
+        $truck_id = $categoryMapper->save(array(
+            'name'=>'truck'
+        ));
+        $wheel_id = $categoryMapper->save(array(
+            'name'=>'wheel',
+            'parents'=>array($car_id,$truck_id)
+        ));
+        $categoryMapper->save(array(
+            'id'=>$wheel_id,
+            'name'=>'wheel',
+            'parents'=>array($car_id)
+        ));
+        $category = $categoryMapper->load($wheel_id);
+        $this->assertEquals(array($car_id), $category['parents'], 'should update parents');
+    }
+
+    function testShouldRemoveParents()
+    {
+        $categoryMapper = new CategoryMapper($this->db);
+        $truck_id = $categoryMapper->save(array(
+            'name'=>'truck'
+        ));
+        $wheel_id = $categoryMapper->save(array(
+            'name'=>'wheel',
+            'parents'=>array($truck_id)
+        ));
+        $categoryMapper->save(array(
+            'id'=>$wheel_id,
+            'name'=>'wheel',
+            'parents'=>array()
+        ));
+        $category = $categoryMapper->load($wheel_id);
+        $this->assertEquals(array(), $category['parents'], 'should remove parents');
+    }
 }

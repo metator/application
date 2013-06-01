@@ -23,12 +23,33 @@ class CategoryMapper
         }
     }
 
+    function load($id)
+    {
+        $select = $this->db->select()
+            ->from('category')
+            ->where('id=?',$id)
+            ->limit(1);
+        $category = $select->query()->fetch();
+        $category['parents'] = $this->loadParents($id);
+        return $category;
+    }
+
     function insert($category)
     {
         $this->db->insert('category',array(
             'name'=>$category['name']
         ));
         $category['id'] = $this->db->lastInsertId();
+        $this->insertParents($category);
+        return $category['id'];
+    }
+
+    function update($category)
+    {
+        $this->db->update('category',array(
+            'name'=>$category['name']
+        ),$category['id']);
+        $this->db->delete('category_structure','category_id='.(int)$category['id']);
         $this->insertParents($category);
         return $category['id'];
     }
@@ -44,24 +65,6 @@ class CategoryMapper
                 'parent_id'=>$parent
             ));
         }
-    }
-
-    function update($category)
-    {
-        $this->db->update('category',array(
-            'name'=>$category['name']
-        ),$category['id']);
-    }
-
-    function load($id)
-    {
-        $select = $this->db->select()
-            ->from('category')
-            ->where('id=?',$id)
-            ->limit(1);
-        $category = $select->query()->fetch();
-        $category['parents'] = $this->loadParents($id);
-        return $category;
     }
 
     function loadParents($id)
