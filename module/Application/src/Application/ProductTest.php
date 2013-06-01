@@ -4,6 +4,10 @@
 * @copyright  Copyright (c) 2013 Vehicle Fits, llc
 * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 */
+use \Application\Product;
+use \Application\Product\Configurable;
+use \Application\Attribute;
+
 class ProductTest extends PHPUnit_Framework_TestCase
 {
     function testShouldSetIDThroughConstructor()
@@ -402,7 +406,7 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $product2->addAttribute($attribute);
         $product1->setAttributeValue('color','red');
         $product2->setAttributeValue('color','blue');
-        $configurableProduct= new Product_Configurable;
+        $configurableProduct= new Configurable;
         $configurableProduct->addProduct($product1);
         $configurableProduct->addProduct($product2);
         $actual = $configurableProduct->attribute('color')->options();

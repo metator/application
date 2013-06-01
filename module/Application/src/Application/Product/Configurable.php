@@ -1,5 +1,7 @@
 <?php
-class Product_Configurable
+namespace Application\Product;
+use \Application\Attribute;
+class Configurable
 {
     protected $products = array();
 

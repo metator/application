@@ -20,5 +20,8 @@
         "phpunit/phpunit-selenium": "*",
         "phpunit/phpunit-story": "*",
         "phpunit/dbunit": "*"
+    },
+    "autoload": {
+        "psr-0": { "Application": "module/Application/src/" }
     }
 }

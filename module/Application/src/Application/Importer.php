@@ -4,6 +4,7 @@
  * @copyright  Copyright (c) 2013 Vehicle Fits, llc
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Application;
 class Importer
 {
     protected $db;
@@ -21,7 +22,7 @@ class Importer
         fwrite($h,$csvText);
         fclose($h);
 
-        $csv = new Csv_Reader($path,new Csv_Dialect);
+        $csv = new \Csv_Reader($path,new \Csv_Dialect);
         $this->fieldPositions = $csv->getRow();
         while( $row = $csv->getRow()) {
             $this->handleRow($row);

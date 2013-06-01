@@ -9,6 +9,7 @@
  * PriceModifier is a class to represent & calculate markups to prices. A flat fee or percentage markup is
  * specified, then you can modify a price which entails adding the specified fee to said price.
  */
+namespace Application;
 class PriceModifier
 {
     protected $flat_fee;

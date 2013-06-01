@@ -4,6 +4,9 @@
  * @copyright  Copyright (c) 2013 Vehicle Fits, llc
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Application;
+use \Zend\Json\Json;
+
 class ProductMapper
 {
     protected $db;
@@ -33,7 +36,7 @@ class ProductMapper
         foreach($attributes as $attribute) {
             $attributesArray[$attribute->id()] = $attribute->options();
         }
-        return Zend_Json::encode($attributesArray);
+        return Json::encode($attributesArray);
     }
 
     function associateAttributeToProduct($product_id, $attributes)
@@ -67,7 +70,7 @@ class ProductMapper
     function productExists($sku)
     {
         $select = $this->db->select()
-            ->from('product',new Zend_Db_Expr('count(*)'))
+            ->from('product',new \Zend_Db_Expr('count(*)'))
             ->where('sku=?',$sku)
             ->limit(1);
         $count = $select->query()->fetchColumn();

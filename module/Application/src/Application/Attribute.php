@@ -10,6 +10,7 @@
  * such as "red","blue","green" or "small","medium","large". These options can have price markups (flat fees & percentage)
  * associated to them based on the value selected.
  */
+namespace Application;
 class Attribute
 {
     protected $id;
@@ -32,7 +33,7 @@ class Attribute
     function setId($id)
     {
         if($this->id()>0) {
-            throw new Exception('You may not change the ID after it is already set');
+            throw new \Exception('You may not change the ID after it is already set');
         }
         $this->id=$id;
     }

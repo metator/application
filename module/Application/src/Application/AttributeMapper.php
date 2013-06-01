@@ -1,4 +1,6 @@
 <?php
+namespace Application;
+
 class AttributeMapper
 {
     protected $db;
