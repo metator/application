@@ -12,13 +12,13 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $this->db = Zend_Registry::get('db');
-        $this->db->beginTransaction();
+        $this->db = phpunit_bootstrap::getServiceManager()->get('Zend\Db\Adapter\Adapter');
+        $this->db->getDriver()->getConnection()->beginTransaction();
     }
 
     function tearDown()
     {
-        $this->db->rollback();
+        $this->db->getDriver()->getConnection()->rollback();
     }
 
     function testShouldSaveSku()

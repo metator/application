@@ -6,25 +6,31 @@
  */
 namespace Application;
 use \Zend\Json\Json;
+use Zend\Db\TableGateway\TableGateway;
 
 class ProductMapper
 {
     protected $db;
+    protected $productTable;
+    protected $productAttributeTable;
 
     function __construct($db)
     {
         $this->db = $db;
+        $this->productTable = new TableGateway('product', $this->db);
+        $this->productAttributeTable = new TableGateway('product_attribute', $this->db);
+        $this->priceModifierTable = new TableGateway('product_attribute_pricemodifiers', $this->db);
     }
 
     /** @param Product */
     function save($product)
     {
-        $this->db->insert('product',array(
+        $this->productTable->insert(array(
             'sku'=>$product->sku(),
             'name'=>$product->name(),
             'attributes'=>$this->serializeAttributes($product->attributes())
         ));
-        $product_id = $this->db->lastInsertId();
+        $product_id = $this->productTable->getLastInsertValue();
         $this->associateAttributeToProduct($product_id, $product->attributes());
         $this->savePriceModifiers($product_id, $product);
         return $product_id;
@@ -42,7 +48,7 @@ class ProductMapper
     function associateAttributeToProduct($product_id, $attributes)
     {
         foreach($attributes as $attribute) {
-            $this->db->insert('product_attribute',array(
+            $this->productAttributeTable->insert(array(
                 'product_id'=>$product_id,
                 'attribute_id'=>$attribute->id()
             ));
@@ -54,7 +60,7 @@ class ProductMapper
     {
         foreach($product->attributes() as $attribute) {
             foreach($attribute->options() as $option) {
-                $this->db->insert('product_attribute_pricemodifiers',array(
+                $this->priceModifierTable->insert(array(
                     'product_id'=>$product_id,
                     'attribute_id'=>$attribute->id(),
                     'attribute_option_id'=>$attribute->optionId($option),
@@ -69,21 +75,14 @@ class ProductMapper
 
     function productExists($sku)
     {
-        $select = $this->db->select()
-            ->from('product',new \Zend_Db_Expr('count(*)'))
-            ->where('sku=?',$sku)
-            ->limit(1);
-        $count = $select->query()->fetchColumn();
-        return $count > 0;
+        $rowset = $this->productTable->select(array('sku'=>$sku));
+        return count($rowset) > 0;
     }
 
     function findBySKu($sku)
     {
-        $select = $this->db->select()
-            ->from('product')
-            ->where('sku=?',$sku)
-            ->limit(1);
-        $data = $select->query()->fetch();
+        $rowset = $this->productTable->select(array('sku'=>$sku));
+        $data = $rowset->current();
         if(!$data) {
             return false;
         }
@@ -92,11 +91,10 @@ class ProductMapper
 
     function load($product_id)
     {
-        $select = $this->db->select()
-            ->from('product')
-            ->where('id=?',$product_id)
-            ->limit(1);
-        $data = $select->query()->fetch();
+        $rowset = $this->productTable->select(array(
+            'id'=>$product_id
+        ));
+        $data = $rowset->current();
         return $this->doLoad($data);
     }
 
@@ -110,12 +108,11 @@ class ProductMapper
 
     function loadAttributes($product)
     {
-        $select = $this->db->select()
-            ->from('product_attribute',array('attribute_id'))
-            ->where('product_id=?',$product->id());
-        $result = $select->query();
-        while($attributeID = $result->fetchColumn()) {
-            $attribute = $this->loadAttribute($attributeID);
+        $rowset = $select = $this->productAttributeTable->select(array(
+            'product_id'=>$product->id()
+        ));
+        while($row = $rowset->current()) {
+            $attribute = $this->loadAttribute($row['attribute_id']);
             $product->addAttribute($attribute);
         }
     }
@@ -124,10 +121,10 @@ class ProductMapper
     {
         foreach($product->attributes() as $attribute) {
             foreach($attribute->options() as $option) {
-                $select = $this->db->select()
-                    ->from('product_attribute_pricemodifiers',array('flat_fee','percentage'))
-                    ->where('attribute_option_id=?',$attribute->optionId($option));
-                $row = $select->query()->fetch();
+                $rowset = $select = $this->priceModifierTable->select(array(
+                    'attribute_option_id'=>$attribute->optionId($option)
+                ));
+                $row = $rowset->current();
 
                 $product->addPriceModifiersForOption($attribute->name(), $option, array(
                     'flat_fee'=>$row['flat_fee'],
