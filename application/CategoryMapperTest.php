@@ -22,7 +22,6 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
     {
         $categoryMapper = new CategoryMapper($this->db);
         $id = $categoryMapper->save(array(
-            'id'=>null,
             'name'=>'foo'
         ));
         $category = $categoryMapper->load($id);
@@ -33,7 +32,6 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
     {
         $categoryMapper = new CategoryMapper($this->db);
         $id = $categoryMapper->save(array(
-            'id'=>null,
             'name'=>'foo'
         ));
         $categoryMapper->save(array(
@@ -42,5 +40,22 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
         ));
         $category = $categoryMapper->load($id);
         $this->assertEquals('foobar',$category['name'],'should update a category name');
+    }
+
+    function testShouldHaveParents()
+    {
+        $categoryMapper = new CategoryMapper($this->db);
+        $car_id = $categoryMapper->save(array(
+            'name'=>'car'
+        ));
+        $truck_id = $categoryMapper->save(array(
+            'name'=>'truck'
+        ));
+        $wheel_id = $categoryMapper->save(array(
+            'name'=>'wheel',
+            'parents'=>array($car_id,$truck_id)
+        ));
+        $category = $categoryMapper->load($wheel_id);
+        $this->assertEquals(array($car_id,$truck_id), $category['parents'], 'should have parents');
     }
 }

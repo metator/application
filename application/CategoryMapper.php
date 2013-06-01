@@ -16,18 +16,41 @@ class CategoryMapper
     /** @param array associative array describing category to save */
     function save($category)
     {
-        if($category['id']) {
-            $this->db->update('category',array(
-                'name'=>$category['name']
-            ),$category['id']);
+        if(isset($category['id']) && $category['id']) {
+            return $this->update($category);
         } else {
-            $this->db->insert('category',array(
-                'id'=>$category['id'],
-                'name'=>$category['name']
-            ));
-            $category_id = $this->db->lastInsertId();
-            return $category_id;
+            return $this->insert($category);
         }
+    }
+
+    function insert($category)
+    {
+        $this->db->insert('category',array(
+            'name'=>$category['name']
+        ));
+        $category['id'] = $this->db->lastInsertId();
+        $this->insertParents($category);
+        return $category['id'];
+    }
+
+    function insertParents($category)
+    {
+        if(!isset($category['parents'])) {
+            return;
+        }
+        foreach($category['parents'] as $parent) {
+            $this->db->insert('category_structure',array(
+                'category_id'=>$category['id'],
+                'parent_id'=>$parent
+            ));
+        }
+    }
+
+    function update($category)
+    {
+        $this->db->update('category',array(
+            'name'=>$category['name']
+        ),$category['id']);
     }
 
     function load($id)
@@ -36,6 +59,20 @@ class CategoryMapper
             ->from('category')
             ->where('id=?',$id)
             ->limit(1);
-        return $select->query()->fetch();
+        $category = $select->query()->fetch();
+        $category['parents'] = $this->loadParents($id);
+        return $category;
+    }
+
+    function loadParents($id)
+    {
+        $parents = array();
+        $select = $this->db->select()
+            ->from('category_structure')
+            ->where('category_id=?',$id);
+        foreach($select->query()->fetchAll() as $row) {
+            $parents[] = $row['parent_id'];
+        }
+        return $parents;
     }
 }

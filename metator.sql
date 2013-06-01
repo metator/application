@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `attribute` (
   `id` int(15) NOT NULL AUTO_INCREMENT,
   `name` varchar(25) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=85 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=222 ;
 
 CREATE TABLE IF NOT EXISTS `attribute_option` (
   `id` int(15) NOT NULL AUTO_INCREMENT,
@@ -13,13 +13,20 @@ CREATE TABLE IF NOT EXISTS `attribute_option` (
   `name` varchar(25) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `attribute_id` (`attribute_id`,`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=105 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=275 ;
 
 CREATE TABLE IF NOT EXISTS `category` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   `name` varchar(25) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=82 ;
+
+CREATE TABLE IF NOT EXISTS `category_structure` (
+  `category_id` int(5) NOT NULL,
+  `parent_id` int(5) NOT NULL,
+  PRIMARY KEY (`category_id`,`parent_id`),
+  KEY `parent_id` (`parent_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `product` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -27,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `product` (
   `name` varchar(25) NOT NULL,
   `attributes` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=51 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=135 ;
 
 CREATE TABLE IF NOT EXISTS `product_attribute` (
   `product_id` int(8) NOT NULL,
@@ -49,6 +56,10 @@ CREATE TABLE IF NOT EXISTS `product_attribute_pricemodifiers` (
 
 ALTER TABLE `attribute_option`
   ADD CONSTRAINT `attribute_option_ibfk_2` FOREIGN KEY (`attribute_id`) REFERENCES `attribute` (`id`) ON DELETE CASCADE;
+
+ALTER TABLE `category_structure`
+  ADD CONSTRAINT `category_structure_ibfk_2` FOREIGN KEY (`parent_id`) REFERENCES `category` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `category_structure_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE;
 
 ALTER TABLE `product_attribute`
   ADD CONSTRAINT `product_attribute_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE;
