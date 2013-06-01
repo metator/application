@@ -69,6 +69,17 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('foobar',$product->name(), 'should update name of existing product');
     }
 
+    function testShouldList()
+    {
+        $product_mapper = new ProductMapper($this->db);
+        $product_mapper->save(new Product(array('name'=>'foo')));
+        $product_mapper->save(new Product(array('name'=>'bar')));
+        $list = $product_mapper->find();
+        $this->assertEquals(2,count($list),'should list all products');
+        $this->assertEquals('foo',$list[0]->name(),'should list 1st product');
+        $this->assertEquals('bar',$list[1]->name(),'should list 2nd product');
+    }
+
     function testShouldSaveAttribute()
     {
         $product = new Product(array('name'=>'widget'));

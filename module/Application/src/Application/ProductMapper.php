@@ -89,6 +89,16 @@ class ProductMapper
         return count($rowset) > 0;
     }
 
+    function find($params=array())
+    {
+        $rowset = $this->productTable->select($params);
+        $products = array();
+        while($row = $rowset->current()) {
+            $products[] = $this->doLoad($row);
+        }
+        return $products;
+    }
+
     function findBySKu($sku)
     {
         $rowset = $this->productTable->select(array('sku'=>$sku));
