@@ -24,8 +24,13 @@ class ProductController extends AbstractActionController
 
     function editAction()
     {
-//        $this->view->headScript()->appendFile('/js/jquery.metadata.pack.js');
-//        $this->view->headScript()->appendFile('/js/product-form.js');
+        // Use an alternative layout
+        $layoutViewModel = $this->layout();
+
+        // add an additional layout to the root view model (layout)
+        $sidebar = new ViewModel();
+        $sidebar->setTemplate('layout/admin-navigation');
+        $layoutViewModel->addChild($sidebar, 'navigation');
 
         $form = new Form;
         $form->setView(new \Zend_View);

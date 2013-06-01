@@ -30,10 +30,10 @@ class IndexController extends AbstractActionController
         $result = new ViewModel();
         $result->setTemplate('application/index/index');
 
-        $comments = new ViewModel();
-        $comments->setTemplate('application/product/list');
-        $comments->setVariable('products',$this->products());
-        $result->addChild($comments, 'product_list');
+        $products = new ViewModel();
+        $products->setTemplate('application/product/list');
+        $products->setVariable('products',$this->products());
+        $result->addChild($products, 'product_list');
 
         return $result;
     }
