@@ -1,5 +1,6 @@
 <?php
-class Product_Form extends Zend_Form
+namespace Application\Product;
+class Form extends \Zend_Form
 {
     function init()
     {

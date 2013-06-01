@@ -20,6 +20,36 @@ return array(
                     ),
                 ),
             ),
+            'product_edit' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/product/edit',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Product',
+                        'action'     => 'edit',
+                    ),
+                ),
+            ),
+            'product_manage' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/product/manage',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Product',
+                        'action'     => 'manage',
+                    ),
+                ),
+            ),
+            'attribute_manage' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/attribute/manage',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Attribute',
+                        'action'     => 'manage',
+                    ),
+                ),
+            ),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
@@ -73,7 +103,9 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Index' => 'Application\Controller\IndexController'
+            'Application\Controller\Index' => 'Application\Controller\IndexController',
+            'Application\Controller\Product' => 'Application\Controller\ProductController',
+            'Application\Controller\Attribute' => 'Application\Controller\AttributeController',
         ),
     ),
     'view_manager' => array(
