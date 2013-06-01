@@ -15,7 +15,7 @@
 
     <testsuites>
         <testsuite name="app">
-            <directory>application</directory>
+            <directory>module/Application/src</directory>
         </testsuite>
     </testsuites>
 
