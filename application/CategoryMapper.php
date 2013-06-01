@@ -13,7 +13,17 @@ class CategoryMapper
         $this->db = $db;
     }
 
-    /** @param array associative array describing category to save */
+    /**
+     * Save a category, which is represented by an array. Categories have an id, name & other category's IDs as parents
+     * Example:
+     * array(
+     *  'id' => 3,
+     *  'name'=> 'foo'
+     *  'parents' => array(1,2)
+     * )
+     * @param array associative array describing category to save
+     * @return integer the category ID
+     */
     function save($category)
     {
         if(isset($category['id']) && $category['id']) {
@@ -23,6 +33,17 @@ class CategoryMapper
         }
     }
 
+    /**
+     * Load a category
+     * Example:
+     * array(
+     *  'id' => 3,
+     *  'name'=> 'foo'
+     *  'parents' => array(1,2)
+     * )
+     * @param $id integer the category ID to load
+     * @return array representing the category
+     */
     function load($id)
     {
         $select = $this->db->select()
