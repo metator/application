@@ -29,8 +29,8 @@ class IndexController extends AbstractActionController
         $result->setTemplate('application/index/index');
 
         $comments = new ViewModel();
-        $comments->setTemplate('application/index/another-child');
-        $result->addChild($comments, 'another_child');
+        $comments->setTemplate('application/product/list');
+        $result->addChild($comments, 'product_list');
 
 
         return $result;
