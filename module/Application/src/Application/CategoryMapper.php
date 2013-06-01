@@ -5,13 +5,17 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Application;
+use Zend\Db\TableGateway\TableGateway;
 class CategoryMapper
 {
     protected $db;
+    protected $categoryTable;
 
     function __construct($db)
     {
         $this->db = $db;
+        $this->categoryTable = new TableGateway('category', $this->db);
+        $this->categoryStructureTable = new TableGateway('category_structure', $this->db);
     }
 
     /**
@@ -47,31 +51,30 @@ class CategoryMapper
      */
     function load($id)
     {
-        $select = $this->db->select()
-            ->from('category')
-            ->where('id=?',$id)
-            ->limit(1);
-        $category = $select->query()->fetch();
+        $rowset = $this->categoryTable->select(array('id'=>$id));
+        $category = $rowset->current();
         $category['parents'] = $this->loadParents($id);
         return $category;
     }
 
     function insert($category)
     {
-        $this->db->insert('category',array(
+        $this->categoryTable->insert(array(
             'name'=>$category['name']
         ));
-        $category['id'] = $this->db->lastInsertId();
+        $category['id'] = $this->categoryTable->getLastInsertValue();
         $this->insertParents($category);
         return $category['id'];
     }
 
     function update($category)
     {
-        $this->db->update('category',array(
+        $this->categoryTable->update(array(
             'name'=>$category['name']
         ),$category['id']);
-        $this->db->delete('category_structure','category_id='.(int)$category['id']);
+        $this->categoryStructureTable->delete(array(
+            'category_id'=>$category['id']
+        ));
         $this->insertParents($category);
         return $category['id'];
     }
@@ -82,7 +85,7 @@ class CategoryMapper
             return;
         }
         foreach($category['parents'] as $parent) {
-            $this->db->insert('category_structure',array(
+            $this->categoryStructureTable->insert(array(
                 'category_id'=>$category['id'],
                 'parent_id'=>$parent
             ));
@@ -92,10 +95,10 @@ class CategoryMapper
     function loadParents($id)
     {
         $parents = array();
-        $select = $this->db->select()
-            ->from('category_structure')
-            ->where('category_id=?',$id);
-        foreach($select->query()->fetchAll() as $row) {
+        $rowset = $this->categoryStructureTable->select(array(
+            'category_id'=>$id
+        ));
+        while($row = $rowset->current()) {
             $parents[] = $row['parent_id'];
         }
         return $parents;
