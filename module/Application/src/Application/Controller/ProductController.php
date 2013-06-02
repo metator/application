@@ -15,11 +15,14 @@ use Application\Product\Form;
 
 class ProductController extends AbstractActionController
 {
+    protected $productMapper;
 
     function manageAction()
     {
-        //$this->render('manage','default',false);
-        return new ViewModel;
+        $products = $this->productMapper()->find();
+        return new ViewModel(array(
+            'products'=>$products
+        ));
     }
 
     function editAction()
@@ -33,9 +36,30 @@ class ProductController extends AbstractActionController
         $layoutViewModel->addChild($sidebar, 'navigation');
 
         $form = new Form;
-        $form->setView(new \Zend_View);
+
+        if($this->getRequest()->isPost()) {
+            $post = $this->getRequest()->getPost();
+            $form->setData($post);
+            if($form->isValid()) {
+                echo 'its valid';
+                print_r($form->getData());
+            } else {
+                echo 'its not';
+                print_r($form->getMessages());
+            }
+        }
+
         return new ViewModel(array(
             'form'=>$form
         ));
+    }
+
+    function productMapper()
+    {
+        if (!$this->productMapper) {
+            $sm = $this->getServiceLocator();
+            $this->productMapper = $sm->get('Application\ProductMapper');
+        }
+        return $this->productMapper;
     }
 }

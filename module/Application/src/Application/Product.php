@@ -36,7 +36,7 @@ class Product
         $this->id=$id;
     }
 
-    function sku()
+    function getSku()
     {
         return $this->sku;
     }

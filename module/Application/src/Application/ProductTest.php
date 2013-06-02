@@ -36,14 +36,14 @@ class ProductTest extends PHPUnit_Framework_TestCase
     function testShouldSetSkuThroughConstructor()
     {
         $product = new Product(array('sku'=>'sku123'));
-        $this->assertEquals('sku123',$product->sku(), 'should set sku through constructor');
+        $this->assertEquals('sku123',$product->getSku(), 'should set sku through constructor');
     }
 
     function testShouldSetSkuThroughSetter()
     {
         $product = new Product;
         $product->setSku('sku123');
-        $this->assertEquals('sku123',$product->sku(), 'should set sku through setter');
+        $this->assertEquals('sku123',$product->getSku(), 'should set sku through setter');
     }
     
     function testShouldSetNameThroughConstructor()

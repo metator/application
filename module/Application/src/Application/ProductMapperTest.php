@@ -30,7 +30,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $id = $product_mapper->save($product);
 
         $new_product = $product_mapper->load($id);
-        $this->assertEquals('sku123', $new_product->sku(), 'should save sku');
+        $this->assertEquals('sku123', $new_product->getSku(), 'should save sku');
     }
 
     function testShouldAssignID()
@@ -210,7 +210,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $product_mapper->save($product);
 
         $new_product = $product_mapper->findBySku('sku123');
-        $this->assertEquals('sku123', $new_product->sku(), 'should find by sku');
+        $this->assertEquals('sku123', $new_product->getSku(), 'should find by sku');
     }
 
     function testShouldNotFindBySKU()

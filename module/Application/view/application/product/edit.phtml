@@ -1,6 +1,16 @@
 <?php
+$this->headTitle('Edit Product');
 $this->headScript()->appendFile('/js/jquery.metadata.pack.js');
 $this->headScript()->appendFile('/js/product-form.js');
 ?>
 <h1>Editing Product</h1>
-<?php echo $this->form ?>
+<?php
+$form->prepare();
+
+echo $this->form()->openTag($form);
+
+
+echo $this->formRow($form->get('sku'));
+
+//echo $this->formSubmit($form->get('submit'));
+echo $this->form()->closeTag();

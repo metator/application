@@ -1,2 +1,19 @@
 managing products blah blah
 <a href="/product/edit">Edit Some Product</a>
+<table>
+    <tr>
+    <th>ID</th>
+    <th>SKU</th>
+    <th>Name</th>
+    <th>Price</th>
+    </tr>
+    <?php
+    foreach($this->products as $product) {
+        ?>
+        <tr>
+            <td><?=$this->escape($product->id())?></td>
+        </tr>
+        <?php
+    }
+    ?>
+</table>
