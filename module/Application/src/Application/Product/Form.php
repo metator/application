@@ -22,6 +22,12 @@ class Form extends ZendForm
             ],
             'type'  => 'Text',
         ]);
+        $this->add([
+            'name' => 'submit',
+            'type'  => 'submit',
+            'attributes'=>['value'=>'Save']
+        ]);
+
 
 
         $inputFilterFactory = new InputFilterFactory();
