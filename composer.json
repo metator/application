@@ -11,7 +11,6 @@
     "minimum-stability": "dev",
     "require": {
         "joshribakoff/php-csv-utils":"dev-master",
-	    "zendframework/zendframework1":"*",
 	    "zendframework/zendframework":"2.*"
     },
     "require-dev": {
