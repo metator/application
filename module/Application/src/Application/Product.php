@@ -46,7 +46,7 @@ class Product
         $this->sku = $sku;
     }
 
-    function name()
+    function getName()
     {
         return $this->name;
     }

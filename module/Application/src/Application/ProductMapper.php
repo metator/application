@@ -28,14 +28,14 @@ class ProductMapper
         if($product->id()) {
             $this->productTable->update(array(
                 'sku'=>$product->getSku(),
-                'name'=>$product->name(),
+                'name'=>$product->getName(),
                 'attributes'=>$this->serializeAttributes($product->attributes())
             ), $product->id());
             $product_id = $product->id();
         } else {
             $this->productTable->insert(array(
                 'sku'=>$product->getSku(),
-                'name'=>$product->name(),
+                'name'=>$product->getName(),
                 'attributes'=>$this->serializeAttributes($product->attributes())
             ));
             $product_id = $this->productTable->getLastInsertValue();

@@ -15,6 +15,13 @@ class Form extends ZendForm
             ],
             'type'  => 'Text',
         ]);
+        $this->add([
+            'name' => 'name',
+            'options' => [
+                'label' => 'Name',
+            ],
+            'type'  => 'Text',
+        ]);
 
 
         $inputFilterFactory = new InputFilterFactory();
@@ -26,7 +33,18 @@ class Form extends ZendForm
                     ['name' => 'not_empty'],
                     [
                         'name' => 'string_length',
-                        'options' => ['min' => 3,'max' => 5]
+                        'options' => ['min' => 3]
+                    ],
+                ],
+            ],
+            'name' => [
+                'name'       => 'name',
+                'required'   => true,
+                'validators' => [
+                    ['name' => 'not_empty'],
+                    [
+                        'name' => 'string_length',
+                        'options' => ['min' => 3]
                     ],
                 ],
             ],
@@ -35,7 +53,7 @@ class Form extends ZendForm
 
         $this->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods());
 
-        if($product) {
+        if(isset($product)) {
             $this->bind($product);
         }
 

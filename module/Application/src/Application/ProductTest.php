@@ -49,14 +49,14 @@ class ProductTest extends PHPUnit_Framework_TestCase
     function testShouldSetNameThroughConstructor()
     {
         $product = new Product(array('name'=>'widget'));
-        $this->assertEquals('widget',$product->name(), 'should set name through constructor');
+        $this->assertEquals('widget',$product->getName(), 'should set name through constructor');
     }
 
     function testShouldSetNameThroughSetter()
     {
         $product = new Product;
         $product->setName('widget');
-        $this->assertEquals('widget',$product->name(), 'should set name through setter');
+        $this->assertEquals('widget',$product->getName(), 'should set name through setter');
     }
 
     function testShouldSetPriceThroughConstructor()

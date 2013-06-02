@@ -52,7 +52,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $id = $product_mapper->save($product);
 
         $new_product = $product_mapper->load($id);
-        $this->assertEquals('widget', $new_product->name(), 'should save name');
+        $this->assertEquals('widget', $new_product->getName(), 'should save name');
     }
 
     function testShouldUpdateName()
@@ -66,7 +66,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $product_mapper->save($product);
 
         $product = $product_mapper->load($id);
-        $this->assertEquals('foobar',$product->name(), 'should update name of existing product');
+        $this->assertEquals('foobar',$product->getName(), 'should update name of existing product');
     }
 
     function testShouldList()
@@ -76,8 +76,8 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $product_mapper->save(new Product(array('name'=>'bar')));
         $list = $product_mapper->find();
         $this->assertEquals(2,count($list),'should list all products');
-        $this->assertEquals('foo',$list[0]->name(),'should list 1st product');
-        $this->assertEquals('bar',$list[1]->name(),'should list 2nd product');
+        $this->assertEquals('foo',$list[0]->getName(),'should list 1st product');
+        $this->assertEquals('bar',$list[1]->getName(),'should list 2nd product');
     }
 
     function testShouldSaveAttribute()
