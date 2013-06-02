@@ -12,8 +12,7 @@ class FormTest extends PHPUnit_Framework_TestCase
     function testShouldGetValuesFromModel()
     {
         $product = new Product(['sku'=>'foo']);
-        $form = new Form;;
-        $form->bind($product);
-        $this->assertEquals('foo', $form->get('sku')->getValue(), 'should get default values from model');
+        $form = new Form($product);
+        $this->assertEquals('foo', $form->get('sku')->getValue(), 'should copy sku from product to form');
     }
 }

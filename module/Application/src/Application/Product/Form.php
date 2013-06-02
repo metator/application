@@ -5,7 +5,7 @@ use Zend\Form\Element;
 use Zend\InputFilter\Factory as InputFilterFactory;
 class Form extends ZendForm
 {
-    function __construct()
+    function __construct($product=null)
     {
         parent::__construct();
         $this->add([
@@ -34,43 +34,10 @@ class Form extends ZendForm
         $this->setInputFilter($inputFilter);
 
         $this->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods());
-        /*$this->addElement('text','name', array(
-            'label'=>'Name',
-            'required'=>true
-        ));*/
 
-
-        /*$this->addElement('radio','attribute_color',array(
-            'label'=>'Configurable "color"',
-            'multiOptions'=>array('yes'=>'Yes','no'=>'No'),
-            'separator' => '',
-            'value'=>'no',
-            'class'=>"toggle_attribute {attributeName:'Color'}"
-        ));
-        $this->addElementForAttribute('Color');*/
-
+        if($product) {
+            $this->bind($product);
+        }
 
     }
-
-    /*function addElementForAttribute($attribute)
-    {
-        $this->addConfigurationElementsForAttributeOption($attribute,'red');
-        $this->addConfigurationElementsForAttributeOption($attribute,'blue');
-
-    }
-
-    function addConfigurationElementsForAttributeOption($attribute,$option)
-    {
-        $this->addElement('radio',"attribute_{$attribute}_{$option}_pricemodifier_type",array(
-            'label'=>"{$attribute} {$option} Price",
-            'multiOptions'=>array('none','flat_fee','percentage'),
-            'separator' => '',
-            'class'=>'configure_attribute_'.$attribute
-        ));
-        $this->addElement('text',"attribute_{$attribute}_{$option}_pricemodifier_amount",array(
-            'label'=>"Amount",
-            'separator' => '',
-            'class'=>'configure_attribute_'.$attribute
-        ));
-    }*/
 }
