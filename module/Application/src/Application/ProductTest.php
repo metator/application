@@ -59,17 +59,17 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('widget',$product->getName(), 'should set name through setter');
     }
 
-    function testShouldSetPriceThroughConstructor()
+    function testShouldSetBasePriceThroughConstructor()
     {
         $product = new Product(array('price'=>5.15));
-        $this->assertEquals(5.15,$product->price(), 'should set price through constructor');
+        $this->assertEquals(5.15,$product->getBasePrice(), 'should set base price through constructor');
     }
 
-    function testShouldSetPriceThroughSetter()
+    function testShouldSetBasePriceThroughSetter()
     {
         $product = new Product;
         $product->setPrice(5.15);
-        $this->assertEquals(5.15,$product->price(), 'should set price through setter');
+        $this->assertEquals(5.15,$product->getBasePrice(), 'should set base price through setter');
     }
 
     function testShouldHaveNoAttributes()

@@ -56,6 +56,11 @@ class Product
         $this->name = $name;
     }
 
+    function getBasePrice()
+    {
+        return $this->price;
+    }
+
     /**
      * Returns the price for this product as configured. For example if this is a T-Shirt with an attribute called
      * "size" and you have declared "large" T-Shirts cost 10% more, this method will return the base price passed
