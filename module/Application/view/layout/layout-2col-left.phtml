@@ -22,8 +22,15 @@
         <?=$this->partial('layout/navigation.phtml')?>
 
         <div class="container-fluid">
-
-            <?php echo $this->content; ?>
+            <div class="row-fluid">
+                <div class="span3">
+                    <?php echo $this->navigation; ?>
+                </div><!--/span-->
+                <div class="span9">
+                    <?php echo $this->splash; ?>
+                    <?php echo $this->content; ?>
+                </div><!--/span-->
+            </div><!--/row-->
 
             <hr>
 
