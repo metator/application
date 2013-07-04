@@ -4,9 +4,11 @@
  * @copyright  Copyright (c) 2013 Vehicle Fits, llc
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-namespace Application;
+namespace Product;
+
 use \Exception;
 use \Application\PriceModifier;
+
 class Product
 {
     protected $id;
@@ -122,7 +124,7 @@ class Product
 
         // if $attribute is a string, turn it into an object
         if(is_string($attribute)) {
-            $attribute = new Attribute(array('name'=>$attribute));
+            $attribute = new \Application\Attribute(array('name'=>$attribute));
         }
 
         // if there are no $params['options'] set, just add the Attribute

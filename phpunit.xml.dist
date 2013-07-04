@@ -21,6 +21,9 @@
         <testsuite name="application">
             <directory>module/Application/test</directory>
         </testsuite>
+        <testsuite name="product">
+            <directory>module/Product/test</directory>
+        </testsuite>
     </testsuites>
 
 </phpunit>

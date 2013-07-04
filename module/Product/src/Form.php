@@ -1,8 +1,10 @@
 <?php
-namespace Application\Product;
+namespace Product;
+
 use Zend\Form\Form as ZendForm;
 use Zend\Form\Element;
 use Zend\InputFilter\Factory as InputFilterFactory;
+
 class Form extends ZendForm
 {
     function __construct($product=null)

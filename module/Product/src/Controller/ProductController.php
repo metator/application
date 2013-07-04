@@ -7,11 +7,12 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Application\Controller;
+namespace Product\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Application\Product\Form;
+use Product\Form;
+use Product\Product;
 
 class ProductController extends AbstractActionController
 {
@@ -41,7 +42,7 @@ class ProductController extends AbstractActionController
             $post = $this->getRequest()->getPost();
             $form->setData($post);
             if($form->isValid()) {
-                $product = new \Application\Product($form->getData());
+                $product = new Product($form->getData());
                 $this->productMapper()->save($product);
                 return $this->redirect()->toRoute('product_manage');
             }

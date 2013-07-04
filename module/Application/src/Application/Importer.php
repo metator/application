@@ -6,7 +6,9 @@
  */
 namespace Application;
 
-use Application\Product\DataMapper as ProductDataMapper;
+use Product\DataMapper as ProductDataMapper,
+    Product\Product;
+
 class Importer
 {
     protected $db;

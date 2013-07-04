@@ -5,7 +5,7 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 use \Application\Importer;
-use \Application\ProductMapper;
+use Product\DataMapper as ProductDataMapper;
 class ImportTest extends PHPUnit_Framework_TestCase
 {
     function setUp()
@@ -111,7 +111,7 @@ class ImportTest extends PHPUnit_Framework_TestCase
 
     function productExists($sku)
     {
-        $product_mapper = new \Application\Product\DataMapper($this->db);
+        $product_mapper = new ProductDataMapper($this->db);
         return $product_mapper->productExists($sku);
     }
 }

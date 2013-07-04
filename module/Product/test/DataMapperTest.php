@@ -1,13 +1,13 @@
 <?php
-namespace Application\Product;
 /**
  * Metator (http://metator.com/)
  * @copyright  Copyright (c) 2013 Vehicle Fits, llc
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-use \Application\Product;
+namespace Product;
 
 use \Application\AttributeMapper;
+
 class DataMapperTest extends \PHPUnit_Framework_TestCase
 {
 

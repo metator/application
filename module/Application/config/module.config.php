@@ -22,39 +22,6 @@ return array(
                 ),
             ),
 
-            'product_new' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route'    => '/product/new',
-                    'defaults' => array(
-                        'controller' => 'Application\Controller\Product',
-                        'action'     => 'edit',
-                    ),
-                ),
-            ),
-
-            'product_edit' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route'    => '/product/edit',
-                    'defaults' => array(
-                        'controller' => 'Application\Controller\Product',
-                        'action'     => 'edit',
-                    ),
-                ),
-            ),
-
-            'product_manage' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route'    => '/product/manage',
-                    'defaults' => array(
-                        'controller' => 'Application\Controller\Product',
-                        'action'     => 'manage',
-                    ),
-                ),
-            ),
-
             'category_manage' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -143,7 +110,6 @@ return array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
             'Application\Controller\Category' => 'Application\Controller\CategoryController',
-            'Application\Controller\Product' => 'Application\Controller\ProductController',
             'Application\Controller\Attribute' => 'Application\Controller\AttributeController',
         ),
     ),

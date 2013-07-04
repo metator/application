@@ -1,6 +1,8 @@
 <?php
-namespace Application\Product;
+namespace Product;
+
 use \Application\Attribute;
+
 class Configurable
 {
     protected $products = array();

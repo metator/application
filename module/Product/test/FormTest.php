@@ -4,10 +4,9 @@
  * @copyright  Copyright (c) 2013 Vehicle Fits, llc
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-use \Application\Product\Form;
-use \Application\Product;
+namespace Product;
 
-class FormTest extends PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit_Framework_TestCase
 {
     function testShouldRequireSku()
     {

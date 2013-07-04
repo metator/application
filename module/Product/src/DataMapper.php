@@ -4,7 +4,7 @@
  * @copyright  Copyright (c) 2013 Vehicle Fits, llc
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-namespace Application\Product;
+namespace Product;
 
 use Application\AttributeMapper;
 use \Zend\Json\Json;
@@ -124,7 +124,7 @@ class DataMapper
 
     function doLoad($data)
     {
-        $product = new \Application\Product($data);
+        $product = new Product($data);
         $this->loadAttributes($product);
         $this->loadPriceModifiers($product);
         return $product;
