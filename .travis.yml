@@ -10,7 +10,7 @@ before_script:
   - mysql -e 'create database metator'
   - mysql metator < metator.sql
   - curl -s http://getcomposer.org/installer | php -- --quiet
-  - php composer.phar install --dev
+  - php composer.phar install --dev --prefer-source
 
 script:
   - vendor/bin/phpunit
