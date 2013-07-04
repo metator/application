@@ -15,7 +15,8 @@ $dbname = 'metator';
 if(getenv('IS_PHPUNIT')) {
     $dbname = 'metator_tests';
 }
-return array(
+
+$config = array(
     'db' => array(
         'driver'         => 'Pdo',
         'dsn'            => "mysql:dbname=$dbname;host=localhost",
@@ -27,8 +28,39 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            'Zend\Db\Adapter\Adapter'
-            => 'Zend\Db\Adapter\AdapterServiceFactory',
+            'Zend\Db\Adapter\Adapter' => 'Zend\Db\Adapter\AdapterServiceFactory',
         ),
     ),
 );
+
+if(file_exists('vendor/bjyoungblood/bjy-profiler')) {
+    $dbParams = array(
+        'database'  => $dbname,
+        'username'  => 'root',
+        'password'  => '',
+        'hostname'  => 'localhost',
+        // buffer_results - only for mysqli buffered queries, skip for others
+        'options' => array('buffer_results' => true)
+    );
+
+    $config['service_manager']['factories']['Zend\Db\Adapter\Adapter'] = function ($sm) use ($dbParams) {
+        $adapter = new BjyProfiler\Db\Adapter\ProfilingAdapter(array(
+            'driver'    => 'pdo',
+            'dsn'       => 'mysql:dbname='.$dbParams['database'].';host='.$dbParams['hostname'],
+            'database'  => $dbParams['database'],
+            'username'  => $dbParams['username'],
+            'password'  => $dbParams['password'],
+            'hostname'  => $dbParams['hostname'],
+        ));
+
+        $adapter->setProfiler(new BjyProfiler\Db\Profiler\Profiler);
+        if (isset($dbParams['options']) && is_array($dbParams['options'])) {
+            $options = $dbParams['options'];
+        } else {
+            $options = array();
+        }
+        $adapter->injectProfilingStatementPrototype($options);
+        return $adapter;
+    };
+}
+return $config;
