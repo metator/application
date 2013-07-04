@@ -7,16 +7,13 @@ class phpunit_bootstrap
 
     static function go()
     {
-        /**
-         * This makes our life easier when dealing with paths. Everything is relative
-         * to the application root now.
-         */
+        /** Everything is relative to the application root now. */
         chdir(__DIR__);
 
-        // Setup autoloading
+        /** Setup autoloading */
         require 'init_autoloader.php';
 
-        // Run the application!
+        /** bootstrap ZF2 */
         $config = require 'config/application.config.php';
         Zend\Mvc\Application::init($config);
 
@@ -25,6 +22,11 @@ class phpunit_bootstrap
         $serviceManager->get('ModuleManager')->loadModules();
 
         self::$serviceManager = $serviceManager;
+
+        /** Reset the DB */
+        `mysql --user=root -e "drop database IF EXISTS metator_tests"`;
+        `mysql --user=root -e "create database metator_tests"`;
+        `mysql --user=root metator_tests < install.sql`;
     }
 
     static public function getServiceManager()

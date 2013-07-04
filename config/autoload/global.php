@@ -11,10 +11,14 @@
  * file.
  */
 
+$dbname = 'metator';
+if(getenv('IS_PHPUNIT')) {
+    $dbname = 'metator_tests';
+}
 return array(
     'db' => array(
         'driver'         => 'Pdo',
-        'dsn'            => 'mysql:dbname=metator;host=localhost',
+        'dsn'            => "mysql:dbname=$dbname;host=localhost",
         'driver_options' => array(
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
         ),
