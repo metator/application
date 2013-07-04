@@ -7,6 +7,7 @@ $this->headScript()->appendFile('/js/product-form.js');
 <?php
 $form->prepare();
 
+$form->setAttribute('action','?');
 echo $this->form()->openTag($form);
 
 

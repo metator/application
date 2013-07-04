@@ -10,6 +10,7 @@
 return array(
     'router' => array(
         'routes' => array(
+
             'home' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -20,6 +21,18 @@ return array(
                     ),
                 ),
             ),
+
+            'product_new' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/product/new',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Product',
+                        'action'     => 'edit',
+                    ),
+                ),
+            ),
+
             'product_edit' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -30,6 +43,7 @@ return array(
                     ),
                 ),
             ),
+
             'product_manage' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -40,6 +54,7 @@ return array(
                     ),
                 ),
             ),
+
             'attribute_manage' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -50,6 +65,7 @@ return array(
                     ),
                 ),
             ),
+
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them

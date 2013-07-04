@@ -20,9 +20,9 @@ class ProductController extends AbstractActionController
     function manageAction()
     {
         $products = $this->productMapper()->find();
-        return new ViewModel(array(
+        return array(
             'products'=>$products
-        ));
+        );
     }
 
     function editAction()
@@ -41,19 +41,20 @@ class ProductController extends AbstractActionController
             $post = $this->getRequest()->getPost();
             $form->setData($post);
             if($form->isValid()) {
-                echo 'its valid';
-                print_r($form->getData());
-            } else {
-                echo 'its not';
-                print_r($form->getMessages());
+
+                $product = new \Application\Product($form->getData());
+
+                $this->productMapper()->save($product);
+                return $this->redirect()->toRoute('product_manage');
             }
         }
 
-        return new ViewModel(array(
+        return array(
             'form'=>$form
-        ));
+        );
     }
 
+    /** @return \Application\ProductMapper */
     function productMapper()
     {
         if (!$this->productMapper) {
