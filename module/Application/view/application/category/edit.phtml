@@ -1,0 +1,16 @@
+<?php
+$this->headTitle('Edit Category');
+?>
+<h1>Editing Category</h1>
+<?php
+$form->prepare();
+
+$form->setAttribute('action','?');
+echo $this->form()->openTag($form);
+
+
+echo $this->formRow($form->get('name'));
+//echo $this->formRow($form->get('parents'));
+
+echo $this->formSubmit($form->get('submit'));
+echo $this->form()->closeTag();

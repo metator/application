@@ -100,4 +100,41 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
         $category = $mapper->load($wheel_id);
         $this->assertEquals(array(), $category['parents'], 'should remove parents');
     }
+
+    function testShouldFindAll()
+    {
+        $mapper = new CategoryMapper($this->db);
+        $car_id = $mapper->save(array(
+            'name'=>'car'
+        ));
+        $truck_id = $mapper->save(array(
+            'name'=>'truck'
+        ));
+        $wheel_id = $mapper->save(array(
+            'name'=>'wheel',
+            'parents'=>array($car_id,$truck_id)
+        ));
+        $categories = $mapper->findAll();
+
+        $expected = array(
+            array(
+                'id'=>$car_id,
+                'name'=>'car',
+                'parents'=>array()
+            ),
+            array(
+                'id'=>$truck_id,
+                'name'=>'truck',
+                'parents'=>array()
+            ),
+            array(
+                'id'=>$wheel_id,
+                'name'=>'wheel',
+                'parents'=>array($car_id,$truck_id)
+            ),
+
+        );
+
+        $this->assertEquals($expected, $categories);
+    }
 }

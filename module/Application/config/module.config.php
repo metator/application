@@ -55,6 +55,28 @@ return array(
                 ),
             ),
 
+            'category_manage' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/category/manage',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Category',
+                        'action'     => 'manage',
+                    ),
+                ),
+            ),
+
+            'category_new' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/category/new',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Category',
+                        'action'     => 'edit',
+                    ),
+                ),
+            ),
+
             'attribute_manage' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -120,6 +142,7 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
+            'Application\Controller\Category' => 'Application\Controller\CategoryController',
             'Application\Controller\Product' => 'Application\Controller\ProductController',
             'Application\Controller\Attribute' => 'Application\Controller\AttributeController',
         ),

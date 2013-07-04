@@ -18,6 +18,16 @@ class CategoryMapper
         $this->categoryStructureTable = new TableGateway('category_structure', $this->db);
     }
 
+    function findAll()
+    {
+        $rows = $this->categoryTable->select();
+        $categories = array();
+        while($row = $rows->current()) {
+            $categories[] = $this->load($row['id']);
+        }
+        return $categories;
+    }
+
     /**
      * Save a category, which is represented by an array. Categories have an id, name & other category's IDs as parents
      * Example:
@@ -52,7 +62,7 @@ class CategoryMapper
     function load($id)
     {
         $rowset = $this->categoryTable->select(array('id'=>$id));
-        $category = $rowset->current();
+        $category = (array)$rowset->current();
         $category['parents'] = $this->loadParents($id);
         return $category;
     }

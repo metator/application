@@ -44,7 +44,11 @@ class Module
             'factories' => array(
                 'Application\ProductMapper' => function ($sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+
                     return new ProductMapper($dbAdapter);
+                },'Application\CategoryMapper' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    return new CategoryMapper($dbAdapter);
                 },
             ),
         );
