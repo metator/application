@@ -46,9 +46,10 @@ class Module
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
 
                     return new ProductMapper($dbAdapter);
-                },'Application\CategoryMapper' => function ($sm) {
+                },
+                'Application\Category\DataMapper' => function ($sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                    return new CategoryMapper($dbAdapter);
+                    return new Category\DataMapper($dbAdapter);
                 },
             ),
         );

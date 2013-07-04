@@ -52,7 +52,7 @@ class CategoryController extends AbstractActionController
     {
         if (!$this->categoryMapper) {
             $sm = $this->getServiceLocator();
-            $this->categoryMapper = $sm->get('Application\CategoryMapper');
+            $this->categoryMapper = $sm->get('Application\Category\DataMapper');
         }
         return $this->categoryMapper;
     }

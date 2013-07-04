@@ -1,16 +1,18 @@
 <?php
+namespace Application\Category;
+
 /**
  * Metator (http://metator.com/)
  * @copyright  Copyright (c) 2013 Vehicle Fits, llc
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-use \Application\CategoryMapper;
-class CategoryMapperTest extends PHPUnit_Framework_TestCase
+
+class DataMapperTest extends \PHPUnit_Framework_TestCase
 {
 
     function setUp()
     {
-        $this->db = phpunit_bootstrap::getServiceManager()->get('Zend\Db\Adapter\Adapter');
+        $this->db = \phpunit_bootstrap::getServiceManager()->get('Zend\Db\Adapter\Adapter');
         $this->db->getDriver()->getConnection()->beginTransaction();
     }
 
@@ -21,7 +23,7 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
 
     function testShouldSaveName()
     {
-        $mapper = new CategoryMapper($this->db);
+        $mapper = new DataMapper($this->db);
         $id = $mapper->save(array(
             'name'=>'foo'
         ));
@@ -31,7 +33,7 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
 
     function testShouldUpdateName()
     {
-        $mapper = new CategoryMapper($this->db);
+        $mapper = new DataMapper($this->db);
         $id = $mapper->save(array(
             'name'=>'foo'
         ));
@@ -45,7 +47,7 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
 
     function testShouldHaveParents()
     {
-        $mapper = new CategoryMapper($this->db);
+        $mapper = new DataMapper($this->db);
         $car_id = $mapper->save(array(
             'name'=>'car'
         ));
@@ -62,7 +64,7 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
 
     function testShouldUpdateParents()
     {
-        $mapper = new CategoryMapper($this->db);
+        $mapper = new DataMapper($this->db);
         $car_id = $mapper->save(array(
             'name'=>'car'
         ));
@@ -84,7 +86,7 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
 
     function testShouldRemoveParents()
     {
-        $mapper = new CategoryMapper($this->db);
+        $mapper = new DataMapper($this->db);
         $truck_id = $mapper->save(array(
             'name'=>'truck'
         ));
@@ -103,7 +105,7 @@ class CategoryMapperTest extends PHPUnit_Framework_TestCase
 
     function testShouldFindAll()
     {
-        $mapper = new CategoryMapper($this->db);
+        $mapper = new DataMapper($this->db);
         $car_id = $mapper->save(array(
             'name'=>'car'
         ));

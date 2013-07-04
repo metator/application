@@ -1,9 +1,6 @@
 <?php
 namespace Application\Category;
 
-use \Application\Category\Form;
-use \Application\CategoryMapper;
-
 class FormTest extends \PHPUnit_Framework_TestCase
 {
     function setUp()
@@ -31,12 +28,12 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     function testShouldListPossibleParents()
     {
-        $mapper = new CategoryMapper($this->db);
+        $mapper = new DataMapper($this->db);
         $parent1_id = $mapper->save(array(
             'name'=>'Parent 1'
         ));
 
-        $mapper = new CategoryMapper($this->db);
+        $mapper = new DataMapper($this->db);
         $parent2_id = $mapper->save(array(
             'name'=>'Parent 2'
         ));
