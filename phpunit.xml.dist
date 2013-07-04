@@ -18,8 +18,8 @@
     </php>
 
     <testsuites>
-        <testsuite name="app">
-            <directory>module/Application/src</directory>
+        <testsuite name="application">
+            <directory>module/Application/test</directory>
         </testsuite>
     </testsuites>
 
