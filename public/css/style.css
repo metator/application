@@ -49,11 +49,6 @@ body {
     margin:0;
 }
 
-.zend_form input, .zend_form textarea{
-    margin:0 0 2px 0;
-    padding:0;
-}
-
 .submit{
     float:right;
 }

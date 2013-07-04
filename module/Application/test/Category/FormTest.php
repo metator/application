@@ -17,26 +17,36 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->db->getDriver()->getConnection()->rollback();
     }
 
-    function testShouldSaveName()
+    function testShouldSetNameToCategory()
     {
-        $mapper = new CategoryMapper($this->db);
-        $id = $mapper->save(array(
-            'name'=>'foo'
-        ));
-        $category = $mapper->load($id);
-        $this->assertEquals('foo',$category['name'],'should save a category name');
+        $form = new Form(null);
+
+        $this->assertTrue($form->isValid([
+            'name'=>'wheels'
+        ]));
+
+        $category = $form->getValues();
+        $this->assertEquals('wheels',$category['name'],'should copy name from form to category');
     }
 
-    function testShouldSetValuesTocategory()
+    function testShouldListPossibleParents()
     {
-        $form = new Form();
-        $form->setData([
-            'name'=>'wheels',
-            'parents'=>array(1,2)
-        ]);
-        $this->assertTrue($form->isValid());
+        $mapper = new CategoryMapper($this->db);
+        $parent1_id = $mapper->save(array(
+            'name'=>'Parent 1'
+        ));
 
-        $category = $form->getData();
-        $this->assertEquals('wheels',$category['name'],'should copy name from form to category');
+        $mapper = new CategoryMapper($this->db);
+        $parent2_id = $mapper->save(array(
+            'name'=>'Parent 2'
+        ));
+
+        $form = new Form($mapper);
+
+        $expected = array(
+            $parent1_id=>'Parent 1',
+            $parent2_id=>'Parent 2',
+        );
+        $this->assertEquals($expected, $form->getElement('parents')->getMultiOptions());
     }
 }

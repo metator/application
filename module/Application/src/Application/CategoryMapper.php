@@ -18,6 +18,15 @@ class CategoryMapper
         $this->categoryStructureTable = new TableGateway('category_structure', $this->db);
     }
 
+    function listForForm()
+    {
+        $categories = array();
+        foreach($this->findAll() as $category) {
+            $categories[$category['id']] = $category['name'];
+        }
+        return $categories;
+    }
+
     function findAll()
     {
         $rows = $this->categoryTable->select();

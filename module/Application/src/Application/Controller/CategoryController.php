@@ -35,15 +35,11 @@ class CategoryController extends AbstractActionController
         $sidebar->setTemplate('layout/admin-navigation');
         $layoutViewModel->addChild($sidebar, 'navigation');
 
-        $form = new Form;
+        $form = new Form($this->categoryMapper());
 
-        if($this->getRequest()->isPost()) {
-            $post = $this->getRequest()->getPost();
-            $form->setData($post);
-            if($form->isValid()) {
-                $this->categoryMapper()->save($form->getData());
-                return $this->redirect()->toRoute('category_manage');
-            }
+        if($this->getRequest()->isPost() && $form->isValid($this->params()->fromPost())) {
+            $this->categoryMapper()->save($form->getValues());
+            return $this->redirect()->toRoute('category_manage');
         }
 
         return array(
