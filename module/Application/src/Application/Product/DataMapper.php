@@ -4,11 +4,13 @@
  * @copyright  Copyright (c) 2013 Vehicle Fits, llc
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-namespace Application;
+namespace Application\Product;
+
+use Application\AttributeMapper;
 use \Zend\Json\Json;
 use Zend\Db\TableGateway\TableGateway;
 
-class ProductMapper
+class DataMapper
 {
     protected $db;
     protected $productTable;
@@ -122,7 +124,7 @@ class ProductMapper
 
     function doLoad($data)
     {
-        $product = new Product($data);
+        $product = new \Application\Product($data);
         $this->loadAttributes($product);
         $this->loadPriceModifiers($product);
         return $product;

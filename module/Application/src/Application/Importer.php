@@ -5,6 +5,8 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Application;
+
+use Application\Product\DataMapper as ProductDataMapper;
 class Importer
 {
     protected $db;
@@ -35,7 +37,7 @@ class Importer
             'sku'=>$row[0],
             'name'=>$row[1]
         ));
-        $product_mapper = new ProductMapper($this->db);
+        $product_mapper = new ProductDataMapper($this->db);
         $product_mapper->save($product);
     }
 }

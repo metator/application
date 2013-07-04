@@ -111,7 +111,7 @@ class ImportTest extends PHPUnit_Framework_TestCase
 
     function productExists($sku)
     {
-        $product_mapper = new ProductMapper($this->db);
+        $product_mapper = new \Application\Product\DataMapper($this->db);
         return $product_mapper->productExists($sku);
     }
 }

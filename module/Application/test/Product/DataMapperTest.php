@@ -1,18 +1,19 @@
 <?php
+namespace Application\Product;
 /**
  * Metator (http://metator.com/)
  * @copyright  Copyright (c) 2013 Vehicle Fits, llc
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 use \Application\Product;
-use \Application\ProductMapper;
+
 use \Application\AttributeMapper;
-class ProductMapperTest extends PHPUnit_Framework_TestCase
+class DataMapperTest extends \PHPUnit_Framework_TestCase
 {
 
     function setUp()
     {
-        $this->db = phpunit_bootstrap::getServiceManager()->get('Zend\Db\Adapter\Adapter');
+        $this->db = \phpunit_bootstrap::getServiceManager()->get('Zend\Db\Adapter\Adapter');
         $this->db->getDriver()->getConnection()->beginTransaction();
     }
 
@@ -26,7 +27,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $product = new Product(array('sku'=>'sku123'));
 
         // save !
-        $product_mapper = new ProductMapper($this->db);
+        $product_mapper = new DataMapper($this->db);
         $id = $product_mapper->save($product);
 
         $new_product = $product_mapper->load($id);
@@ -38,7 +39,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $product = new Product(array('sku'=>'sku123'));
 
         // save !
-        $product_mapper = new ProductMapper($this->db);
+        $product_mapper = new DataMapper($this->db);
         $id = $product_mapper->save($product);
         $this->assertEquals($id, $product->id(), 'should assign ID to product');
     }
@@ -48,7 +49,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $product = new Product(array('name'=>'widget'));
 
         // save !
-        $product_mapper = new ProductMapper($this->db);
+        $product_mapper = new DataMapper($this->db);
         $id = $product_mapper->save($product);
 
         $new_product = $product_mapper->load($id);
@@ -59,7 +60,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
     {
         $product = new Product(array('name'=>'widget'));
 
-        $product_mapper = new ProductMapper($this->db);
+        $product_mapper = new DataMapper($this->db);
         $id = $product_mapper->save($product);
 
         $product->setName('foobar');
@@ -74,7 +75,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $product = new Product(array('base_price'=>'12.34'));
 
         // save !
-        $product_mapper = new ProductMapper($this->db);
+        $product_mapper = new DataMapper($this->db);
         $id = $product_mapper->save($product);
 
         $new_product = $product_mapper->load($id);
@@ -85,7 +86,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
     {
         $product = new Product(array('base_price'=>'12.34'));
 
-        $product_mapper = new ProductMapper($this->db);
+        $product_mapper = new DataMapper($this->db);
         $id = $product_mapper->save($product);
 
         $product->setBasePrice('12.45');
@@ -97,7 +98,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
 
     function testShouldList()
     {
-        $product_mapper = new ProductMapper($this->db);
+        $product_mapper = new DataMapper($this->db);
         $product_mapper->save(new Product(array('name'=>'foo')));
         $product_mapper->save(new Product(array('name'=>'bar')));
         $list = $product_mapper->find();
@@ -116,7 +117,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $attribute_mapper->save($product->attribute('color'));
 
         // save product !
-        $product_mapper = new ProductMapper($this->db);
+        $product_mapper = new DataMapper($this->db);
         $id = $product_mapper->save($product);
 
         $loaded_product = $product_mapper->load($id);
@@ -135,7 +136,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $attribute_mapper->save($product->attribute('color'));
 
         // save product !
-        $product_mapper = new ProductMapper($this->db);
+        $product_mapper = new DataMapper($this->db);
         $id = $product_mapper->save($product);
 
         $loaded_product = $product_mapper->load($id);
@@ -158,7 +159,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $attribute_mapper->save($product->attribute('color'));
 
         // save product !
-        $product_mapper = new ProductMapper($this->db);
+        $product_mapper = new DataMapper($this->db);
         $id = $product_mapper->save($product);
 
         $new_product = $product_mapper->load($id);
@@ -181,7 +182,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $attribute_mapper->save($product->attribute('color'));
 
         // save product !
-        $product_mapper = new ProductMapper($this->db);
+        $product_mapper = new DataMapper($this->db);
         $id = $product_mapper->save($product);
 
         $new_product = $product_mapper->load($id);
@@ -217,7 +218,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $attribute_mapper->save($product->attribute('size'));
 
         // save product !
-        $product_mapper = new ProductMapper($this->db);
+        $product_mapper = new DataMapper($this->db);
         $id = $product_mapper->save($product);
 
         $new_product = $product_mapper->load($id);
@@ -232,7 +233,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $product = new Product(array('sku'=>'sku123'));
 
         // save !
-        $product_mapper = new ProductMapper($this->db);
+        $product_mapper = new DataMapper($this->db);
         $product_mapper->save($product);
 
         $new_product = $product_mapper->findBySku('sku123');
@@ -244,7 +245,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $product = new Product(array('sku'=>'foo'));
 
         // save !
-        $product_mapper = new ProductMapper($this->db);
+        $product_mapper = new DataMapper($this->db);
         $product_mapper->save($product);
 
         $this->assertFalse($product_mapper->findBySku('bar'), 'should not find a non-existent sku');
@@ -253,7 +254,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
     function testProductShouldNotExist()
     {
         $product = new Product(array('sku'=>'foo'));
-        $product_mapper = new ProductMapper($this->db);
+        $product_mapper = new DataMapper($this->db);
         $product_mapper->save($product);
         $this->assertFalse($product_mapper->productExists('bar'),   'product should not exist');
     }
@@ -261,7 +262,7 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
     function testProductShouldExist()
     {
         $product = new Product(array('sku'=>'foo'));
-        $product_mapper = new ProductMapper($this->db);
+        $product_mapper = new DataMapper($this->db);
         $product_mapper->save($product);
         $this->assertTrue($product_mapper->productExists('foo'),    'product should exist');
     }
