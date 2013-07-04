@@ -29,14 +29,16 @@ class ProductMapper
             $this->productTable->update(array(
                 'sku'=>$product->getSku(),
                 'name'=>$product->getName(),
-                'attributes'=>$this->serializeAttributes($product->attributes())
+                'attributes'=>$this->serializeAttributes($product->attributes()),
+                'base_price'=>$product->getBasePrice()
             ), $product->id());
             $product_id = $product->id();
         } else {
             $this->productTable->insert(array(
                 'sku'=>$product->getSku(),
                 'name'=>$product->getName(),
-                'attributes'=>$this->serializeAttributes($product->attributes())
+                'attributes'=>$this->serializeAttributes($product->attributes()),
+                'base_price'=>$product->getBasePrice()
             ));
             $product_id = $this->productTable->getLastInsertValue();
             $product->setId($product_id);

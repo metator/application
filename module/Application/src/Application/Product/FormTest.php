@@ -52,10 +52,12 @@ class FormTest extends PHPUnit_Framework_TestCase
         $form = new Form($product);
         $form->setData([
             'sku'=>'foo',
-            'name'=>'widget'
+            'name'=>'widget',
+            'basePrice'=>12.34
         ]);
         $this->assertTrue($form->isValid());
         $this->assertEquals('foo',$product->getSku(),'should copy sku from form to product');
         $this->assertEquals('widget',$product->getName(),'should copy name from form to product');
+        $this->assertEquals(12.34,$product->getBasePrice(),'should copy base price from form to product');
     }
 }

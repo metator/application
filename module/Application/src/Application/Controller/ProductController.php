@@ -41,9 +41,7 @@ class ProductController extends AbstractActionController
             $post = $this->getRequest()->getPost();
             $form->setData($post);
             if($form->isValid()) {
-
                 $product = new \Application\Product($form->getData());
-
                 $this->productMapper()->save($product);
                 return $this->redirect()->toRoute('product_manage');
             }

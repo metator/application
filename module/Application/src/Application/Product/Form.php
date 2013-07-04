@@ -8,6 +8,7 @@ class Form extends ZendForm
     function __construct($product=null)
     {
         parent::__construct();
+
         $this->add([
             'name' => 'sku',
             'options' => [
@@ -15,6 +16,7 @@ class Form extends ZendForm
             ],
             'type'  => 'Text',
         ]);
+
         $this->add([
             'name' => 'name',
             'options' => [
@@ -22,13 +24,20 @@ class Form extends ZendForm
             ],
             'type'  => 'Text',
         ]);
+
+        $this->add([
+            'name' => 'basePrice',
+            'options' => [
+                'label' => 'Base Price',
+            ],
+            'type'  => 'Text',
+        ]);
+
         $this->add([
             'name' => 'submit',
             'type'  => 'submit',
             'attributes'=>['value'=>'Save']
         ]);
-
-
 
         $inputFilterFactory = new InputFilterFactory();
         $inputFilter = $inputFilterFactory->createInputFilter([
@@ -52,6 +61,13 @@ class Form extends ZendForm
                         'name' => 'string_length',
                         'options' => ['min' => 3]
                     ],
+                ],
+            ],
+            'basePrice' => [
+                'name'       => 'base_price',
+                'required'   => true,
+                'validators' => [
+                    ['name' => 'float']
                 ],
             ],
         ]);

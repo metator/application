@@ -61,14 +61,20 @@ class ProductTest extends PHPUnit_Framework_TestCase
 
     function testShouldSetBasePriceThroughConstructor()
     {
-        $product = new Product(array('price'=>5.15));
+        $product = new Product(array('base_price'=>5.15));
         $this->assertEquals(5.15,$product->getBasePrice(), 'should set base price through constructor');
+    }
+
+    function testShouldSetBasePriceThroughConstructorCamelCase()
+    {
+        $product = new Product(array('basePrice'=>5.15));
+        $this->assertEquals(5.15,$product->getBasePrice(), 'should set base price through constructor w/ camel case');
     }
 
     function testShouldSetBasePriceThroughSetter()
     {
         $product = new Product;
-        $product->setPrice(5.15);
+        $product->setBasePrice(5.15);
         $this->assertEquals(5.15,$product->getBasePrice(), 'should set base price through setter');
     }
 
@@ -314,7 +320,7 @@ class ProductTest extends PHPUnit_Framework_TestCase
     function testShouldModifyPrice()
     {
         $product = new Product(array(
-            'price'=>5
+            'base_price'=>5
         ));
         $attribute = new Attribute(array(
             'name'=>'Color'
@@ -363,7 +369,7 @@ class ProductTest extends PHPUnit_Framework_TestCase
     function testShouldModifyPriceWithMultipleAttributes()
     {
         $product = new Product(array(
-            'price'=>5
+            'base_price'=>5
         ));
 
         // add "color" attribute

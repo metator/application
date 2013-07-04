@@ -69,6 +69,32 @@ class ProductMapperTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('foobar',$product->getName(), 'should update name of existing product');
     }
 
+    function testShouldSaveBasePrice()
+    {
+        $product = new Product(array('base_price'=>'12.34'));
+
+        // save !
+        $product_mapper = new ProductMapper($this->db);
+        $id = $product_mapper->save($product);
+
+        $new_product = $product_mapper->load($id);
+        $this->assertEquals('12.34', $new_product->getBasePrice(), 'should save base price');
+    }
+
+    function testShouldUpdateBasePrice()
+    {
+        $product = new Product(array('base_price'=>'12.34'));
+
+        $product_mapper = new ProductMapper($this->db);
+        $id = $product_mapper->save($product);
+
+        $product->setBasePrice('12.45');
+        $product_mapper->save($product);
+
+        $product = $product_mapper->load($id);
+        $this->assertEquals('12.45',$product->getBasePrice(), 'should update base price of existing product');
+    }
+
     function testShouldList()
     {
         $product_mapper = new ProductMapper($this->db);

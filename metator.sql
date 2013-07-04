@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS `product` (
   `attributes` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=135 ;
+ALTER TABLE  `product` ADD  `base_price` FLOAT NOT NULL AFTER  `name`
 
 CREATE TABLE IF NOT EXISTS `product_attribute` (
   `product_id` int(8) NOT NULL,
