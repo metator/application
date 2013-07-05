@@ -140,6 +140,22 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $categories);
     }
 
+    function testShouldFindChildren()
+    {
+        $mapper = new DataMapper($this->db);
+        $vehicle_id = $mapper->save(array(
+            'name'=>'vehicle'
+        ));
+        $truck_id = $mapper->save(array(
+            'name'=>'truck',
+            'parents'=>array($vehicle_id)
+        ));
+
+        $categories = $mapper->findChildren($vehicle_id);
+        $this->assertEquals(1, count($categories), 'should find only 1 child');
+        $this->assertEquals($truck_id, $categories[0]['id'], 'should find "truck" as the 1 child');
+    }
+
     function testShouldFindStructured()
     {
         $mapper = new DataMapper($this->db);
@@ -182,6 +198,50 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
             ),
 
         );
+
+        $this->assertEquals($expected, $categories);
+    }
+
+    function testShouldFindStructured_2Levels()
+    {
+        return $this->markTestIncomplete();
+        $mapper = new DataMapper($this->db);
+        $vehicle_id = $mapper->save(array(
+            'name'=>'vehicle'
+        ));
+        $truck_id = $mapper->save(array(
+            'name'=>'truck',
+            'parents'=>array($vehicle_id)
+        ));
+        $wheel_id = $mapper->save(array(
+            'name'=>'wheel',
+            'parents'=>array($truck_id)
+        ));
+        $categories = $mapper->findStructuredAll();
+
+        $expected = array(
+            array(
+                'id'=>$vehicle_id,
+                'name'=>'vehicle',
+                'parents'=>array(),
+                'children'=>array(
+                    array(
+                        'id'=>$truck_id,
+                        'name'=>'truck',
+                        'parents'=>array(),
+                        'children'=>array(
+                            array(
+                                'id'=>$wheel_id,
+                                'name'=>'wheel',
+                                'parents'=>array($truck_id)
+                            ),
+                        )
+                    )
+                )
+            ),
+        );
+
+        print_r($categories);
 
         $this->assertEquals($expected, $categories);
     }

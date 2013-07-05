@@ -6,7 +6,8 @@
  */
 namespace Metator\Category;
 
-use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\TableGateway\TableGateway,
+    Zend\Db\Sql\Sql;
 
 class DataMapper
 {
@@ -29,12 +30,12 @@ class DataMapper
         return $categories;
     }
 
-    function findStructuredAll()
+    function findStructuredAll($parent=null)
     {
         $categories = $this->findAll();
         $top_level = array();
         foreach($categories as $category) {
-            if(!count($category['parents'])) {
+            if(!$parent && !count($category['parents'])) {
                 $top_level[] = $category;
             }
         }
@@ -50,6 +51,23 @@ class DataMapper
         }
 
         return $top_level;
+    }
+
+    function findChildren($parent_id)
+    {
+        $adapter = $this->db;
+
+        $sql = new Sql($adapter);
+        $select = $sql->select()
+            ->from('category')
+            ->join('category_structure', 'category.id = category_structure.category_id')
+            ->where(array('parent_id'=>$parent_id));
+
+        $string = $sql->getSqlStringForSqlObject($select);
+        $result = $this->db->query($string, $adapter::QUERY_MODE_EXECUTE);
+
+        $result = (array)$result->toArray();
+        return $result;
     }
 
     function findAll()
