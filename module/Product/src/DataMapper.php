@@ -15,12 +15,14 @@ class DataMapper
     protected $db;
     protected $productTable;
     protected $productAttributeTable;
+    protected $productCategoriesAssociationTable;
 
     function __construct($db)
     {
         $this->db = $db;
         $this->productTable = new TableGateway('product', $this->db);
         $this->productAttributeTable = new TableGateway('product_attribute', $this->db);
+        $this->productCategoriesAssociationTable = new TableGateway('product_categories', $this->db);
         $this->priceModifierTable = new TableGateway('product_attribute_pricemodifiers', $this->db);
     }
 
@@ -32,7 +34,7 @@ class DataMapper
                 'sku'=>$product->getSku(),
                 'name'=>$product->getName(),
                 'attributes'=>$this->serializeAttributes($product->attributes()),
-                'base_price'=>$product->getBasePrice()
+                'base_price'=>$product->getBasePrice(),
             ), array('id'=>$product->id()));
             $product_id = $product->id();
         } else {
@@ -47,6 +49,7 @@ class DataMapper
         }
         $this->associateAttributeToProduct($product_id, $product->attributes());
         $this->savePriceModifiers($product_id, $product);
+        $this->saveCategories($product_id, $product->getCategories());
         return $product_id;
     }
 
@@ -84,6 +87,17 @@ class DataMapper
                         $product->priceModifierFor($attribute->name(), $option)->percentage() : 0,
                 ));
             }
+        }
+    }
+
+    function saveCategories($product_id, $categories)
+    {
+        $this->productCategoriesAssociationTable->delete(array('product_id'=>$product_id));
+        foreach($categories as $category) {
+            $this->productCategoriesAssociationTable->insert(array(
+                'product_id'=>$product_id,
+                'category_id'=>$category
+            ));
         }
     }
 
@@ -126,6 +140,7 @@ class DataMapper
     {
         $product = new Product($data);
         $this->loadAttributes($product);
+        $this->loadCategories($product);
         $this->loadPriceModifiers($product);
         return $product;
     }
@@ -139,6 +154,18 @@ class DataMapper
             $attribute = $this->loadAttribute($row['attribute_id']);
             $product->addAttribute($attribute);
         }
+    }
+
+    function loadCategories($product)
+    {
+        $rowset = $select = $this->productCategoriesAssociationTable->select(array(
+            'product_id'=>$product->id()
+        ));
+        $category_ids = array();
+        while($row = $rowset->current()) {
+            $category_ids[] = $row['category_id'];
+        }
+        $product->setCategories($category_ids);
     }
 
     function loadPriceModifiers($product)

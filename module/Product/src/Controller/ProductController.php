@@ -16,7 +16,7 @@ use Metator\Product\Product;
 
 class ProductController extends AbstractActionController
 {
-    protected $productMapper;
+    protected $productMapper, $categoryMapper;
 
     function manageAction()
     {
@@ -28,7 +28,7 @@ class ProductController extends AbstractActionController
 
     function editAction()
     {
-        $form = new Form;
+        $form = new Form($this->categoryMapper());
 
         if($this->params('id')) {
             $product = $this->productMapper()->load($this->params('id'));
@@ -36,6 +36,7 @@ class ProductController extends AbstractActionController
                 'name'=>$product->getName(),
                 'sku'=>$product->getSku(),
                 'basePrice'=>$product->getBasePrice(),
+                'categories'=>$product->getCategories(),
             ));
         }
 
@@ -50,7 +51,7 @@ class ProductController extends AbstractActionController
         );
     }
 
-    /** @return \Product\DataMapper */
+    /** @return \Metator\Product\DataMapper */
     function productMapper()
     {
         if (!$this->productMapper) {
@@ -58,5 +59,15 @@ class ProductController extends AbstractActionController
             $this->productMapper = $sm->get('Application\Product\DataMapper');
         }
         return $this->productMapper;
+    }
+
+    /** @return \Application\CategoryMapper */
+    function categoryMapper()
+    {
+        if (!$this->categoryMapper) {
+            $sm = $this->getServiceLocator();
+            $this->categoryMapper = $sm->get('Application\Category\DataMapper');
+        }
+        return $this->categoryMapper;
     }
 }

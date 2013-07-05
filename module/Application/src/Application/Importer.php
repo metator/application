@@ -39,6 +39,7 @@ class Importer
             'sku'=>$row[0],
             'name'=>$row[1]
         ));
+
         $product_mapper = new ProductDataMapper($this->db);
         $product_mapper->save($product);
     }

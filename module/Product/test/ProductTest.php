@@ -59,6 +59,19 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('widget',$product->getName(), 'should set name through setter');
     }
 
+    function testShouldSetCategoriesThroughConstructor()
+    {
+        $product = new Product(array('categories'=>[1,2,3]));
+        $this->assertEquals([1,2,3],$product->getCategories(), 'should set categories through constructor');
+    }
+
+    function testShouldSetCategoriesThroughSetter()
+    {
+        $product = new Product;
+        $product->setCategories([1,2,3]);
+        $this->assertEquals([1,2,3],$product->getCategories(), 'should set categories through setter');
+    }
+
     function testShouldSetBasePriceThroughConstructor()
     {
         $product = new Product(array('base_price'=>5.15));

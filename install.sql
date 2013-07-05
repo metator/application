@@ -69,3 +69,10 @@ ALTER TABLE `product_attribute_pricemodifiers`
   ADD CONSTRAINT `product_attribute_pricemodifiers_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `product_attribute_pricemodifiers_ibfk_2` FOREIGN KEY (`attribute_id`) REFERENCES `attribute` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `product_attribute_pricemodifiers_ibfk_3` FOREIGN KEY (`attribute_option_id`) REFERENCES `attribute_option` (`id`) ON DELETE CASCADE;
+
+
+CREATE TABLE IF NOT EXISTS `product_categories` (
+  `product_id` int(8) NOT NULL,
+  `category_id` int(8) NOT NULL,
+  PRIMARY KEY (`product_id`,`category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

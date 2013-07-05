@@ -283,4 +283,30 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEquals('bar', $product2->getName());
     }
 
+    function testShouldAssignToCategories()
+    {
+        $product = new Product(array('sku'=>'foo2'));
+        $product->setCategories(array(1,2,3));
+        $product_mapper = new DataMapper($this->db);
+        $product_mapper->save($product);
+
+        $product = $product_mapper->load($product->id());
+        $this->assertEquals(array(1,2,3), $product->getCategories(), 'should assign product to categories');
+    }
+
+    function testShouldUpdateCategories()
+    {
+        $product_mapper = new DataMapper($this->db);
+
+        $product = new Product(array('sku'=>'foo2'));
+        $product->setCategories(array(1,2,3));
+        $product_mapper->save($product);
+
+        $product = $product_mapper->load($product->id());
+        $product->setCategories(array(1,2));
+        $product_mapper->save($product);
+
+        $this->assertEquals(array(1,2), $product->getCategories(), 'should update product categories');
+    }
+
 }

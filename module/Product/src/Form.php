@@ -3,7 +3,7 @@ namespace Metator\Product;
 
 class Form extends \Zend_Form
 {
-    function __construct($product=null)
+    function __construct($categoryMapper, $product=null)
     {
         parent::__construct();
 
@@ -19,6 +19,12 @@ class Form extends \Zend_Form
 
         $this->addElement('text','basePrice',array(
             'label' => 'Base Price',
+        ));
+
+        $this->addElement('multiCheckbox','categories',array(
+            'label'=>'Parents',
+            'multiOptions'=>$categoryMapper ? $categoryMapper->listForForm() : array(),
+            'separator'=>''
         ));
 
         $this->addElement('submit','submit',[
