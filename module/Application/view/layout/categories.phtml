@@ -6,7 +6,7 @@ function renderCategories($categories, $view) {
         <?php
         foreach($categories as $category) {
             ?>
-            <li><a href="#"><?=$view->escapeHTML($category['name'])?></a></li>
+            <li><a href="<?=$view->url('category', $category)?>"><?=$view->escapeHTML($category['name'])?></a></li>
             <?php
             if(count($category['children'])) {
                 echo renderCategories($category['children'], $view);

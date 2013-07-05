@@ -17,6 +17,14 @@ class CategoryController extends AbstractActionController
 {
     protected $categoryMapper;
 
+    function viewAction()
+    {
+        $category = $this->categoryMapper()->load($this->params('id'));
+        return array(
+            'category'=>$category['name']
+        );
+    }
+
     function manageAction()
     {
         $categories = $this->categoryMapper()->findAll();

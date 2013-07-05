@@ -22,6 +22,20 @@ return array(
                 ),
             ),
 
+            'category' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/category/:id{-}-:name',
+                    'constraints' => array(
+                        'id' => '[0-9]*',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Category',
+                        'action'     => 'view',
+                    ),
+                ),
+            ),
+
             'category_manage' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
