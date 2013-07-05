@@ -334,4 +334,19 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $products = $product_mapper->find();
         $this->assertEquals(0, count($products), 'should deactivate product');
     }
+
+    function testFindingByCategoryShouldFindOnlyActive()
+    {
+        $product_mapper = new DataMapper($this->db);
+
+        $product = new Product(array('sku'=>'foo2'));
+        $product->setCategories(array(1));
+        $product_mapper->save($product);
+
+        $product_mapper->deactivate($product->id());
+
+        $products = $product_mapper->findByCategory(1);
+
+        $this->assertEquals(0,count($products));
+    }
 }

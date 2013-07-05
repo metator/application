@@ -131,7 +131,7 @@ class DataMapper
     function findByCategory($id)
     {
         $id = (int)$id;
-        $rowset = $this->productTable->select("`id` IN (SELECT `product_id` FROM `product_categories` WHERE `category_id` = $id)");
+        $rowset = $this->productTable->select("`active` = 1 && `id` IN (SELECT `product_id` FROM `product_categories` WHERE `category_id` = $id)");
         $products = array();
         while($row = $rowset->current()) {
             $products[] = $this->doLoad($row);
