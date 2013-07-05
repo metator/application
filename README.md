@@ -1,3 +1,7 @@
+[![Latest Stable Version](https://poser.pugx.org/joshribakoff/metator/version.png)](https://packagist.org/packages/joshribakoff/metator)
+[![Total Downloads](https://poser.pugx.org/joshribakoff/metator/d/total.png)](https://packagist.org/packages/joshribakoff/metator)
+[![Build Status](https://travis-ci.org/joshribakoff/metator.png?branch=master)](https://travis-ci.org/joshribakoff/metator)
+
 metator
 =======
 A unit tested shopping cart.
