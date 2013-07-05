@@ -3,6 +3,7 @@
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
+            <th></th>
             <th>ID</th>
             <th>SKU</th>
             <th>Name</th>
@@ -13,6 +14,7 @@
     foreach($this->products as $product) {
         ?>
         <tr>
+            <td><a href="<?=$this->url('product_edit',array('id'=>$product->id()))?>" class="btn"><i class="icon-pencil"></i></a></td>
             <td><?=$this->escapeHTML($product->id())?></td>
             <td><?=$this->escapeHTML($product->getSku())?></td>
             <td><?=$this->escapeHTML($product->getName())?></td>

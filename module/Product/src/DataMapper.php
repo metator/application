@@ -33,7 +33,7 @@ class DataMapper
                 'name'=>$product->getName(),
                 'attributes'=>$this->serializeAttributes($product->attributes()),
                 'base_price'=>$product->getBasePrice()
-            ), $product->id());
+            ), array('id'=>$product->id()));
             $product_id = $product->id();
         } else {
             $this->productTable->insert(array(

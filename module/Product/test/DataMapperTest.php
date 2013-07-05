@@ -267,4 +267,20 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($product_mapper->productExists('foo'),    'product should exist');
     }
 
+    function testShouldNotUpdateOtherProducts()
+    {
+        $product1 = new Product(array('sku'=>'foo1'));
+        $product2 = new Product(array('sku'=>'foo2'));
+
+        $product_mapper = new DataMapper($this->db);
+        $product_mapper->save($product1);
+        $product_mapper->save($product2);
+
+        $product1->setName('bar');
+        $product_mapper->save($product1);
+
+        $product2 = $product_mapper->load($product2->id());
+        $this->assertNotEquals('bar', $product2->getName());
+    }
+
 }

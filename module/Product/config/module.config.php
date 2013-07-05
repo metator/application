@@ -23,9 +23,9 @@ return array(
             ),
 
             'product_edit' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'type' => 'Zend\Mvc\Router\Http\Segment',
                 'options' => array(
-                    'route'    => '/product/edit',
+                    'route'    => '/product/edit/:id',
                     'defaults' => array(
                         'controller' => 'Product\Controller\Product',
                         'action'     => 'edit',

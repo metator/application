@@ -28,24 +28,21 @@ class ProductController extends AbstractActionController
 
     function editAction()
     {
-        // Use an alternative layout
-        $layoutViewModel = $this->layout();
-
-        // add an additional layout to the root view model (layout)
-        $sidebar = new ViewModel();
-        $sidebar->setTemplate('layout/admin-navigation');
-        $layoutViewModel->addChild($sidebar, 'navigation');
-
         $form = new Form;
 
-        if($this->getRequest()->isPost()) {
-            $post = $this->getRequest()->getPost();
-            $form->setData($post);
-            if($form->isValid()) {
-                $product = new Product($form->getData());
-                $this->productMapper()->save($product);
-                return $this->redirect()->toRoute('product_manage');
-            }
+        if($this->params('id')) {
+            $product = $this->productMapper()->load($this->params('id'));
+            $form->populate(array(
+                'name'=>$product->getName(),
+                'sku'=>$product->getSku(),
+                'basePrice'=>$product->getBasePrice(),
+            ));
+        }
+
+        if($this->getRequest()->isPost() && $form->isValid($this->params()->fromPost())) {
+            $product = new Product(array('id'=>$this->params('id')) + $form->getValues());
+            $this->productMapper()->save($product);
+            return $this->redirect()->toRoute('product_manage');
         }
 
         return array(
@@ -53,7 +50,7 @@ class ProductController extends AbstractActionController
         );
     }
 
-    /** @return \Application\ProductMapper */
+    /** @return \Product\DataMapper */
     function productMapper()
     {
         if (!$this->productMapper) {

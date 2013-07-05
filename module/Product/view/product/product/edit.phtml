@@ -5,15 +5,5 @@ $this->headScript()->appendFile('/js/product-form.js');
 ?>
 <h1>Editing Product</h1>
 <?php
-$form->prepare();
-
-$form->setAttribute('action','?');
-echo $this->form()->openTag($form);
-
-
-echo $this->formRow($form->get('sku'));
-echo $this->formRow($form->get('name'));
-echo $this->formRow($form->get('basePrice'));
-
-echo $this->formSubmit($form->get('submit'));
-echo $this->form()->closeTag();
+$form->setView(new \Zend_View);
+echo $form;
