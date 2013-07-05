@@ -1,0 +1,25 @@
+<?php
+function renderCategories($categories, $view) {
+    ob_start();
+    ?>
+    <ul class="nav nav-list">
+        <?php
+        foreach($categories as $category) {
+            ?>
+            <li><a href="<?=$view->url('category', $category)?>"><?=$view->escapeHTML($category['name'])?></a></li>
+            <?php
+            if(count($category['children'])) {
+                echo renderCategories($category['children'], $view);
+            }
+        }
+        ?>
+    </ul>
+    <?php
+    return ob_get_clean();
+}
+?>
+<div class="well sidebar-nav">
+    <?php
+    echo renderCategories($categories, $this);
+    ?>
+</div><!--/.well -->
