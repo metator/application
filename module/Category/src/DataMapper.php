@@ -41,15 +41,8 @@ class DataMapper
         }
 
         foreach($top_level as $key => $top_category) {
-            $children = array();
-            foreach($categories as $possible_child) {
-                if(in_array($top_category['id'], $possible_child['parents'])) {
-                    $children[] = $possible_child;
-                }
-            }
-            $top_level[$key]['children'] = $children;
+            $top_level[$key]['children'] = $this->findChildren($top_category['id']);
         }
-
         return $top_level;
     }
 
@@ -60,13 +53,17 @@ class DataMapper
         $sql = new Sql($adapter);
         $select = $sql->select()
             ->from('category')
-            ->join('category_structure', 'category.id = category_structure.category_id')
+            ->join('category_structure', 'category.id = category_structure.category_id',array())
             ->where(array('parent_id'=>$parent_id));
 
         $string = $sql->getSqlStringForSqlObject($select);
         $result = $this->db->query($string, $adapter::QUERY_MODE_EXECUTE);
-
         $result = (array)$result->toArray();
+
+        foreach($result as $key=>$row) {
+            $result[$key]['parents'] = $this->loadParents($row['id']);
+        }
+
         return $result;
     }
 
