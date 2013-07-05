@@ -3,7 +3,7 @@ $config = array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
         'Application',
-        'Product',
+        'Metator\Product',
         'Category',
     ),
 
@@ -16,6 +16,7 @@ $config = array(
         'module_paths' => array(
             './module',
             './vendor',
+            'Metator\Product'=>'./module/Product/'
         ),
 
         // An array of paths from which to glob configuration files after

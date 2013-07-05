@@ -6,8 +6,8 @@
  */
 namespace Application;
 
-use Product\DataMapper as ProductDataMapper,
-    Product\Product;
+use Metator\Product\DataMapper as ProductDataMapper,
+    Metator\Product\Product;
 
 class Importer
 {

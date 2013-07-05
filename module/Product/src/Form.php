@@ -1,5 +1,5 @@
 <?php
-namespace Product;
+namespace Metator\Product;
 
 class Form extends \Zend_Form
 {

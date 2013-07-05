@@ -139,4 +139,52 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $categories);
     }
+
+    function testShouldFindStructured()
+    {
+        return $this->markTestIncomplete();
+
+        $mapper = new DataMapper($this->db);
+        $car_id = $mapper->save(array(
+            'name'=>'car'
+        ));
+        $truck_id = $mapper->save(array(
+            'name'=>'truck'
+        ));
+        $wheel_id = $mapper->save(array(
+            'name'=>'wheel',
+            'parents'=>array($car_id,$truck_id)
+        ));
+        $categories = $mapper->findStructuredAll();
+
+        $expected = array(
+            array(
+                'id'=>$car_id,
+                'name'=>'car',
+                'parents'=>array(),
+                'children'=>array(
+                    array(
+                        'id'=>$wheel_id,
+                        'name'=>'wheel',
+                        'parents'=>array($car_id,$truck_id)
+                    ),
+                )
+            ),
+            array(
+                'id'=>$truck_id,
+                'name'=>'truck',
+                'parents'=>array(),
+                'children'=>array(
+                    array(
+                        'id'=>$wheel_id,
+                        'name'=>'wheel',
+                        'parents'=>array($car_id,$truck_id)
+                    ),
+                )
+            ),
+
+        );
+
+        $this->assertEquals($expected, $categories);
+    }
 }

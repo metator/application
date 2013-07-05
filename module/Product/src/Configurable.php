@@ -1,5 +1,5 @@
 <?php
-namespace Product;
+namespace Metator\Product;
 
 use \Application\Attribute;
 
