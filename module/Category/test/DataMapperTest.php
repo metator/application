@@ -180,7 +180,8 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
                     array(
                         'id'=>$wheel_id,
                         'name'=>'wheel',
-                        'parents'=>array($car_id,$truck_id)
+                        'parents'=>array($car_id,$truck_id),
+                        'children'=>array()
                     ),
                 )
             ),
@@ -192,7 +193,8 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
                     array(
                         'id'=>$wheel_id,
                         'name'=>'wheel',
-                        'parents'=>array($car_id,$truck_id)
+                        'parents'=>array($car_id,$truck_id),
+                        'children'=>array()
                     ),
                 )
             ),
@@ -204,7 +206,6 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
 
     function testShouldFindStructured_2Levels()
     {
-        return $this->markTestIncomplete();
         $mapper = new DataMapper($this->db);
         $vehicle_id = $mapper->save(array(
             'name'=>'vehicle'
@@ -228,20 +229,19 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
                     array(
                         'id'=>$truck_id,
                         'name'=>'truck',
-                        'parents'=>array(),
+                        'parents'=>array($vehicle_id),
                         'children'=>array(
                             array(
                                 'id'=>$wheel_id,
                                 'name'=>'wheel',
-                                'parents'=>array($truck_id)
+                                'parents'=>array($truck_id),
+                                'children'=>array()
                             ),
                         )
                     )
                 )
             ),
         );
-
-        print_r($categories);
 
         $this->assertEquals($expected, $categories);
     }

@@ -41,12 +41,12 @@ class DataMapper
         }
 
         foreach($top_level as $key => $top_category) {
-            $top_level[$key]['children'] = $this->findChildren($top_category['id']);
+            $top_level[$key]['children'] = $this->findChildren($top_category['id'], true);
         }
         return $top_level;
     }
 
-    function findChildren($parent_id)
+    function findChildren($parent_id, $recursion=false)
     {
         $adapter = $this->db;
 
@@ -62,6 +62,12 @@ class DataMapper
 
         foreach($result as $key=>$row) {
             $result[$key]['parents'] = $this->loadParents($row['id']);
+        }
+
+        if($recursion) {
+            foreach($result as $key=>$category) {
+                $result[$key]['children'] = $this->findChildren($category['id'],true);
+            }
         }
 
         return $result;
