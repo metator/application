@@ -27,6 +27,9 @@
         <testsuite name="category">
             <directory>module/Category/test</directory>
         </testsuite>
+        <testsuite name="cart">
+            <directory>module/Cart/test</directory>
+        </testsuite>
     </testsuites>
 
 </phpunit>
