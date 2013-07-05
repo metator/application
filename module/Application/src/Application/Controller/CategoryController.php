@@ -11,7 +11,7 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Application\Category\Form;
+use Category\Form;
 
 class CategoryController extends AbstractActionController
 {

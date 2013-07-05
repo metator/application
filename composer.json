@@ -26,7 +26,8 @@
     "autoload": {
         "classmap": [
             "module/Application/src/",
-            "module/Product/src/"
+            "module/Product/src/",
+            "module/Category/src/"
         ]
     }
 }

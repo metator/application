@@ -1,5 +1,5 @@
 <?php
-namespace Application\Category;
+namespace Category;
 
 /**
  * Metator (http://metator.com/)

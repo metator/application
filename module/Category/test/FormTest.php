@@ -1,5 +1,5 @@
 <?php
-namespace Application\Category;
+namespace Category;
 
 class FormTest extends \PHPUnit_Framework_TestCase
 {

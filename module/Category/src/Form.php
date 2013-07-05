@@ -1,7 +1,5 @@
 <?php
-namespace Application\Category;
-
-use Application\CategoryMapper;
+namespace Category;
 
 class Form extends \Zend_Form
 {
