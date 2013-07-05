@@ -29,6 +29,29 @@ class DataMapper
         return $categories;
     }
 
+    function findStructuredAll()
+    {
+        $categories = $this->findAll();
+        $top_level = array();
+        foreach($categories as $category) {
+            if(!count($category['parents'])) {
+                $top_level[] = $category;
+            }
+        }
+
+        foreach($top_level as $key => $top_category) {
+            $children = array();
+            foreach($categories as $possible_child) {
+                if(in_array($top_category['id'], $possible_child['parents'])) {
+                    $children[] = $possible_child;
+                }
+            }
+            $top_level[$key]['children'] = $children;
+        }
+
+        return $top_level;
+    }
+
     function findAll()
     {
         $rows = $this->categoryTable->select();

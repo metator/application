@@ -142,8 +142,6 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
 
     function testShouldFindStructured()
     {
-        return $this->markTestIncomplete();
-
         $mapper = new DataMapper($this->db);
         $car_id = $mapper->save(array(
             'name'=>'car'
