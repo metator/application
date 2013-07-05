@@ -44,6 +44,17 @@ return array(
                 ),
             ),
 
+            'product_deactivate' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/product/deactivate/:id',
+                    'defaults' => array(
+                        'controller' => 'Product\Controller\Product',
+                        'action'     => 'deactivate',
+                    ),
+                ),
+            ),
+
             'product_manage' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(

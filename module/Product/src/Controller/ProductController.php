@@ -32,6 +32,13 @@ class ProductController extends AbstractActionController
         );
     }
 
+    function deactivateAction()
+    {
+        $id = $this->params('id');
+        $this->productMapper()->deactivate($id);
+        return $this->redirect()->toRoute('product_manage');
+    }
+
     function editAction()
     {
         $form = new Form($this->categoryMapper());

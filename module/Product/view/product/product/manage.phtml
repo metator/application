@@ -1,4 +1,4 @@
-<a class="btn" href="/product/new">New</a>
+<a class="btn btn-success" href="/product/new"><i class="icon-plus-sign"></i> Add New</a>
 
 <table class="table table-bordered table-striped">
     <thead>
@@ -14,7 +14,10 @@
     foreach($this->products as $product) {
         ?>
         <tr>
-            <td><a href="<?=$this->url('product_edit',array('id'=>$product->id()))?>" class="btn"><i class="icon-pencil"></i></a></td>
+            <td>
+                <a href="<?=$this->url('product_edit',array('id'=>$product->id()))?>" class="btn"><i class="icon-pencil"></i> Edit</a>
+                <a href="<?=$this->url('product_deactivate',array('id'=>$product->id()))?>" class="btn btn-danger"><i class="icon-remove-sign"></i> Deactivate</a>
+            </td>
             <td><?=$this->escapeHTML($product->id())?></td>
             <td><?=$this->escapeHTML($product->getSku())?></td>
             <td><?=$this->escapeHTML($product->getName())?></td>

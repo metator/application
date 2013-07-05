@@ -76,3 +76,5 @@ CREATE TABLE IF NOT EXISTS `product_categories` (
   `category_id` int(8) NOT NULL,
   PRIMARY KEY (`product_id`,`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE  `product` ADD  `active` INT( 1 ) NOT NULL;

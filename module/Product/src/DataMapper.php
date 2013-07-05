@@ -26,6 +26,15 @@ class DataMapper
         $this->priceModifierTable = new TableGateway('product_attribute_pricemodifiers', $this->db);
     }
 
+    function deactivate($id)
+    {
+        $this->productTable->update(array(
+            'active'=>0
+        ),array(
+            'id'=>$id
+        ));
+    }
+
     /** @param Product */
     function save($product)
     {
@@ -39,6 +48,7 @@ class DataMapper
             $product_id = $product->id();
         } else {
             $this->productTable->insert(array(
+                'active'=>1,
                 'sku'=>$product->getSku(),
                 'name'=>$product->getName(),
                 'attributes'=>$this->serializeAttributes($product->attributes()),
@@ -109,6 +119,7 @@ class DataMapper
 
     function find($params=array())
     {
+        $params['active']=1;
         $rowset = $this->productTable->select($params);
         $products = array();
         while($row = $rowset->current()) {
