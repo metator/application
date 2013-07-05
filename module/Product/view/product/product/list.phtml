@@ -1,35 +1,19 @@
 <div class="row-fluid">
-    <div class="span4">
-        <h2>Product</h2>
+<?php
+$i = 0;
+foreach($this->products as $product) {
+    if($i%3==0) {
+        echo '</div><div class="row-fluid">';
+    }
+    ?>
+    <div class="span4 product-block">
+        <a href="#<?=$product->id()?>"><h2><?=$this->escapeHTML($product->getName())?></h2></a>
+        <?=$this->escapeHTML($product->price())?>
         <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
         <p><a class="btn" href="#">View details &raquo;</a></p>
-    </div><!--/span-->
-    <div class="span4">
-        <h2>Product</h2>
-        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-        <p><a class="btn" href="#">View details &raquo;</a></p>
-    </div><!--/span-->
-    <div class="span4">
-        <h2>Product</h2>
-        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-        <p><a class="btn" href="#">View details &raquo;</a></p>
-    </div><!--/span-->
-</div><!--/row-->
-<div class="row-fluid">
-    <div class="span4">
-        <h2>Product</h2>
-        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-        <p><a class="btn" href="#">View details &raquo;</a></p>
-    </div><!--/span-->
-    <div class="span4">
-        <h2>Product</h2>
-        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-        <p><a class="btn" href="#">View details &raquo;</a></p>
-    </div><!--/span-->
-    <div class="span4">
-        <h2>Product</h2>
-        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-        <p><a class="btn" href="#">View details &raquo;</a></p>
-    </div><!--/span-->
-</div><!--/row-->
-<?php var_dump($this->products)?>
+    </div>
+    <?php
+    $i++;
+}
+?>
+</div>

@@ -44,9 +44,10 @@ class IndexController extends AbstractActionController
 
     function products()
     {
-        //return $this->productMapper()->load(5);
+        return $this->productMapper()->find();
     }
 
+    /** @return \Metator\Product\DataMapper */
     function productMapper()
     {
         if (!$this->productMapper) {

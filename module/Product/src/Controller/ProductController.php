@@ -11,8 +11,8 @@ namespace Product\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Product\Form;
-use Product\Product;
+use Metator\Product\Form;
+use Metator\Product\Product;
 
 class ProductController extends AbstractActionController
 {
