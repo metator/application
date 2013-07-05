@@ -1,13 +1,25 @@
-<div class="well sidebar-nav">
+<?php
+function renderCategories($categories, $view) {
+    ob_start();
+    ?>
     <ul class="nav nav-list">
-        <li class="nav-header">Shirts</li>
-        <li class="active"><a href="#">Cotton</a></li>
-        <li><a href="#">Polyester</a></li>
-        <li><a href="#">Silk</a></li>
-        <li><a href="#">T-Shirts</a></li>
-        <li class="nav-header">Pants</li>
-        <li><a href="#">Jeans</a></li>
-        <li><a href="#">Shorts</a></li>
-        <li><a href="#">Dress Pants</a></li>
+        <?php
+        foreach($categories as $category) {
+            ?>
+            <li><a href="#"><?=$view->escapeHTML($category['name'])?></a></li>
+            <?php
+            if(count($category['children'])) {
+                echo renderCategories($category['children'], $view);
+            }
+        }
+        ?>
     </ul>
+    <?php
+    return ob_get_clean();
+}
+?>
+<div class="well sidebar-nav">
+    <?php
+    echo renderCategories($categories, $this);
+    ?>
 </div><!--/.well -->

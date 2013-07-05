@@ -14,24 +14,28 @@ use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
 {
-    protected $productMapper;
+    protected $productMapper, $categoryMapper;
 
     public function indexAction()
     {
-        // Use an alternative layout
+        $this->layout('layout/layout-2col-left.phtml');
+
         $layoutViewModel = $this->layout();
 
-        // add an additional layout to the root view model (layout)
-        $sidebar = new ViewModel();
+        // add categories to sidebar
+        $sidebar = new ViewModel(array(
+            'categories'=>$this->categoryMapper()->findStructuredAll()
+        ));
         $sidebar->setTemplate('layout/categories');
         $layoutViewModel->addChild($sidebar, 'navigation');
 
-        // set up action view model and associated child view models
+        // render splash
         $result = new ViewModel();
         $result->setTemplate('application/index/index');
 
+        // render some featured products
         $products = new ViewModel();
-        $products->setTemplate('application/product/list');
+        $products->setTemplate('product/product/list');
         $products->setVariable('products',$this->products());
         $result->addChild($products, 'product_list');
 
@@ -47,8 +51,17 @@ class IndexController extends AbstractActionController
     {
         if (!$this->productMapper) {
             $sm = $this->getServiceLocator();
-            $this->productMapper = $sm->get('Application\ProductMapper');
+            $this->productMapper = $sm->get('Application\Product\DataMapper');
         }
         return $this->productMapper;
+    }
+
+    function categoryMapper()
+    {
+        if (!$this->categoryMapper) {
+            $sm = $this->getServiceLocator();
+            $this->categoryMapper = $sm->get('Application\Category\DataMapper');
+        }
+        return $this->categoryMapper;
     }
 }
