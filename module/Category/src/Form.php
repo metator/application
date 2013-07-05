@@ -1,5 +1,5 @@
 <?php
-namespace Category;
+namespace Metator\Category;
 
 class Form extends \Zend_Form
 {
