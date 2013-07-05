@@ -11,6 +11,17 @@ return array(
     'router' => array(
         'routes' => array(
 
+            'product' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/product/:id{-}-:name',
+                    'defaults' => array(
+                        'controller' => 'Product\Controller\Product',
+                        'action'     => 'view',
+                    ),
+                ),
+            ),
+
             'product_new' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(

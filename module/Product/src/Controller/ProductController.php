@@ -18,6 +18,12 @@ class ProductController extends AbstractActionController
 {
     protected $productMapper, $categoryMapper;
 
+    function viewAction()
+    {
+        $product = $this->productMapper()->load($this->params('id'));
+        return array('product'=>$product);
+    }
+
     function manageAction()
     {
         $products = $this->productMapper()->find();

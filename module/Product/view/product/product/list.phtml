@@ -7,7 +7,7 @@ foreach($this->products as $product) {
     }
     ?>
     <div class="span4 product-block">
-        <a href="#<?=$product->id()?>"><h2><?=$this->escapeHTML($product->getName())?></h2></a>
+        <a href="<?=$this->url('product',array('id'=>$product->id(),'name'=>$product->getName()))?>"><h2><?=$this->escapeHTML($product->getName())?></h2></a>
         <?=$this->escapeHTML($product->price())?>
         <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
         <p><a class="btn" href="#">View details &raquo;</a></p>
