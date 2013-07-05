@@ -5,6 +5,7 @@ $config = array(
         'Application',
         'Metator\Product',
         'Metator\Category',
+        'Metator\Cart',
     ),
 
     // These are various options for the listeners attached to the ModuleManager
@@ -17,7 +18,8 @@ $config = array(
             './module',
             './vendor',
             'Metator\Product'=>'./module/Product/',
-            'Metator\Category'=>'./module/Category/'
+            'Metator\Category'=>'./module/Category/',
+            'Metator\Cart'=>'./module/Cart/',
         ),
 
         // An array of paths from which to glob configuration files after

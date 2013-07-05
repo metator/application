@@ -1,3 +1,4 @@
 <h1><?=$this->escapeHTML($product->getName())?></h1>
 <p><?=$this->escapeHTML($product->getSku())?></p>
 <p>Price:   <?=$this->escapeHTML($product->price())?></p>
+<a class="btn btn-large" href="<?=$this->url('cart_add',array('id'=>$product->id()))?>">Add To Cart</a>

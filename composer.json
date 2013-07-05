@@ -27,7 +27,8 @@
         "classmap": [
             "module/Application/src/",
             "module/Product/src/",
-            "module/Category/src/"
+            "module/Category/src/",
+            "module/Cart/src/"
         ]
     }
 }
