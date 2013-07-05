@@ -4,6 +4,7 @@ $config = array(
     'modules' => array(
         'Application',
         'Product',
+        'Category',
     ),
 
     // These are various options for the listeners attached to the ModuleManager
