@@ -15,13 +15,15 @@ use Metator\Category\Form;
 
 class CategoryController extends AbstractActionController
 {
-    protected $categoryMapper;
+    protected $categoryMapper,$productMapper;
 
     function viewAction()
     {
         $category = $this->categoryMapper()->load($this->params('id'));
+        $products = $this->productMapper()->findByCategory($this->params('id'));
         return array(
-            'category'=>$category['name']
+            'category'=>$category['name'],
+            'products'=>$products
         );
     }
 
@@ -53,6 +55,16 @@ class CategoryController extends AbstractActionController
         return array(
             'form'=>$form
         );
+    }
+
+    /** @return \Metator\Product\DataMapper */
+    function productMapper()
+    {
+        if (!$this->productMapper) {
+            $sm = $this->getServiceLocator();
+            $this->productMapper = $sm->get('Application\Product\DataMapper');
+        }
+        return $this->productMapper;
     }
 
     /** @return \Application\CategoryMapper */

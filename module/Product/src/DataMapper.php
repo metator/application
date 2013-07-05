@@ -117,6 +117,17 @@ class DataMapper
         return $products;
     }
 
+    function findByCategory($id)
+    {
+        $id = (int)$id;
+        $rowset = $this->productTable->select("`id` IN (SELECT `product_id` FROM `product_categories` WHERE `category_id` = $id)");
+        $products = array();
+        while($row = $rowset->current()) {
+            $products[] = $this->doLoad($row);
+        }
+        return $products;
+    }
+
     function findBySKu($sku)
     {
         $rowset = $this->productTable->select(array('sku'=>$sku));

@@ -309,4 +309,17 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(1,2), $product->getCategories(), 'should update product categories');
     }
 
+    function testShouldFindByCategory()
+    {
+        $product_mapper = new DataMapper($this->db);
+
+        $product = new Product(array('sku'=>'foo2'));
+        $product->setCategories(array(1));
+        $product_mapper->save($product);
+
+        $products = $product_mapper->findByCategory(1);
+
+        $this->assertEquals(1,count($products));
+        $this->assertEquals($product->id(), $products[0]->id(), 'should find products by category');
+    }
 }
