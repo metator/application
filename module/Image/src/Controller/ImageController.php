@@ -6,6 +6,8 @@ use Zend\View\Model\ViewModel;
 
 class ImageController extends AbstractActionController
 {
+    const MAX = 999;
+
     function viewAction()
     {
         $file = './data/images/'.$this->params('hash');
@@ -20,8 +22,12 @@ class ImageController extends AbstractActionController
         $size = $this->params('size');
         preg_match('/([0-9]+)x([0-9]+)/', $size, $matches);
 
-        $width   = $matches[1]; // @todo: apply validation!
-        $height  = $matches[2]; // @todo: apply validation!
+        $width   = $matches[1];
+        $height  = $matches[2];
+
+        if($width>self::MAX || $height>self::MAX) {
+            throw new Exception("that's way too big for a thumbnail, my feeble server wont handle it! Aborting.");
+        }
 
         $newFile = './data/images/'.$size.'/'.$hash;
         $outputDir = dirname($newFile);
