@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/metator/application.png?branch=master)](https://travis-ci.org/metator/application)
+
 Metator
 =======
 A unit tested shopping cart. Check out the [demo site](http://demo.metator.com/).
