@@ -36,7 +36,7 @@ return array(
             'checkout' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
-                    'route'    => '/cart',
+                    'route'    => '/checkout',
                     'defaults' => array(
                         'controller' => 'Cart\Controller\Checkout',
                         'action'     => 'index',
