@@ -118,10 +118,6 @@ class DataMapper
     {
         $this->productImagesAssociationTable->delete(array('product_id'=>$product_id));
         foreach($image_hashes as $image_hash) {
-            var_dump(array(
-                'product_id'=>$product_id,
-                'image_hash'=>$image_hash
-            ));
             $this->productImagesAssociationTable->insert(array(
                 'product_id'=>$product_id,
                 'image_hash'=>$image_hash
