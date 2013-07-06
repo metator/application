@@ -10,7 +10,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "metator/cart":"*",
+        "metator/cart":"1.0.*",
         "joshribakoff/php-csv-utils":"dev-master",
 	    "zendframework/zendframework1":"1.12.*",
 	    "zendframework/zendframework":"2.*"
