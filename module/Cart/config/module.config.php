@@ -33,12 +33,24 @@ return array(
                 ),
             ),
 
+            'checkout' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/cart',
+                    'defaults' => array(
+                        'controller' => 'Cart\Controller\Checkout',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
+
         ),
     ),
 
     'controllers' => array(
         'invokables' => array(
             'Cart\Controller\Cart' => 'Cart\Controller\CartController',
+            'Cart\Controller\Checkout' => 'Cart\Controller\CheckoutController',
         ),
     ),
 
