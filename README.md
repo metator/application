@@ -1,6 +1,13 @@
-metator
+Metator
 =======
-A unit tested shopping cart.
+A unit tested shopping cart. Check out the [demo site](http://demo.metator.com/).
+
+#Install
+````
+composer create-project metator/application
+php public/index.php phinx setup
+php public/index.php phinx migrate
+````
 
 ###Why yet another open source shopping cart?###
 There is a need for online retailers to sell complex products in today's marketplace. Configurable products that come in different colors & sizes like a T-Shirt, and groups of these configurable products like a product representing a T-Shirt & Pants sold together.
