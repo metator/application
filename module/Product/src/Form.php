@@ -22,14 +22,14 @@ class Form extends \Zend_Form
         ));
 
         $this->addElement('multiCheckbox','categories',array(
-            'label'=>'Parents',
+            'label'=>'Categories',
             'multiOptions'=>$categoryMapper ? $categoryMapper->listForForm() : array(),
             'separator'=>''
         ));
 
-        $this->addElement('submit','submit',[
-            'label'=>'Save'
-        ]);
+        $this->addElement('file','image_to_add',array(
+            'label'=>'Image To Add'
+        ));
 
     }
 }

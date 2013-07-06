@@ -16,6 +16,7 @@ class DataMapper
     protected $productTable;
     protected $productAttributeTable;
     protected $productCategoriesAssociationTable;
+    protected $productImagesAssociationTable;
 
     function __construct($db)
     {
@@ -23,6 +24,7 @@ class DataMapper
         $this->productTable = new TableGateway('product', $this->db);
         $this->productAttributeTable = new TableGateway('product_attribute', $this->db);
         $this->productCategoriesAssociationTable = new TableGateway('product_categories', $this->db);
+        $this->productImagesAssociationTable = new TableGateway('product_images', $this->db);
         $this->priceModifierTable = new TableGateway('product_attribute_pricemodifiers', $this->db);
     }
 
@@ -60,6 +62,7 @@ class DataMapper
         $this->associateAttributeToProduct($product_id, $product->attributes());
         $this->savePriceModifiers($product_id, $product);
         $this->saveCategories($product_id, $product->getCategories());
+        $this->saveImageHashes($product_id, $product->getImageHashes());
         return $product_id;
     }
 
@@ -107,6 +110,21 @@ class DataMapper
             $this->productCategoriesAssociationTable->insert(array(
                 'product_id'=>$product_id,
                 'category_id'=>$category
+            ));
+        }
+    }
+
+    function saveImageHashes($product_id, $image_hashes)
+    {
+        $this->productImagesAssociationTable->delete(array('product_id'=>$product_id));
+        foreach($image_hashes as $image_hash) {
+            var_dump(array(
+                'product_id'=>$product_id,
+                'image_hash'=>$image_hash
+            ));
+            $this->productImagesAssociationTable->insert(array(
+                'product_id'=>$product_id,
+                'image_hash'=>$image_hash
             ));
         }
     }
@@ -163,6 +181,7 @@ class DataMapper
         $product = new Product($data);
         $this->loadAttributes($product);
         $this->loadCategories($product);
+        $this->loadImages($product);
         $this->loadPriceModifiers($product);
         return $product;
     }
@@ -188,6 +207,17 @@ class DataMapper
             $category_ids[] = $row['category_id'];
         }
         $product->setCategories($category_ids);
+    }
+
+    function loadImages($product)
+    {
+        $rowset = $select = $this->productImagesAssociationTable->select(array(
+            'product_id'=>$product->id()
+        ));
+
+        while($row = $rowset->current()) {
+            $product->addImageHash($row['image_hash']);
+        }
     }
 
     function loadPriceModifiers($product)

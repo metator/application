@@ -6,6 +6,7 @@ $config = array(
         'Metator\Product',
         'Metator\Category',
         'Metator\Cart',
+        'Metator\Image',
         'PhinxModule'
     ),
 
@@ -21,6 +22,7 @@ $config = array(
             'Metator\Product'=>'./module/Product/',
             'Metator\Category'=>'./module/Category/',
             'Metator\Cart'=>'./module/Cart/',
+            'Metator\Image'=>'./module/Image/',
         ),
 
         // An array of paths from which to glob configuration files after

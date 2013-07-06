@@ -96,6 +96,20 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('12.45',$product->getBasePrice(), 'should update base price of existing product');
     }
 
+    function testShouldAssociateImageHash()
+    {
+        $image_hash = 'foobar123';
+
+        $product = new Product(array());
+        $product->addImageHash($image_hash);
+
+        $product_mapper = new DataMapper($this->db);
+        $id = $product_mapper->save($product);
+
+        $product = $product_mapper->load($id);
+        $this->assertEquals(array('foobar123'), $product->getImageHashes(), 'should associate image hashes');
+    }
+
     function testShouldList()
     {
         $product_mapper = new DataMapper($this->db);

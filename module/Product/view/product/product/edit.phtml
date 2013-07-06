@@ -6,4 +6,12 @@ $this->headScript()->appendFile('/js/product-form.js');
 <h1>Editing Product</h1>
 <?php
 $form->setView(new \Zend_View);
+$form->addElement('submit','save',[
+    'label'=>'Save',
+    'class'=>'btn'
+]);
+$form->addElement('submit','save_and_continue',[
+    'label'=>'Save & Continue',
+    'class'=>'btn'
+]);
 echo $form;

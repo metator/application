@@ -30,6 +30,9 @@
         <testsuite name="cart">
             <directory>module/Cart/test</directory>
         </testsuite>
+        <testsuite name="image">
+            <directory>module/Image/test</directory>
+        </testsuite>
     </testsuites>
 
 </phpunit>

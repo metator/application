@@ -13,6 +13,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Metator\Product\Form;
 use Metator\Product\Product;
+use Metator\Image\Saver;
 
 class ProductController extends AbstractActionController
 {
@@ -54,9 +55,29 @@ class ProductController extends AbstractActionController
         }
 
         if($this->getRequest()->isPost() && $form->isValid($this->params()->fromPost())) {
-            $product = new Product(array('id'=>$this->params('id')) + $form->getValues());
+
+            $image_hash_to_add = false;
+            $file = $_FILES['image_to_add']['tmp_name'];
+
+            if($file) {
+                $saver = new Saver(file_get_contents($file));
+                $saver->save();
+                $image_hash_to_add = $saver->getHash();
+            }
+
+            $product_data = array('id'=>$this->params('id'));
+            $product_data = $product_data + $form->getValues();
+
+            $product = new Product($product_data);
+
+            if($image_hash_to_add) {
+                $product->addImageHash($image_hash_to_add);
+            }
+
             $this->productMapper()->save($product);
-            return $this->redirect()->toRoute('product_manage');
+            if(!$this->params()->fromPost('save_and_continue')) {
+                return $this->redirect()->toRoute('product_manage');
+            }
         }
 
         return array(

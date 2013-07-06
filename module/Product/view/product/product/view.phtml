@@ -3,6 +3,13 @@ $this->plugin("currencyformat")->setCurrencyCode("USD")->setLocale("en_US");
 ?>
 
 <h1><?=$this->escapeHTML($product->getName())?></h1>
+
+<?php
+foreach($product->getImageHashes() as $image_hash) {
+    echo '<img src="/image/'.$image_hash.'" />';
+}
+?>
+
 <p><?=$this->escapeHTML($product->getSku())?></p>
 <p>Price:   <?=$this->currencyFormat($product->price())?></p>
 <a class="btn btn-large" href="<?=$this->url('cart_add',array('id'=>$product->id()))?>">Add To Cart</a>

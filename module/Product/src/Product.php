@@ -17,6 +17,7 @@ class Product
     protected $categories = array();
     protected $attribute_values = array();
     protected $price_modifiers = array();
+    protected $image_hashes = array();
 
     function __construct($params=array())
     {
@@ -62,6 +63,16 @@ class Product
     function setName($name)
     {
         $this->name = $name;
+    }
+
+    function addImageHash($image_hash)
+    {
+        array_push($this->image_hashes, $image_hash);
+    }
+
+    function getImageHashes()
+    {
+        return $this->image_hashes;
     }
 
     function getBasePrice()
