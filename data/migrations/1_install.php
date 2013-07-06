@@ -1,4 +1,28 @@
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+<?php
+
+use Phinx\Migration\AbstractMigration;
+
+class Install extends AbstractMigration
+{
+    /**
+     * Change Method.
+     *
+     * More information on this method is available here:
+     * http://docs.phinx.org/en/latest/migrations.html#the-change-method
+     *
+     * Uncomment this method if you would like to use it.
+     *
+    public function change()
+    {
+    }
+    */
+    
+    /**
+     * Migrate Up.
+     */
+    public function up()
+    {
+        $this->execute('SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `attribute` (
@@ -77,4 +101,14 @@ CREATE TABLE IF NOT EXISTS `product_categories` (
   PRIMARY KEY (`product_id`,`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-ALTER TABLE  `product` ADD  `active` INT( 1 ) NOT NULL;
+ALTER TABLE  `product` ADD  `active` INT( 1 ) NOT NULL;');
+    }
+
+    /**
+     * Migrate Down.
+     */
+    public function down()
+    {
+        throw new Exception('cant reverse the install');
+    }
+}
