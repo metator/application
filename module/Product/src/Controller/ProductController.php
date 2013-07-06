@@ -81,7 +81,8 @@ class ProductController extends AbstractActionController
         }
 
         return array(
-            'form'=>$form
+            'form'=>$form,
+            'product'=>$product
         );
     }
 

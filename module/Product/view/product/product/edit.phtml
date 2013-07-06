@@ -15,3 +15,14 @@ $form->addElement('submit','save_and_continue',[
     'class'=>'btn'
 ]);
 echo $form;
+?>
+<fieldset class="well">
+    <label>Images</label>
+    <?php
+    foreach($product->getImageHashes() as $image_hash) {
+        ?>
+        <a href="/image/<?=$image_hash?>"><img src="/image/150x150/<?=$image_hash?>" /></a>
+    <?php
+    }
+    ?>
+</fieldset>
