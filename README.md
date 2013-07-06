@@ -11,6 +11,8 @@ php public/index.php phinx setup
 php public/index.php phinx migrate
 ````
 
+#About
+
 ###Why yet another open source shopping cart?###
 There is a need for online retailers to sell complex products in today's marketplace. Configurable products that come in different colors & sizes like a T-Shirt, and groups of these configurable products like a product representing a T-Shirt & Pants sold together.
 
@@ -30,3 +32,6 @@ Even if you are just using simple products, Magento takes 1-2 seconds per produc
 
 ###What about export?###
 That is important too. If you imported it, you need to be able to export it. An export from within the application should be a substitute for backing up the database. If you export all data from within the app, then delete your database, importing it back in should restore you to a working state with no data loss. Exports & backups should be synonymous.
+
+#Performance Tuning
+It dumps user uploaded images for products into `./data/images`. By default, this is served through the front controller, but I've symlinked it from `./public/images` so that we're not involving PHP to serve these images, I just let the web server handle the caching & serving of these images. Ensure your server is set to follow symlinks for the `./public` directory to get this speed boost.
