@@ -13,6 +13,7 @@ class Product
 {
     protected $id;
     protected $name;
+    protected $description;
     protected $attributes = array();
     protected $categories = array();
     protected $attribute_values = array();
@@ -24,6 +25,7 @@ class Product
         $this->id = isset($params['id']) ? $params['id'] : '';
         $this->sku = isset($params['sku']) ? $params['sku'] : '';
         $this->name = isset($params['name']) ? $params['name'] : '';
+        $this->description = isset($params['description']) ? $params['description'] : '';
         $this->categories = isset($params['categories']) ? $params['categories'] : array();
         if(isset($params['basePrice'])) {
             $this->price = $params['basePrice'];
@@ -63,6 +65,16 @@ class Product
     function setName($name)
     {
         $this->name = $name;
+    }
+
+    function getDescription()
+    {
+        return $this->description;
+    }
+
+    function setDescription($description)
+    {
+        $this->description = $description;
     }
 
     function addImageHash($image_hash)

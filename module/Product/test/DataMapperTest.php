@@ -70,6 +70,32 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foobar',$product->getName(), 'should update name of existing product');
     }
 
+    function testShouldSaveDescription()
+    {
+        $product = new Product(array('description'=>'foo bar baz bat'));
+
+        // save !
+        $product_mapper = new DataMapper($this->db);
+        $id = $product_mapper->save($product);
+
+        $new_product = $product_mapper->load($id);
+        $this->assertEquals('foo bar baz bat', $new_product->getDescription(), 'should save description');
+    }
+
+    function testShouldUpdateDescription()
+    {
+        $product = new Product(array('description'=>'foo bar baz bat'));
+
+        $product_mapper = new DataMapper($this->db);
+        $id = $product_mapper->save($product);
+
+        $product->setDescription('new 123');
+        $product_mapper->save($product);
+
+        $product = $product_mapper->load($id);
+        $this->assertEquals('new 123',$product->getDescription(), 'should update description of existing product');
+    }
+
     function testShouldSaveBasePrice()
     {
         $product = new Product(array('base_price'=>'12.34'));
@@ -108,6 +134,24 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
 
         $product = $product_mapper->load($id);
         $this->assertEquals(array('foobar123'), $product->getImageHashes(), 'should associate image hashes');
+    }
+
+    function testShouldPreserveExistingImages()
+    {
+        $image_hash = 'foobar123';
+
+        $product = new Product(array());
+        $product->addImageHash($image_hash);
+
+        $product_mapper = new DataMapper($this->db);
+        $id = $product_mapper->save($product);
+
+        $product = $product_mapper->load($id);
+        $product_mapper = new DataMapper($this->db);
+        $id = $product_mapper->save($product);
+
+        $product = $product_mapper->load($id);
+        $this->assertEquals(array('foobar123'), $product->getImageHashes(), 'should preserve existing image hashes');
     }
 
     function testShouldList()

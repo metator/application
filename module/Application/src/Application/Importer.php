@@ -37,7 +37,8 @@ class Importer
     {
         $product = new Product(array(
             'sku'=>$row[0],
-            'name'=>$row[1]
+            'name'=>$row[1],
+            'description'=>''
         ));
 
         $product_mapper = new ProductDataMapper($this->db);

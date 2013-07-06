@@ -10,6 +10,7 @@ foreach($product->getImageHashes() as $image_hash) {
 }
 ?>
 
-<p><?=$this->escapeHTML($product->getSku())?></p>
+<p>SKU: <?=$this->escapeHTML($product->getSku())?></p>
+<p><?=$this->escapeHTML($product->getDescription())?></p>
 <p>Price:   <?=$this->currencyFormat($product->price())?></p>
 <a class="btn btn-large" href="<?=$this->url('cart_add',array('id'=>$product->id()))?>">Add To Cart</a>

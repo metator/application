@@ -48,10 +48,13 @@ class ProductController extends AbstractActionController
             $product = $this->productMapper()->load($this->params('id'));
             $form->populate(array(
                 'name'=>$product->getName(),
+                'description'=>$product->getDescription(),
                 'sku'=>$product->getSku(),
                 'basePrice'=>$product->getBasePrice(),
                 'categories'=>$product->getCategories(),
             ));
+        } else {
+            $product = new Product;
         }
 
         if($this->getRequest()->isPost() && $form->isValid($this->params()->fromPost())) {
@@ -65,10 +68,11 @@ class ProductController extends AbstractActionController
                 $image_hash_to_add = $saver->getHash();
             }
 
-            $product_data = array('id'=>$this->params('id'));
-            $product_data = $product_data + $form->getValues();
-
-            $product = new Product($product_data);
+            $product->setSku($form->getValue('sku'));
+            $product->setName($form->getValue('name'));
+            $product->setDescription($form->getValue('description'));
+            $product->setBasePrice($form->getValue('basePrice'));
+            $product->setCategories($form->getValue('categories'));
 
             if($image_hash_to_add) {
                 $product->addImageHash($image_hash_to_add);

@@ -20,7 +20,7 @@ foreach($this->products as $product) {
         }
         ?>
         <p><?=$this->currencyFormat($product->price())?></p></a>
-        <p>put description</p>
+        <p><?=$this->escapeHTML($product->getDescription())?></p>
         <p>
             <a class="btn" href="<?=$this->productURL($product->id())?>">View details &raquo;</a>
             <a class="btn btn-primary" href="<?=$this->url('cart_add',array('id'=>$product->id()))?>">Add To Cart</a>

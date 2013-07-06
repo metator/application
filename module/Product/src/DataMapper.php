@@ -46,6 +46,7 @@ class DataMapper
                 'name'=>$product->getName(),
                 'attributes'=>$this->serializeAttributes($product->attributes()),
                 'base_price'=>$product->getBasePrice(),
+                'description'=>$product->getDescription(),
             ), array('id'=>$product->id()));
             $product_id = $product->id();
         } else {
@@ -54,7 +55,8 @@ class DataMapper
                 'sku'=>$product->getSku(),
                 'name'=>$product->getName(),
                 'attributes'=>$this->serializeAttributes($product->attributes()),
-                'base_price'=>$product->getBasePrice()
+                'base_price'=>$product->getBasePrice(),
+                'description'=>$product->getDescription(),
             ));
             $product_id = $this->productTable->getLastInsertValue();
             $product->setId($product_id);
