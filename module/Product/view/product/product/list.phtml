@@ -12,7 +12,7 @@ foreach($this->products as $product) {
     <div class="span4 product-block">
         <a href="<?=$this->productURL($product->id())?>"><h2><?=$this->escapeHTML($product->getName())?></h2></a>
         <?=$this->currencyFormat($product->price())?>
-        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+        <p>put description</p>
         <p>
             <a class="btn" href="<?=$this->productURL($product->id())?>">View details &raquo;</a>
             <a class="btn btn-primary" href="<?=$this->url('cart_add',array('id'=>$product->id()))?>">Add To Cart</a>

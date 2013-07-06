@@ -19,6 +19,17 @@ class CategoryController extends AbstractActionController
 
     function viewAction()
     {
+        $this->layout('layout/layout-2col-left.phtml');
+
+        $layoutViewModel = $this->layout();
+        
+        // add categories to sidebar
+        $sidebar = new ViewModel(array(
+            'categories'=>$this->categoryMapper()->findStructuredAll()
+        ));
+        $sidebar->setTemplate('layout/categories');
+        $layoutViewModel->addChild($sidebar, 'navigation');
+
         $category = $this->categoryMapper()->load($this->params('id'));
         $products = $this->productMapper()->findByCategory($this->params('id'));
         return array(
