@@ -80,4 +80,11 @@ return array(
             __DIR__ . '/../view',
         ),
     ),
+
+    'view_helpers'=>array(
+        'invokables'=>array(
+            'productName'=>'\Metator\Product\Name',
+            'productURL'=>'\Metator\Product\URL',
+        )
+    )
 );

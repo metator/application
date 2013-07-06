@@ -1,3 +1,6 @@
+<?php
+$this->plugin("currencyformat")->setCurrencyCode("USD")->setLocale("en_US");
+?>
 <table class="table table-bordered">
     <thead>
         <th>Item</th>
@@ -10,10 +13,10 @@
     foreach($cart->items() as $item) {
         ?>
         <tr>
-            <td><?=$this->escapeHTML($item)?></td>
+            <td><a href="<?=$this->productURL($item)?>"><?=$this->escapeHTML($this->productName($item))?></a></td>
             <td><?=$this->escapeHTML($cart->quantity($item))?></td>
-            <td>$<?=$this->escapeHTML(number_format($cart->price($item),2))?></td>
-            <td>$<?=$this->escapeHTML(number_format($cart->totalPrice($item),2))?></td>
+            <td><?=$this->currencyFormat($cart->price($item))?></td>
+            <td><?=$this->currencyFormat($cart->totalPrice($item))?></td>
         </tr>
         <?php
     }
@@ -23,7 +26,7 @@
     <tr>
         <td colspan="4" class="summary">
             <dt>Grand Total</dt>
-                <dd>$<?=number_format($cart->totalPrice(),2)?></dd>
+                <dd><?=$this->currencyFormat($cart->totalPrice())?></dd>
         </td>
     </tr>
     <tr>
