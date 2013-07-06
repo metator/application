@@ -22,6 +22,17 @@ return array(
                 ),
             ),
 
+            'image_resized' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/image/:size/:hash',
+                    'defaults' => array(
+                        'controller' => 'Image\Controller\Image',
+                        'action'     => 'resized',
+                    ),
+                ),
+            ),
+
 
         ),
     ),

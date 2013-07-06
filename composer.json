@@ -14,7 +14,8 @@
         "joshribakoff/php-csv-utils":"dev-master",
 	    "zendframework/zendframework1":"1.12.*",
 	    "zendframework/zendframework":"2.*",
-        "valorin/zf2-phinx-module": "0.*"
+        "valorin/zf2-phinx-module": "0.*",
+        "imagine/imagine":"0.4.*"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.19",

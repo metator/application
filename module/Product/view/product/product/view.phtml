@@ -6,7 +6,7 @@ $this->plugin("currencyformat")->setCurrencyCode("USD")->setLocale("en_US");
 
 <?php
 foreach($product->getImageHashes() as $image_hash) {
-    echo '<img src="/image/'.$image_hash.'" />';
+    echo '<a href="/image/'.$image_hash.'"><img src="/image/300x300/'.$image_hash.'" /></a>';
 }
 ?>
 
