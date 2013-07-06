@@ -1,1 +1,36 @@
-cart index
+<table class="table table-bordered">
+    <thead>
+        <th>Item</th>
+        <th>Quantity</th>
+        <th>Item Price</th>
+        <th>Total Price</th>
+    </thead>
+    <tbody>
+    <?php
+    foreach($cart->items() as $item) {
+        ?>
+        <tr>
+            <td><?=$this->escapeHTML($item)?></td>
+            <td><?=$this->escapeHTML($cart->quantity($item))?></td>
+            <td>$<?=$this->escapeHTML(number_format($cart->price($item),2))?></td>
+            <td>$<?=$this->escapeHTML(number_format($cart->totalPrice($item),2))?></td>
+        </tr>
+        <?php
+    }
+    ?>
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="4" class="summary">
+            <dt>Grand Total</dt>
+                <dd>$<?=number_format($cart->totalPrice(),2)?></dd>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4" class="actions">
+            <input type="submit" name="update" value="Update" class="btn btn-large" />
+            <input type="submit" name="checkout" value="Checkout" class="btn btn-primary btn-large" />
+        </td>
+    </tr>
+    </tfoot>
+</table>
