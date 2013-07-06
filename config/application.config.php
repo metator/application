@@ -6,6 +6,7 @@ $config = array(
         'Metator\Product',
         'Metator\Category',
         'Metator\Cart',
+        'PhinxModule'
     ),
 
     // These are various options for the listeners attached to the ModuleManager

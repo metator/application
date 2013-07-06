@@ -13,7 +13,8 @@
         "metator/cart":"1.0.*",
         "joshribakoff/php-csv-utils":"dev-master",
 	    "zendframework/zendframework1":"1.12.*",
-	    "zendframework/zendframework":"2.*"
+	    "zendframework/zendframework":"2.*",
+        "valorin/zf2-phinx-module": "0.*"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.19",
