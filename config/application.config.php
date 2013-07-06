@@ -7,7 +7,9 @@ $config = array(
         'Metator\Category',
         'Metator\Cart',
         'Metator\Image',
-        'PhinxModule'
+        'PhinxModule',
+        'ZfcBase',
+        'ZfcUser',
     ),
 
     // These are various options for the listeners attached to the ModuleManager

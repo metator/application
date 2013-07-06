@@ -11,7 +11,23 @@
 
             <div class="nav-collapse collapse">
                 <p class="navbar-text pull-right">
-                    Logged in as <a href="#" class="navbar-link">Username</a>
+                    <!-- Test if the User is connected -->
+                    <?php
+                    if(!$this->zfcUserIdentity()) {
+                        ?>
+                        <!-- display the login form -->
+                        <?php ''/* echo $this->zfcUserLoginWidget(array('redirect'=>'application'));*/ ?>
+                        <a class="navbar-link" href="<?=$this->url('zfcuser/login')?>">Login</a>
+                        <?php
+                    } else {
+                        ?>
+                        <!-- display the 'display name' of the user -->
+                        Welcome,
+                        <a class="navbar-link" href="<?=$this->url('zfcuser')?>"><?php echo $this->zfcUserIdentity()->getEmail(); ?></a>
+                        <a class="navbar-link" href="<?=$this->url('zfcuser/logout')?>">Logout</a>
+                        <?php
+                    }
+                    ?>
                 </p>
                 <ul class="nav">
                     <li class="active"><a href="<?=$this->url('home')?>">Home</a></li>
