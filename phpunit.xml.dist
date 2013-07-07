@@ -16,9 +16,18 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./module</directory>
-            <directory suffix=".php">./config</directory>
+            <exclude>
+                <!-- dont include test files -->
+                <directory suffix="Test.php">./module</directory>
+                <!-- dont include view scripts -->
+                <directory suffix=".phtml">./module</directory>
+                <!-- dont include ZF scaffolding -->
+                <directory suffix="Module.php">./module</directory>
+                <directory suffix="config/module.config.php">./module</directory>
+            </exclude>
         </whitelist>
     </filter>
+
 
     <php>
         <env name="IS_PHPUNIT" value="1" />
