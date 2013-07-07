@@ -2,10 +2,7 @@
 $this->headTitle('Edit Product');
 $this->headScript()->appendFile('/js/jquery.metadata.pack.js');
 $this->headScript()->appendFile('/js/product-form.js');
-?>
-<h1>Editing Product</h1>
-<?php
-$form->setView(new \Zend_View);
+
 $form->addElement('submit','save',[
     'label'=>'Save',
     'class'=>'btn'
@@ -14,15 +11,63 @@ $form->addElement('submit','save_and_continue',[
     'label'=>'Save & Continue',
     'class'=>'btn'
 ]);
-echo $form;
+
+foreach($form->getElements() as $element) {
+    $element->setView(new \Zend_View);
+};
 ?>
-<fieldset class="well">
-    <label>Images</label>
-    <?php
-    foreach($product->getImageHashes() as $image_hash) {
+<h1>Editing Product</h1>
+<form action="?" method="post" enctype="multipart/form-data">
+    <div class="pull-right product-edit-controls">
+        <?php
+        echo $form->save_and_continue;
+        echo $form->save;
         ?>
-        <a href="/image/<?=$image_hash?>"><img src="/image/150x150/<?=$image_hash?>" /></a>
-    <?php
-    }
-    ?>
-</fieldset>
+    </div>
+    <ul class="nav nav-tabs" id="productTabs">
+        <li><a href="#general" data-toggle="tab">General</a></li>
+        <li><a href="#images" data-toggle="tab">Images</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="general">
+            <div class="row-fluid">
+                <div class="span6">
+                    <?php
+                    echo $form->sku;
+                    echo $form->name;
+                    echo $form->description;
+                    ?>
+                </div>
+                <div class="span6">
+                    <?php
+                    echo $form->basePrice;
+                    echo $form->categories;
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="images">
+            <ul>
+            <?php
+            foreach($product->getImageHashes() as $image_hash) {
+                ?>
+                <li>
+                    <a href="/image/<?=$image_hash?>"><img src="/image/150x150/<?=$image_hash?>" /></a>
+                </li>
+                <?php
+            }
+            ?>
+            </ul>
+            <?php
+            echo $form->image_to_add;
+            ?>
+        </div>
+    </div>
+
+</form>
+
+<script>
+    $(function () {
+        $('#productTabs a:first').tab('show');
+    })
+</script>

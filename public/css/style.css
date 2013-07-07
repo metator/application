@@ -26,7 +26,7 @@ body {
     overflow:auto;
 }
 
-form dt{
+form.float dt{
     padding:0;
     clear:both;
     width:30%;
@@ -35,7 +35,7 @@ form dt{
     margin:5px 5px 5px 0;
 }
 
-form dd{
+form.float dd{
     padding:0;
     float:left;
     width:68%;
@@ -67,4 +67,9 @@ label span {
 #shipping-label,
 #billing-label {
     display:none;
+}
+
+.product-edit-controls dd,
+.product-edit-controls dt {
+    display:inline;
 }
