@@ -52,6 +52,9 @@
         <testsuite name="image">
             <directory>module/Image/test</directory>
         </testsuite>
+        <testsuite name="order">
+            <directory>module/Order/test</directory>
+        </testsuite>
     </testsuites>
 
 </phpunit>

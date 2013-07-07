@@ -196,3 +196,10 @@ CREATE TABLE IF NOT EXISTS `address` (
   `fax` varchar(15) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `order` (
+  `id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `shipping` int(10) NOT NULL,
+  `billing` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

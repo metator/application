@@ -35,7 +35,8 @@
             "module/Product/src/",
             "module/Category/src/",
             "module/Cart/src/",
-            "module/Image/src/"
+            "module/Image/src/",
+            "module/Order/src/"
         ]
     }
 }

@@ -33,6 +33,8 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $addressMapper = new DataMapper($this->db);
         $id = $addressMapper->save($address);
 
+        $this->assertEquals($id, $address['id'], 'should assign the ID upon saving');
+
         $loadedAddress = $addressMapper->load($id);
         $this->assertSame(array('id'=>$id)+$address, $loadedAddress, 'should save new address');
     }
