@@ -1,7 +1,7 @@
 <?php
 namespace Metator\Cart;
 
-class AddressForm extends \Zend_Form
+class AddressForm extends \Zend_Form_SubForm
 {
     function init()
     {

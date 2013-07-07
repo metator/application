@@ -22,12 +22,11 @@ body {
     padding-bottom:10px;
 }
 .zend_form{
-    width:460px;
     padding:0;
     overflow:auto;
 }
 
-.zend_form dt{
+form dt{
     padding:0;
     clear:both;
     width:30%;
@@ -36,7 +35,7 @@ body {
     margin:5px 5px 5px 0;
 }
 
-.zend_form dd{
+form dd{
     padding:0;
     float:left;
     width:68%;
@@ -64,4 +63,8 @@ thead {
 label span {
     width:200px;
     display:block;
+}
+#shipping-label,
+#billing-label {
+    display:none;
 }
