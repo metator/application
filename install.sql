@@ -180,3 +180,19 @@ CREATE TABLE IF NOT EXISTS `product_images` (
   `default` int(1) NOT NULL,
   PRIMARY KEY (`product_id`,`image_hash`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `address` (
+  `id` int(15) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(80) NOT NULL,
+  `last_name` varchar(80) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `address` varchar(150) NOT NULL,
+  `address2` varchar(150) NOT NULL,
+  `city` varchar(25) NOT NULL,
+  `state` varchar(15) NOT NULL,
+  `postal` varchar(15) NOT NULL,
+  `country` varchar(15) NOT NULL,
+  `phone` varchar(15) NOT NULL,
+  `fax` varchar(15) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;

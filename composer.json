@@ -30,6 +30,7 @@
     },
     "autoload": {
         "classmap": [
+            "module/Address/src/",
             "module/Application/src/",
             "module/Product/src/",
             "module/Category/src/",

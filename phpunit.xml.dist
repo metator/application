@@ -34,6 +34,9 @@
     </php>
 
     <testsuites>
+        <testsuite name="address">
+            <directory>module/Address/test</directory>
+        </testsuite>
         <testsuite name="application">
             <directory>module/Application/test</directory>
         </testsuite>
