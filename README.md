@@ -1,3 +1,4 @@
+[![Coverage Status](https://coveralls.io/repos/metator/application/badge.png?branch=master)](https://coveralls.io/r/metator/application?branch=master)
 [![Build Status](https://travis-ci.org/metator/application.png?branch=master)](https://travis-ci.org/metator/application)
 
 Metator
