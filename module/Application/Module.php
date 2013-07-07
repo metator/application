@@ -13,9 +13,12 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Application\ProductMapper;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
+use Zend\View\Model\ViewModel;
 
 class Module
 {
+    protected $categoryMapper;
+
     function init($moduleManager)
     {
         /** Make sure the ZfcUser is loaded previously, so we can override it later. */
@@ -24,13 +27,7 @@ class Module
 
     public function onBootstrap(MvcEvent $e)
     {
-        $eventManager        = $e->getApplication()->getEventManager();
-        $moduleRouteListener = new ModuleRouteListener();
-        $moduleRouteListener->attach($eventManager);
-
-        /**
-         * Hook into ZfcUser & add new registration field(s)
-         */
+        /** Hook into ZfcUser & add new registration field(s) */
         $events = $e->getApplication()->getEventManager()->getSharedManager();
         $events->attach('ZfcUser\Form\Register','init', function($e) {
             $form = $e->getTarget();
@@ -38,6 +35,31 @@ class Module
                 'name'=>'Test',
                 'options'=>array('label'=>'Test')
             ));
+        });
+
+        /** add categories to sidebar on every request */
+        $e->getApplication()->getEventManager()->attach(MvcEvent::EVENT_RENDER, function() use($e) {
+
+            $sm = $e->getApplication()->getServiceManager();
+
+            /** Only add it if the layout actually has a left column */
+            if('layout/layout-2col-left.phtml' == $e->getViewModel()->getTemplate()) {
+                /** Grab the Category DataMapper from the SM */
+                $categoryMapper = $sm->get('Application\Category\DataMapper');
+
+                /** Render it out to the sidebar in the layout */
+                $sidebar = new ViewModel(array(
+                    'categories'=> $categoryMapper->findStructuredAll()
+                ));
+                $sidebar->setTemplate('layout/categories');
+
+
+                $htmlOutput = $sm->get('viewrenderer')
+                    ->render($sidebar);
+
+                $e->getViewModel()->navigation .= $htmlOutput;
+                $e->getViewModel()->navigation .= 'I am on the sidebar too!';
+            }
         });
 
     }

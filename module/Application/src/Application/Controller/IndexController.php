@@ -14,20 +14,13 @@ use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
 {
-    protected $productMapper, $categoryMapper;
+    protected $productMapper;
 
     public function indexAction()
     {
         $this->layout('layout/layout-2col-left.phtml');
 
         $layoutViewModel = $this->layout();
-
-        // add categories to sidebar
-        $sidebar = new ViewModel(array(
-            'categories'=>$this->categoryMapper()->findStructuredAll()
-        ));
-        $sidebar->setTemplate('layout/categories');
-        $layoutViewModel->addChild($sidebar, 'navigation');
 
         // render splash
         $result = new ViewModel();
@@ -57,12 +50,5 @@ class IndexController extends AbstractActionController
         return $this->productMapper;
     }
 
-    function categoryMapper()
-    {
-        if (!$this->categoryMapper) {
-            $sm = $this->getServiceLocator();
-            $this->categoryMapper = $sm->get('Application\Category\DataMapper');
-        }
-        return $this->categoryMapper;
-    }
+
 }
