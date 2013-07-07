@@ -9,9 +9,10 @@
 
 namespace Cart\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController,
-    Zend\Session\Container,
-    Metator\Cart\Cart;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Session\Container;
+use Metator\Cart\Cart;
+use Metator\Cart\AddressForm;
 
 class CheckoutController extends AbstractActionController
 {
@@ -20,11 +21,11 @@ class CheckoutController extends AbstractActionController
     function indexAction()
     {
         $cart = $this->cart();
-
-
+        $form = new AddressForm;
 
         return array(
-            'cart'=>$cart
+            'cart'=>$cart,
+            'form'=>$form
         );
     }
 

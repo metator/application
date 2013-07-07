@@ -1,13 +1,33 @@
 <div class="row-fluid">
     <div class="span6">
         <h1>Checkout As a Guest</h1>
+        <?php
+        $form->setView(new \Zend_View);
+        echo $form;
+        ?>
     </div>
-    <div class="span6 well">
-        <?php echo $this->zfcUserLoginWidget(array('redirect'=>'application')); ?>
-        Register and save time!
-        Register with us for future convenience:
 
-        Fast and easy check out
-        Easy access to your order history and status
+        <?php
+        if(!$this->zfcUserIdentity()) {
+            ?>
+            <div class="span6 well">
+                <?php echo $this->zfcUserLoginWidget(array('redirect'=>$this->url())); ?>
+                Register and save time!
+                Register with us for future convenience:
+
+                Fast and easy check out
+                Easy access to your order history and status
+            </div>
+            <?php
+        } else {
+            ?>
+            <div class="span6">
+                <h1>Welcome,</h1>
+                <a class="navbar-link" href="<?=$this->url('zfcuser')?>"><?php echo $this->zfcUserIdentity()->getEmail(); ?></a>
+                <a class="btn btn-mini" href="<?=$this->url('zfcuser/logout')?>?redirect=<?=$this->escapeHTMLAttr($this->url())?>">Logout</a>
+            </div>
+            <?php
+        }
+        ?>
     </div>
 </div>
