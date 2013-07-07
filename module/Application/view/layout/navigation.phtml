@@ -17,15 +17,25 @@
                         ?>
                         <!-- display the login form -->
                         <?php ''/* echo $this->zfcUserLoginWidget(array('redirect'=>'application'));*/ ?>
-                        <a class="navbar-link" href="<?=$this->url('zfcuser/login')?>">Login</a>
+                        <a class="btn btn-mini" href="<?=$this->url('zfcuser/login')?>">Login</a>
                         <?php
                     } else {
                         ?>
                         <!-- display the 'display name' of the user -->
                         Welcome,
                         <a class="navbar-link" href="<?=$this->url('zfcuser')?>"><?php echo $this->zfcUserIdentity()->getEmail(); ?></a>
-                        <a class="navbar-link" href="<?=$this->url('zfcuser/logout')?>">Logout</a>
+                        <a class="btn btn-mini" href="<?=$this->url('zfcuser/logout')?>">Logout</a>
                         <?php
+                    }
+
+                    $session = new \Zend\Session\Container('metator');
+                    $cart = $session->cart;
+
+                    if($cart) {
+                        $this->plugin("currencyformat")->setCurrencyCode("USD")->setLocale("en_US");
+                        echo '<a class="btn btn-mini" href="'.$this->url('cart').'">';
+                        printf('%d item(s) (%s)', $cart->itemCount(), $this->currencyFormat($cart->totalPrice()));
+                        echo '</a>';
                     }
                     ?>
                 </p>
