@@ -16,12 +16,26 @@ use Metator\Cart\CheckoutForm;
 
 class CheckoutController extends AbstractActionController
 {
-    protected $productMapper;
+    protected $productMapper, $orderMapper;
 
     function indexAction()
     {
         $cart = $this->cart();
         $form = new CheckoutForm;
+
+        if($this->getRequest()->isPost() && $form->isValid($this->params()->fromPost())) {
+            $order = array(
+                'shipping'=>$form->getValues()['shipping'],
+                'billing'=>$form->getValues()['billing'],
+                'items'=> $this->cart()
+            );
+
+            $orderMapper = $this->orderMapper();
+            $id = $orderMapper->save($order);
+            var_dump($id);
+
+            exit;
+        }
 
         return array(
             'cart'=>$cart,
@@ -37,6 +51,16 @@ class CheckoutController extends AbstractActionController
             $this->productMapper = $sm->get('Application\Product\DataMapper');
         }
         return $this->productMapper;
+    }
+
+    /** @return \Metator\Cart\DataMapper */
+    function orderMapper()
+    {
+        if (!$this->orderMapper) {
+            $sm = $this->getServiceLocator();
+            $this->orderMapper = $sm->get('Application\Order\DataMapper');
+        }
+        return $this->orderMapper;
     }
 
     /** @return \Application\CategoryMapper */

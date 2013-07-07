@@ -21,5 +21,9 @@ class CheckoutForm extends \Zend_Form
 
         $this->addSubForm($shipping, 'shipping');
         $this->addSubForm($billing, 'billing');
+
+        foreach($this->billing->getElements() as $element) {
+            $element->setRequired(false);
+        }
     }
 }

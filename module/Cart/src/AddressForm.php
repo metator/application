@@ -17,7 +17,7 @@ class AddressForm extends \Zend_Form_SubForm
             'label'=>'Email',
             'required'=>true
         ));
-        $this->addElement('text','address1',array(
+        $this->addElement('text','address',array(
             'label'=>'Address',
             'required'=>true
         ));
@@ -33,7 +33,7 @@ class AddressForm extends \Zend_Form_SubForm
             'label'=>'State',
             'required'=>true
         ));
-        $this->addElement('text','zip',array(
+        $this->addElement('text','postal',array(
             'label'=>'Zip/Postal Code',
             'required'=>true
         ));

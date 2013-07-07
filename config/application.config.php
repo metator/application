@@ -7,6 +7,7 @@ $config = array(
         'Metator\Category',
         'Metator\Cart',
         'Metator\Image',
+        'Metator\Order',
         'PhinxModule',
         'ZfcBase',
         'ZfcUser',
@@ -25,6 +26,7 @@ $config = array(
             'Metator\Category'=>'./module/Category/',
             'Metator\Cart'=>'./module/Cart/',
             'Metator\Image'=>'./module/Image/',
+            'Metator\Order'=>'./module/Order/',
         ),
 
         // An array of paths from which to glob configuration files after
