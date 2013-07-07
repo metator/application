@@ -17,11 +17,15 @@ class DataMapper
 
     function save($order)
     {
-        $this->addressDataMapper->save($order['shipping']);
-        $this->addressDataMapper->save($order['billing']);
+        if(isset($order['shipping'])) {
+            $this->addressDataMapper->save($order['shipping']);
+        }
+        if(isset($order['billing'])) {
+            $this->addressDataMapper->save($order['billing']);
+        }
         $this->table->insert(array(
-            'shipping'=>$order['shipping']['id'],
-            'billing'=>$order['billing']['id'],
+            'shipping'=>isset($order['shipping']) ? $order['shipping']['id'] : null,
+            'billing'=>isset($order['billing']) ? $order['billing']['id'] : null,
         ));
         return $this->table->getLastInsertValue();
     }

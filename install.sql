@@ -203,3 +203,23 @@ CREATE TABLE IF NOT EXISTS `order` (
   `shipping` int(10) NOT NULL,
   `billing` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE  `order` CHANGE  `shipping`  `shipping` INT( 10 ) NULL;
+ALTER TABLE  `order` CHANGE  `billing`  `billing` INT( 10 ) NULL;
+
+CREATE TABLE IF NOT EXISTS `cart` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cart_item`
+--
+
+CREATE TABLE IF NOT EXISTS `cart_item` (
+  `cart_id` int(15) NOT NULL,
+  `item_id` int(15) NOT NULL,
+  PRIMARY KEY (`cart_id`,`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

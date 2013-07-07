@@ -32,3 +32,10 @@
         ?>
     </div>
 </div>
+<?php
+$form->addElement('submit','submit',array(
+    'label'=>'Place Order',
+    'class' => 'btn btn-large btn-primary'
+));
+$form->submit->setView(new \Zend_View);
+echo $form->submit;

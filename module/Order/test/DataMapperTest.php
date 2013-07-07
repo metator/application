@@ -68,15 +68,21 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
     function testShouldSaveCartAndItems()
     {
         return $this->markTestIncomplete();
-        //        $cart = new \Metator\Cart\Cart;
-//        $cart->add(1, 9.99);
-//        $cart->add(2, 4.99);
+        
+        $cart = new \Metator\Cart\Cart;
+        $cart->add(1, 9.99);
+        $cart->add(2, 4.99);
 
         $order = array(
-            'shipping'=>$shipping_address,
-            'billing'=>$billing_address,
-//            'cart'=>$cart
+            'items'=>$cart,
             'created'=>'0000-00-00 00:00:00'
         );
+
+        $orderMapper = new DataMapper($this->db);
+        $id = $orderMapper->save($order);
+
+        $reloaded_order = $orderMapper->load($id);
+
+        $this->assertEquals(array(1,2), $reloaded_order['items']->items(), 'should save items');
     }
 }
