@@ -16,6 +16,14 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $this->db->getDriver()->getConnection()->rollback();
     }
 
+    function testShouldReturnOrderID()
+    {
+        $order = array();
+        $orderMapper = new DataMapper($this->db);
+        $id = $orderMapper->save($order);
+        $this->assertNotEquals(0, $id, 'should assign an order ID');
+    }
+
     function testShouldCreateNewAddressesAndOrder()
     {
         $shipping_address = array(

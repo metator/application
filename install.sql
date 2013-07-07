@@ -197,15 +197,16 @@ CREATE TABLE IF NOT EXISTS `address` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
-CREATE TABLE IF NOT EXISTS `order` (
-  `id` int(11) NOT NULL,
-  `created` datetime NOT NULL,
-  `shipping` int(10) NOT NULL,
-  `billing` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-ALTER TABLE  `order` CHANGE  `shipping`  `shipping` INT( 10 ) NULL;
-ALTER TABLE  `order` CHANGE  `billing`  `billing` INT( 10 ) NULL;
+CREATE TABLE IF NOT EXISTS `order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `shipping` int(10) DEFAULT NULL,
+  `billing` int(10) DEFAULT NULL,
+  `cart_id` int(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
 
 CREATE TABLE IF NOT EXISTS `cart` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
