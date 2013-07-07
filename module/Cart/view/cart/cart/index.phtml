@@ -12,9 +12,17 @@ $this->plugin("currencyformat")->setCurrencyCode("USD")->setLocale("en_US");
         <tbody>
         <?php
         foreach($cart->items() as $item) {
+            $product = $this->product($item);
             ?>
             <tr>
-                <td><a href="<?=$this->productURL($item)?>"><?=$this->escapeHTML($this->productName($item))?></a></td>
+                <td>
+                    <?php
+                    foreach($product->getImageHashes() as $image_hash) {
+                        echo '<a href="/image/'.$image_hash.'"><img src="/image/100x100/'.$image_hash.'" /></a>';
+                    }
+                    ?>
+                    <a href="<?=$this->productURL($item)?>"><?=$this->escapeHTML($this->productName($item))?></a>
+                </td>
                 <td><input type="text" name="quantity-<?=$this->escapeHtmlAttr($item)?>" value="<?=$this->escapeHtmlAttr($cart->quantity($item))?>" /></td>
                 <td><?=$this->currencyFormat($cart->price($item))?></td>
                 <td><?=$this->currencyFormat($cart->totalPrice($item))?></td>

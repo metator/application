@@ -50,4 +50,16 @@ class Module
             ),
         );
     }
+
+    public function getViewHelperConfig()
+    {
+        return array(
+            'invokables'=>array(
+                'product'=>'\Metator\Product\View\Helper\Product',
+                'productName'=>'\Metator\Product\Name',
+                'productURL'=>'\Metator\Product\URL',
+            )
+        );
+
+    }
 }
