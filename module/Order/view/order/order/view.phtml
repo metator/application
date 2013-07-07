@@ -1,0 +1,44 @@
+<?php
+$this->plugin("currencyformat")->setCurrencyCode("USD")->setLocale("en_US");
+?>
+<h1>Order View</h1>
+<div class="row-fluid">
+    <div class="span6">
+        <h2>Ship To</h2>
+        <?=print_r($order['shipping'])?>
+    </div>
+    <div class="span6">
+        <h2>Bill To</h2>
+        <?=print_r($order['billing'])?>
+    </div>
+</div>
+<div class="row-fluid">
+    <h2>Items Ordered</h2>
+    <table class="table">
+        <thead>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Item Price</th>
+            <th>Total Price</th>
+        </thead>
+        <tbody>
+        <?php
+        $cart = $order['items'];
+        foreach($cart->items() as $item) {
+            $product = $this->product($item);
+            ?>
+            <tr>
+                <td>
+                    <?='<a href="/image/'.$product->getDefaultImageHash().'"><img src="/image/100x100/'.$product->getDefaultImageHash().'" /></a>'?>
+                    <a href="<?=$this->productURL($item)?>"><?=$this->escapeHTML($this->productName($item))?></a>
+                </td>
+                <td><?=$cart->quantity($item)?></td>
+                <td><?=$this->currencyFormat($cart->price($item))?></td>
+                <td><?=$this->currencyFormat($cart->totalPrice($item))?></td>
+            </tr>
+            <?php
+        }
+        ?>
+        </tbody>
+    </table>
+</div>

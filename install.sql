@@ -220,5 +220,3 @@ CREATE TABLE IF NOT EXISTS `cart_item` (
   `quantity` int(11) NOT NULL,
   PRIMARY KEY (`cart_id`,`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-ALTER TABLE  `order` ADD  `cart_id` INT( 10 ) NOT NULL;

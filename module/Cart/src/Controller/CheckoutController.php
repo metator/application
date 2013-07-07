@@ -53,7 +53,7 @@ class CheckoutController extends AbstractActionController
         return $this->productMapper;
     }
 
-    /** @return \Metator\Cart\DataMapper */
+    /** @return \Metator\Order\DataMapper */
     function orderMapper()
     {
         if (!$this->orderMapper) {

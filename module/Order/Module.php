@@ -24,8 +24,7 @@ class Module
 
     public function getConfig()
     {
-        return array();
-        //return include __DIR__ . '/config/module.config.php';
+        return include __DIR__ . '/config/module.config.php';
     }
 
     public function getAutoloaderConfig()
