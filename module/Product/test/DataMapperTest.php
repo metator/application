@@ -154,6 +154,21 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('foobar123'), $product->getImageHashes(), 'should preserve existing image hashes');
     }
 
+    function testShouldSetDefaultImageHash()
+    {
+        $product = new Product(array());
+        $product->addImageHash('foo123');
+        $product->addImageHash('foo456');
+        $product->addImageHash('foo789');
+
+        $product->setDefaultImageHash('foo456');
+
+        $product_mapper = new DataMapper($this->db);
+        $id = $product_mapper->save($product);
+        $product = $product_mapper->load($id);
+        $this->assertEquals('foo456', $product->getDefaultImageHash(), 'should set default image hash');
+    }
+
     function testShouldList()
     {
         $product_mapper = new DataMapper($this->db);

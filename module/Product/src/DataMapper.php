@@ -64,7 +64,7 @@ class DataMapper
         $this->associateAttributeToProduct($product_id, $product->attributes());
         $this->savePriceModifiers($product_id, $product);
         $this->saveCategories($product_id, $product->getCategories());
-        $this->saveImageHashes($product_id, $product->getImageHashes());
+        $this->saveImageHashes($product_id, $product);
         return $product_id;
     }
 
@@ -116,13 +116,15 @@ class DataMapper
         }
     }
 
-    function saveImageHashes($product_id, $image_hashes)
+    function saveImageHashes($product_id, $product)
     {
+        $image_hashes = $product->getImageHashes();
         $this->productImagesAssociationTable->delete(array('product_id'=>$product_id));
         foreach($image_hashes as $image_hash) {
             $this->productImagesAssociationTable->insert(array(
                 'product_id'=>$product_id,
-                'image_hash'=>$image_hash
+                'image_hash'=>$image_hash,
+                'default'=>$product->getDefaultImageHash() == $image_hash
             ));
         }
     }
@@ -215,6 +217,9 @@ class DataMapper
 
         while($row = $rowset->current()) {
             $product->addImageHash($row['image_hash']);
+            if($row['default']) {
+                $product->setDefaultImageHash($row['image_hash']);
+            }
         }
     }
 

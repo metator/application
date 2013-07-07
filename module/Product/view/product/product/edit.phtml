@@ -53,6 +53,7 @@ foreach($form->getElements() as $element) {
                 ?>
                 <li>
                     <a href="/image/<?=$image_hash?>"><img src="/image/150x150/<?=$image_hash?>" /></a>
+                    <input type="radio" name="default_image" value="<?=$image_hash?>" /> Is Default?
                 </li>
                 <?php
             }

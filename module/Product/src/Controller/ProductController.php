@@ -58,7 +58,6 @@ class ProductController extends AbstractActionController
         }
 
         if($this->getRequest()->isPost() && $form->isValid($this->params()->fromPost())) {
-
             $image_hash_to_add = false;
             $file = $_FILES['image_to_add']['tmp_name'];
 
@@ -73,6 +72,7 @@ class ProductController extends AbstractActionController
             $product->setDescription($form->getValue('description'));
             $product->setBasePrice($form->getValue('basePrice'));
             $product->setCategories($form->getValue('categories'));
+            $product->setDefaultImageHash($this->params()->fromPost('default_image'));
 
             if($image_hash_to_add) {
                 $product->addImageHash($image_hash_to_add);
