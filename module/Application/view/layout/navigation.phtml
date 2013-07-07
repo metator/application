@@ -31,12 +31,14 @@
                     $session = new \Zend\Session\Container('metator');
                     $cart = $session->cart;
 
+                    echo '<a class="btn btn-mini" href="'.$this->url('cart').'">';
                     if($cart) {
                         $this->plugin("currencyformat")->setCurrencyCode("USD")->setLocale("en_US");
-                        echo '<a class="btn btn-mini" href="'.$this->url('cart').'">';
                         printf('%d item(s) (%s)', $cart->itemCount(), $this->currencyFormat($cart->totalPrice()));
-                        echo '</a>';
+                    } else {
+                        echo '0 Items In Cart';
                     }
+                    echo '</a>';
                     ?>
                 </p>
                 <ul class="nav">
