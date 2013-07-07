@@ -13,11 +13,7 @@ foreach($this->products as $product) {
         <a href="<?=$this->productURL($product->id())?>"><h2><?=$this->escapeHTML($product->getName())?></h2></a>
 
         <?php
-        foreach($product->getImageHashes() as $image_hash) {
-            ?>
-            <a href="<?=$this->productURL($product->id())?>"><img src="/image/150x150/<?=$image_hash?>" /></a>
-            <?php
-        }
+        echo '<a href="/image/'.$product->getDefaultImageHash().'"><img src="/image/150x150/'.$product->getDefaultImageHash().'" /></a>';
         ?>
         <p><?=$this->currencyFormat($product->price())?></p></a>
         <p><?=$this->escapeHTML($product->getDescription())?></p>

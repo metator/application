@@ -5,8 +5,10 @@ $this->plugin("currencyformat")->setCurrencyCode("USD")->setLocale("en_US");
 <h1><?=$this->escapeHTML($product->getName())?></h1>
 
 <?php
+echo '<a href="/image/'.$product->getDefaultImageHash().'"><img src="/image/600x600/'.$product->getDefaultImageHash().'" /></a>';
+echo '<hr />';
 foreach($product->getImageHashes() as $image_hash) {
-    echo '<a href="/image/'.$image_hash.'"><img src="/image/300x300/'.$image_hash.'" /></a>';
+    echo '<a href="/image/'.$image_hash.'"><img src="/image/100x100/'.$image_hash.'" /></a>';
 }
 ?>
 
