@@ -15,8 +15,13 @@ class DataMapper
 
     function save($address)
     {
-        $this->table->insert($address);
-        return $this->table->getLastInsertValue();
+        if(isset($address['id']) && $address['id']) {
+            $this->table->update($address,array('id'=>$address['id']));
+            return $address['id'];
+        } else {
+            $this->table->insert($address);
+            return $this->table->getLastInsertValue();
+        }
     }
 
     function load($id)
