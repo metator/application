@@ -67,11 +67,10 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
 
     function testShouldSaveCartAndItems()
     {
-        return $this->markTestIncomplete();
-        
         $cart = new \Metator\Cart\Cart;
         $cart->add(1, 9.99);
         $cart->add(2, 4.99);
+        $cart->setQuantity(2, 2);
 
         $order = array(
             'items'=>$cart,
