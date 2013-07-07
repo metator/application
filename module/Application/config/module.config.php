@@ -143,4 +143,8 @@ return array(
             __DIR__ . '/../view',
         ),
     ),
+    'route_layouts'=>array(
+        'home'=>'layout/layout-2col-left.phtml',
+        'category'=>'layout/layout-2col-left.phtml',
+    )
 );

@@ -19,10 +19,6 @@ class CategoryController extends AbstractActionController
 
     function viewAction()
     {
-        $this->layout('layout/layout-2col-left.phtml');
-
-        $layoutViewModel = $this->layout();
-
         $category = $this->categoryMapper()->load($this->params('id'));
         $products = $this->productMapper()->findByCategory($this->params('id'));
         return array(
@@ -41,14 +37,6 @@ class CategoryController extends AbstractActionController
 
     function editAction()
     {
-        // Use an alternative layout
-        $layoutViewModel = $this->layout();
-
-        // add an additional layout to the root view model (layout)
-        $sidebar = new ViewModel();
-        $sidebar->setTemplate('layout/admin-navigation');
-        $layoutViewModel->addChild($sidebar, 'navigation');
-
         $form = new Form($this->categoryMapper());
 
         if($this->getRequest()->isPost() && $form->isValid($this->params()->fromPost())) {

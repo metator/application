@@ -18,10 +18,6 @@ class IndexController extends AbstractActionController
 
     public function indexAction()
     {
-        $this->layout('layout/layout-2col-left.phtml');
-
-        $layoutViewModel = $this->layout();
-
         // render splash
         $result = new ViewModel();
         $result->setTemplate('application/index/index');

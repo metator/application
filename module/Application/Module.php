@@ -37,31 +37,15 @@ class Module
             ));
         });
 
-        /** add categories to sidebar on every request */
-        $e->getApplication()->getEventManager()->attach(MvcEvent::EVENT_RENDER, function() use($e) {
-
-            $sm = $e->getApplication()->getServiceManager();
-
-            /** Only add it if the layout actually has a left column */
-            if('layout/layout-2col-left.phtml' == $e->getViewModel()->getTemplate()) {
-                /** Grab the Category DataMapper from the SM */
-                $categoryMapper = $sm->get('Application\Category\DataMapper');
-
-                /** Render it out to the sidebar in the layout */
-                $sidebar = new ViewModel(array(
-                    'categories'=> $categoryMapper->findStructuredAll()
-                ));
-                $sidebar->setTemplate('layout/categories');
-
-
-                $htmlOutput = $sm->get('viewrenderer')
-                    ->render($sidebar);
-
-                $e->getViewModel()->navigation .= $htmlOutput;
-                $e->getViewModel()->navigation .= 'I am on the sidebar too!';
+        /** Assign the layout for this route, based on the `route_layouts` key of the config */
+        $e->getApplication()->getEventManager()->getSharedManager()->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', function($e) {
+            $controller = $e->getTarget();
+            $route = $e->getRouteMatch()->getMatchedRouteName();
+            $config = $e->getApplication()->getServiceManager()->get('config');
+            if (isset($config['route_layouts'][$route])) {
+                $controller->layout($config['route_layouts'][$route]);
             }
-        });
-
+        }, 100);
     }
 
     public function getConfig()
@@ -90,5 +74,15 @@ class Module
                 },
             ),
         );
+    }
+
+    public function getViewHelperConfig()
+    {
+        return array(
+            'invokables'=>array(
+                'categoryStructure'=>'\Application\View\Helper\CategoryStructure',
+            )
+        );
+
     }
 }
