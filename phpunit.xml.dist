@@ -13,9 +13,12 @@
         syntaxCheck="false"
         bootstrap="phpunit-bootstrap.php">
 
-    <logging>
-        <log type="coverage-clover" target="build/logs/clover.xml"/>
-    </logging>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./module</directory>
+            <directory suffix=".php">./config</directory>
+        </whitelist>
+    </filter>
 
     <php>
         <env name="IS_PHPUNIT" value="1" />
