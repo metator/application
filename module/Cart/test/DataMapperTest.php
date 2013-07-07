@@ -36,7 +36,15 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
 
     function testShouldSaveItemQuantity()
     {
-        return $this->markTestIncomplete();
+        $cart = new \Metator\Cart\Cart;
+        $cart->add(1);
+        $cart->setQuantity(1,10);
+        $cart->add(2);
+        $cart->setQuantity(2,20);
+        $id = $this->dataMapper->save($cart);
+        $reloaded_cart = $this->dataMapper->load($id);
+        $this->assertEquals(10, $reloaded_cart->quantity(1), 'should save item quantity');
+        $this->assertEquals(20, $reloaded_cart->quantity(2), 'should save item quantity');
     }
 
     function testShouldSaveItemPrices()

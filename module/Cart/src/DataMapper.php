@@ -23,7 +23,8 @@ class DataMapper
             $this->cartItemTable->insert(array(
                 'cart_id'=>$cart_id,
                 'item_id'=>$item_id,
-                'price'=>$cart->price($item_id)
+                'price'=>$cart->price($item_id),
+                'quantity'=>$cart->quantity($item_id)
             ));
         }
         return $cart_id;
@@ -42,6 +43,7 @@ class DataMapper
         ));
         while($item = $rowset->current()) {
             $cart->add((int)$item['item_id'], (float)$item['price']);
+            $cart->setQuantity($item['item_id'], $item['quantity']);
         }
         return $cart;
     }
