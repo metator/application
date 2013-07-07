@@ -22,7 +22,8 @@ class DataMapper
         foreach($cart->items() as $item_id) {
             $this->cartItemTable->insert(array(
                 'cart_id'=>$cart_id,
-                'item_id'=>$item_id
+                'item_id'=>$item_id,
+                'price'=>$cart->price($item_id)
             ));
         }
         return $cart_id;
@@ -39,9 +40,8 @@ class DataMapper
         $rowset = $this->cartItemTable->select(array(
             'cart_id'=>$id
         ));
-        $cartItems = (array)$rowset->current();
-        foreach($cartItems as $cartItemsRow) {
-            $cart->add((int)$cartItemsRow);
+        while($item = $rowset->current()) {
+            $cart->add((int)$item['item_id'], (float)$item['price']);
         }
         return $cart;
     }

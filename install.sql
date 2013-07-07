@@ -212,14 +212,11 @@ CREATE TABLE IF NOT EXISTS `cart` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `cart_item`
---
 
 CREATE TABLE IF NOT EXISTS `cart_item` (
   `cart_id` int(15) NOT NULL,
   `item_id` int(15) NOT NULL,
+  `price` float NOT NULL,
   PRIMARY KEY (`cart_id`,`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+

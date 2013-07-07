@@ -27,11 +27,11 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
     function testShouldSaveItems()
     {
         $cart = new \Metator\Cart\Cart;
-        $cart->add(1, 9.99);
-        $cart->add(2, 4.99);
+        $cart->add(1);
+        $cart->add(2);
         $id = $this->dataMapper->save($cart);
         $reloaded_cart = $this->dataMapper->load($id);
-        $this->assertEquals(array(2,1), $reloaded_cart->items(), 'should save cart item IDs');
+        $this->assertEquals(array(1,2), $reloaded_cart->items(), 'should save cart item IDs');
     }
 
     function testShouldSaveItemQuantity()
@@ -41,7 +41,13 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
 
     function testShouldSaveItemPrices()
     {
-        return $this->markTestIncomplete();
+        $cart = new \Metator\Cart\Cart;
+        $cart->add(1, 9.99);
+        $cart->add(2, 4.99);
+        $id = $this->dataMapper->save($cart);
+        $reloaded_cart = $this->dataMapper->load($id);
+        $this->assertEquals(9.99, $reloaded_cart->price(1), 'should save item price');
+        $this->assertEquals(4.99, $reloaded_cart->price(2), 'should save item price');
     }
 
 }
