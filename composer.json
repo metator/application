@@ -25,7 +25,8 @@
         "phpunit/phpunit-story": "*",
         "phpunit/dbunit": "*",
         "zendframework/zend-developer-tools": "dev-master",
-        "bjyoungblood/bjy-profiler": "*"
+        "bjyoungblood/bjy-profiler": "*",
+        "satooshi/php-coveralls": "dev-master"
     },
     "autoload": {
         "classmap": [
