@@ -1,5 +1,5 @@
 <?php
-namespace Application\View\Helper;
+namespace Category\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
