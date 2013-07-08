@@ -95,7 +95,7 @@ class ProductController extends AbstractActionController
     {
         if (!$this->productMapper) {
             $sm = $this->getServiceLocator();
-            $this->productMapper = $sm->get('Application\Product\DataMapper');
+            $this->productMapper = $sm->get('Product\DataMapper');
         }
         return $this->productMapper;
     }

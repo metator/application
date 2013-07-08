@@ -31,6 +31,6 @@ class Name extends AbstractHelper implements ServiceLocatorAwareInterface
 
     function __invoke($id)
     {
-        return $this->getServiceLocator()->getServiceLocator()->get('Application\Product\DataMapper')->load($id)->getName();
+        return $this->getServiceLocator()->getServiceLocator()->get('Product\DataMapper')->load($id)->getName();
     }
 }
