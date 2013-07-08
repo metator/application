@@ -11,9 +11,53 @@ return array(
     'router' => array(
         'routes' => array(
 
+            'category' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/category/:id{-}-:name',
+                    'constraints' => array(
+                        'id' => '[0-9]*',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Category\Controller\Category',
+                        'action'     => 'view',
+                    ),
+                ),
+            ),
+
+            'category_manage' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/category/manage',
+                    'defaults' => array(
+                        'controller' => 'Category\Controller\Category',
+                        'action'     => 'manage',
+                    ),
+                ),
+            ),
+
+            'category_new' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/category/new',
+                    'defaults' => array(
+                        'controller' => 'Category\Controller\Category',
+                        'action'     => 'edit',
+                    ),
+                ),
+            ),
 
         ),
     ),
+    'controllers' => array(
+        'invokables' => array(
+            'Category\Controller\Category' => 'Category\Controller\CategoryController',
+        ),
+    ),
 
-
+    'view_manager' => array(
+        'template_path_stack' => array(
+            __DIR__ . '/../view',
+        ),
+    ),
 );
