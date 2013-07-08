@@ -144,6 +144,15 @@ return array(
         ),
     ),
     'route_layouts'=>array(
+        'product_manage'=>'layout/admin.phtml',
+        'product_edit'=>'layout/admin.phtml',
+        'product_new'=>'layout/admin.phtml',
+        'category_manage'=>'layout/admin.phtml',
+        'category_new'=>'layout/admin.phtml',
+        'attribute_manage'=>'layout/admin.phtml',
+        'order_admin_list'=>'layout/admin.phtml',
+        'order_admin_view'=>'layout/admin.phtml',
+
         'home'=>'layout/layout-2col-left.phtml',
         'category'=>'layout/layout-2col-left.phtml',
     )

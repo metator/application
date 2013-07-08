@@ -44,6 +44,7 @@ class Module
             $config = $e->getApplication()->getServiceManager()->get('config');
             if (isset($config['route_layouts'][$route])) {
                 $controller->layout($config['route_layouts'][$route]);
+                $controller->layout()->controller = get_class($controller);
             }
         }, 100);
     }

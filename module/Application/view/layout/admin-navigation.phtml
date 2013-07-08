@@ -1,10 +1,8 @@
-<div class="well sidebar-nav">
+<div class="sidebar-nav well">
     <ul class="nav nav-list">
-        <li class="nav-header">Catalog</li>
-
-        <li class="nav-header">System</li>
-        <li><a href="#">Cache</a></li>
-        <li><a href="#">Search Index</a></li>
-        <li><a href="#">Configuration Settings</a></li>
+        <li><strong>Admin Menu</strong></li>
+        <li <?=$this->controller=='Product\Controller\ProductController' ? 'class="active"' : ''?>><a href="/product/manage">Manage Products</a></li>
+        <li <?=$this->controller=='Application\Controller\CategoryController' ? 'class="active"' : ''?>><a href="/category/manage">Manage Categories</a></li>
+        <li <?=$this->controller=='Application\Controller\AttributeController' ? 'class="active"' : ''?>><a href="/attribute/manage">Manage Attributes</a></li>
     </ul>
 </div><!--/.well -->
