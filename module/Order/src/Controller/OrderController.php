@@ -36,7 +36,7 @@ class OrderController extends AbstractActionController
     {
         if (!$this->orderMapper) {
             $sm = $this->getServiceLocator();
-            $this->orderMapper = $sm->get('Application\Order\DataMapper');
+            $this->orderMapper = $sm->get('Order\DataMapper');
         }
         return $this->orderMapper;
     }
