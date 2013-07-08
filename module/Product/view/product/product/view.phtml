@@ -2,17 +2,29 @@
 $this->plugin("currencyformat")->setCurrencyCode("USD")->setLocale("en_US");
 ?>
 
-<h1><?=$this->escapeHTML($product->getName())?></h1>
+<div class="row-fluid">
+    <div class="span4 well">
+        <?php
+        echo '<a href="/image/'.$product->getDefaultImageHash().'"><img src="/image/300x300/'.$product->getDefaultImageHash().'" /></a>';
+        echo '<hr />';
+        foreach($product->getImageHashes() as $image_hash) {
+            echo '<a href="/image/'.$image_hash.'"><img src="/image/100x100/'.$image_hash.'" /></a>';
+        }
+        ?>
+    </div>
+    <div class="span8">
+        <div class="row-fluid well">
+            <h1><?=$this->escapeHTML($product->getName())?></h1>
+            <p><?=$this->escapeHTML($product->getDescription())?></p>
+        </div>
+        <div class="row-fluid well">
+            <p>SKU: <?=$this->escapeHTML($product->getSku())?></p>
 
-<?php
-echo '<a href="/image/'.$product->getDefaultImageHash().'"><img src="/image/450x450/'.$product->getDefaultImageHash().'" /></a>';
-echo '<hr />';
-foreach($product->getImageHashes() as $image_hash) {
-    echo '<a href="/image/'.$image_hash.'"><img src="/image/100x100/'.$image_hash.'" /></a>';
-}
-?>
-
-<p>SKU: <?=$this->escapeHTML($product->getSku())?></p>
-<p><?=$this->escapeHTML($product->getDescription())?></p>
-<p>Price:   <?=$this->currencyFormat($product->price())?></p>
-<a class="btn btn-large" href="<?=$this->url('cart_add',array('id'=>$product->id()))?>">Add To Cart</a>
+            <p>Price:   <?=$this->currencyFormat($product->price())?></p>
+            <a class="btn btn-large btn-primary" href="<?=$this->url('cart_add',array('id'=>$product->id()))?>">
+                <i class="icon-shopping-cart icon-white icon-large"></i>
+                Add To Cart
+            </a>
+        </div>
+    </div>
+</div>

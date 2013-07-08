@@ -16,8 +16,10 @@ $this->plugin("currencyformat")->setCurrencyCode("USD")->setLocale("en_US");
             ?>
             <tr>
                 <td>
-                    <?='<a href="/image/'.$product->getDefaultImageHash().'"><img src="/image/100x100/'.$product->getDefaultImageHash().'" /></a>'?>
-                    <a href="<?=$this->productURL($item)?>"><?=$this->escapeHTML($this->productName($item))?></a>
+                    <a href="<?=$this->productURL($item)?>">
+                        <img src="/image/100x100/<?=$product->getDefaultImageHash()?>" />
+                        <?=$this->escapeHTML($this->productName($item))?>
+                    </a>
                 </td>
                 <td><input type="text" name="quantity-<?=$this->escapeHtmlAttr($item)?>" value="<?=$this->escapeHtmlAttr($cart->quantity($item))?>" /></td>
                 <td><?=$this->currencyFormat($cart->price($item))?></td>
@@ -36,8 +38,15 @@ $this->plugin("currencyformat")->setCurrencyCode("USD")->setLocale("en_US");
         </tr>
         <tr>
             <td colspan="4" class="actions">
-                <input type="submit" name="update" value="Update" class="btn btn-large" />
-                <input type="submit" name="checkout" value="Checkout" class="btn btn-primary btn-large" />
+
+                <button type="submit" name="update" value="1" class="btn btn-large btn-primary">
+                    <i class="icon-save icon-white icon-large"></i>
+                    Save
+                </button>
+                <button type="submit" name="checkout" value="1" class="btn btn-success btn-large pull-right">
+                    <i class="icon-shopping-cart icon-white icon-large"></i>
+                    Checkout
+                </button>
             </td>
         </tr>
         </tfoot>
