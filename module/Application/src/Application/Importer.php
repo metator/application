@@ -6,8 +6,9 @@
  */
 namespace Application;
 
-use Metator\Product\DataMapper as ProductDataMapper,
-    Metator\Product\Product;
+use Metator\Product\DataMapper as ProductDataMapper;
+use Metator\Product\Product;
+use Zend\Db\TableGateway\TableGateway;
 
 class Importer
 {
@@ -26,11 +27,12 @@ class Importer
         fwrite($h,$csvText);
         fclose($h);
 
-        $csv = new \Csv_Reader($path,new \Csv_Dialect);
-        $this->fieldPositions = $csv->getRow();
-        while( $row = $csv->getRow()) {
-            $this->handleRow($row);
-        }
+        $sql = "LOAD DATA INFILE '".$path."' INTO TABLE `import` FIELDS TERMINATED BY ','";
+        $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->db->query("REPLACE INTO `product` (`sku`,`name`) SELECT `sku`, `name` FROM `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+
+        $import = new TableGateway('import', $this->db);
+        $rowset = $import->select();
     }
 
     function handleRow($row)

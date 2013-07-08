@@ -220,3 +220,9 @@ CREATE TABLE IF NOT EXISTS `cart_item` (
   `quantity` int(11) NOT NULL,
   PRIMARY KEY (`cart_id`,`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `import` (
+  `sku` varchar(15) NOT NULL,
+  `name` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
