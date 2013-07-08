@@ -9,7 +9,7 @@ foreach($this->products as $product) {
         echo '</div><div class="row-fluid">';
     }
     ?>
-    <div class="span4 product-block">
+    <div class="span4 product-block outline">
         <a href="<?=$this->productURL($product->id())?>"><h2><?=$this->escapeHTML($product->getName())?></h2></a>
 
         <?php
@@ -18,7 +18,7 @@ foreach($this->products as $product) {
         <p><?=$this->currencyFormat($product->price())?></p></a>
         <p><?=$this->escapeHTML($product->getDescription())?></p>
         <p>
-            <a class="btn btn-large btn-success" href="<?=$this->url('cart_add',array('id'=>$product->id()))?>">
+            <a class="btn btn-success" href="<?=$this->url('cart_add',array('id'=>$product->id()))?>">
                 <i class="icon-shopping-cart icon-white icon-large"></i>
                 Add To Cart
             </a>

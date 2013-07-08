@@ -3,7 +3,7 @@ $this->plugin("currencyformat")->setCurrencyCode("USD")->setLocale("en_US");
 ?>
 
 <div class="row-fluid">
-    <div class="span4 well">
+    <div class="span4">
         <?php
         echo '<a href="/image/'.$product->getDefaultImageHash().'"><img src="/image/300x300/'.$product->getDefaultImageHash().'" /></a>';
         echo '<hr />';
@@ -13,18 +13,22 @@ $this->plugin("currencyformat")->setCurrencyCode("USD")->setLocale("en_US");
         ?>
     </div>
     <div class="span8">
-        <div class="row-fluid well">
-            <h1><?=$this->escapeHTML($product->getName())?></h1>
-            <p><?=$this->escapeHTML($product->getDescription())?></p>
+        <div class="row">
+            <div class="outline">
+                <h1><?=$this->escapeHTML($product->getName())?></h1>
+                <p><?=$this->escapeHTML($product->getDescription())?></p>
+            </div>
         </div>
-        <div class="row-fluid well">
-            <p>SKU: <?=$this->escapeHTML($product->getSku())?></p>
+        <div class="row">
+            <div class="outline">
+                <p>SKU: <?=$this->escapeHTML($product->getSku())?></p>
 
-            <p>Price:   <?=$this->currencyFormat($product->price())?></p>
-            <a class="btn btn-large btn-primary" href="<?=$this->url('cart_add',array('id'=>$product->id()))?>">
-                <i class="icon-shopping-cart icon-white icon-large"></i>
-                Add To Cart
-            </a>
+                <p>Price:   <?=$this->currencyFormat($product->price())?></p>
+                <a class="btn btn-large btn-success" href="<?=$this->url('cart_add',array('id'=>$product->id()))?>">
+                    <i class="icon-shopping-cart icon-white icon-large"></i>
+                    Add To Cart
+                </a>
+            </div>
         </div>
     </div>
 </div>

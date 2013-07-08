@@ -2,8 +2,9 @@
 $this->plugin("currencyformat")->setCurrencyCode("USD")->setLocale("en_US");
 ?>
 <form action="<?=$this->url()?>" method="post">
-    <table class="table table-bordered">
+    <table class="table">
         <thead>
+            <th></th>
             <th>Item</th>
             <th>Quantity</th>
             <th>Item Price</th>
@@ -18,6 +19,10 @@ $this->plugin("currencyformat")->setCurrencyCode("USD")->setLocale("en_US");
                 <td>
                     <a href="<?=$this->productURL($item)?>">
                         <img src="/image/100x100/<?=$product->getDefaultImageHash()?>" />
+                    </a>
+                </td>
+                <td>
+                    <a href="<?=$this->productURL($item)?>">
                         <?=$this->escapeHTML($this->productName($item))?>
                     </a>
                 </td>
@@ -31,13 +36,13 @@ $this->plugin("currencyformat")->setCurrencyCode("USD")->setLocale("en_US");
         </tbody>
         <tfoot>
         <tr>
-            <td colspan="4" class="summary">
+            <td colspan="5" class="summary">
                 <dt>Grand Total</dt>
                     <dd><?=$this->currencyFormat($cart->totalPrice())?></dd>
             </td>
         </tr>
         <tr>
-            <td colspan="4" class="actions">
+            <td colspan="5" class="actions">
 
                 <button type="submit" name="update" value="1" class="btn btn-large btn-primary">
                     <i class="icon-save icon-white icon-large"></i>
