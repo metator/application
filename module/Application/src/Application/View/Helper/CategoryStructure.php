@@ -32,7 +32,7 @@ class CategoryStructure extends AbstractHelper implements ServiceLocatorAwareInt
     function __invoke()
     {
         $sm = $this->getServiceLocator()->getServiceLocator();
-        $categoryMapper = $sm->get('Application\Category\DataMapper');
+        $categoryMapper = $sm->get('Category\DataMapper');
 
         $sidebar = new ViewModel(array(
             'categories'=> $categoryMapper->findStructuredAll()

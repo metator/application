@@ -68,7 +68,7 @@ class CheckoutController extends AbstractActionController
     {
         if (!$this->categoryMapper) {
             $sm = $this->getServiceLocator();
-            $this->categoryMapper = $sm->get('Application\Category\DataMapper');
+            $this->categoryMapper = $sm->get('Category\DataMapper');
         }
         return $this->categoryMapper;
     }

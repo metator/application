@@ -69,7 +69,7 @@ class Module
     {
         return array(
             'factories' => array(
-                'Application\Category\DataMapper' => function ($sm) {
+                'Category\DataMapper' => function ($sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     return new \Category\DataMapper($dbAdapter);
                 },
