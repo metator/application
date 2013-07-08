@@ -9,7 +9,7 @@
 
 namespace Order\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use Application\AbstractActionController;
 use Zend\Session\Container;
 use Metator\Cart\Cart;
 use Metator\Cart\CheckoutForm;
@@ -31,13 +31,4 @@ class OrderController extends AbstractActionController
         );
     }
 
-    /** @return \Metator\Order\DataMapper */
-    function orderMapper()
-    {
-        if (!$this->orderMapper) {
-            $sm = $this->getServiceLocator();
-            $this->orderMapper = $sm->get('Order\DataMapper');
-        }
-        return $this->orderMapper;
-    }
 }

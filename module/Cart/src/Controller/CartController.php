@@ -9,9 +9,9 @@
 
 namespace Cart\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController,
-    Zend\Session\Container,
-    Metator\Cart\Cart;
+use Application\AbstractActionController;
+use Zend\Session\Container;
+use Metator\Cart\Cart;
 
 class CartController extends AbstractActionController
 {
@@ -53,32 +53,4 @@ class CartController extends AbstractActionController
         $this->redirect()->toRoute('cart');
     }
 
-    /** @return \Metator\Product\DataMapper */
-    function productMapper()
-    {
-        if (!$this->productMapper) {
-            $sm = $this->getServiceLocator();
-            $this->productMapper = $sm->get('Product\DataMapper');
-        }
-        return $this->productMapper;
-    }
-
-    /** @return \Application\CategoryMapper */
-    function categoryMapper()
-    {
-        if (!$this->categoryMapper) {
-            $sm = $this->getServiceLocator();
-            $this->categoryMapper = $sm->get('Category\DataMapper');
-        }
-        return $this->categoryMapper;
-    }
-
-    function cart()
-    {
-        $session = new Container('metator');
-        if(!$session->cart) {
-            $session->cart = new Cart;
-        }
-        return $session->cart;
-    }
 }

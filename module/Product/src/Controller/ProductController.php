@@ -9,8 +9,7 @@
 
 namespace Product\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Application\AbstractActionController;
 use Metator\Product\Form;
 use Metator\Product\Product;
 use Metator\Image\Saver;
@@ -88,25 +87,5 @@ class ProductController extends AbstractActionController
             'form'=>$form,
             'product'=>$product
         );
-    }
-
-    /** @return \Metator\Product\DataMapper */
-    function productMapper()
-    {
-        if (!$this->productMapper) {
-            $sm = $this->getServiceLocator();
-            $this->productMapper = $sm->get('Product\DataMapper');
-        }
-        return $this->productMapper;
-    }
-
-    /** @return \Application\CategoryMapper */
-    function categoryMapper()
-    {
-        if (!$this->categoryMapper) {
-            $sm = $this->getServiceLocator();
-            $this->categoryMapper = $sm->get('Category\DataMapper');
-        }
-        return $this->categoryMapper;
     }
 }

@@ -9,7 +9,7 @@
 
 namespace Category\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use Application\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Metator\Category\Form;
 
@@ -49,23 +49,4 @@ class CategoryController extends AbstractActionController
         );
     }
 
-    /** @return \Metator\Product\DataMapper */
-    function productMapper()
-    {
-        if (!$this->productMapper) {
-            $sm = $this->getServiceLocator();
-            $this->productMapper = $sm->get('Product\DataMapper');
-        }
-        return $this->productMapper;
-    }
-
-    /** @return \Application\CategoryMapper */
-    function categoryMapper()
-    {
-        if (!$this->categoryMapper) {
-            $sm = $this->getServiceLocator();
-            $this->categoryMapper = $sm->get('Category\DataMapper');
-        }
-        return $this->categoryMapper;
-    }
 }

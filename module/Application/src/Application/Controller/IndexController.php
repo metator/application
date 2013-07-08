@@ -9,7 +9,7 @@
 
 namespace Application\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use Application\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
@@ -18,33 +18,20 @@ class IndexController extends AbstractActionController
 
     public function indexAction()
     {
-        // render splash
-        $result = new ViewModel();
-        $result->setTemplate('application/index/index');
-
         // render some featured products
         $products = new ViewModel();
         $products->setTemplate('product/product/list');
         $products->setVariable('products',$this->products());
-        $result->addChild($products, 'product_list');
 
-        return $result;
+        $view = new ViewModel();
+        $view->addChild($products, 'product_list');
+
+        return $view;
     }
 
     function products()
     {
         return $this->productMapper()->find();
     }
-
-    /** @return \Metator\Product\DataMapper */
-    function productMapper()
-    {
-        if (!$this->productMapper) {
-            $sm = $this->getServiceLocator();
-            $this->productMapper = $sm->get('Product\DataMapper');
-        }
-        return $this->productMapper;
-    }
-
 
 }
