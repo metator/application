@@ -18,15 +18,16 @@ class IndexController extends AbstractActionController
 
     public function indexAction()
     {
-        // render some featured products
-        $products = new ViewModel();
-        $products->setTemplate('product/product/list');
-        $products->setVariable('products',$this->products());
+        if( $this->params()->fromQuery('page') > 100 ) {
+            throw new \Exception('You cant go past 100 pages for performance reasons');
+        }
+        $paginator = $this->productMapper()->findPaginated();
+        $paginator->setCurrentPageNumber((int)$this->params()->fromQuery('page', 1));
+        $paginator->setItemCountPerPage(9);
 
-        $view = new ViewModel();
-        $view->addChild($products, 'product_list');
-
-        return $view;
+        return array(
+            'paginator'=>$paginator
+        );
     }
 
     function products()

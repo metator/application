@@ -10,6 +10,12 @@ use Application\AttributeMapper;
 use \Zend\Json\Json;
 use Zend\Db\TableGateway\TableGateway;
 
+use Zend\Db\ResultSet\ResultSet;
+
+use Zend\Db\Sql\Select;
+use Zend\Paginator\Adapter\DbSelect;
+use Zend\Paginator\Paginator;
+
 class DataMapper
 {
     protected $db;
@@ -144,6 +150,22 @@ class DataMapper
             $products[] = $this->doLoad($row);
         }
         return $products;
+    }
+
+    function findPaginated()
+    {
+        $select = new Select('product');
+
+        $resultSetPrototype = new ResultSet();
+        //$resultSetPrototype->setArrayObjectPrototype(new Album());
+
+        $paginatorAdapter = new DbSelect(
+            $select,
+            $this->productTable->getAdapter(),
+            $resultSetPrototype
+        );
+        $paginator = new Paginator($paginatorAdapter);
+        return $paginator;
     }
 
     function findByCategory($id)

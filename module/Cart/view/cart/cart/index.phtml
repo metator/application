@@ -18,7 +18,13 @@ $this->plugin("currencyformat")->setCurrencyCode("USD")->setLocale("en_US");
             <tr>
                 <td>
                     <a href="<?=$this->productURL($item)?>">
-                        <img src="/image/100x100/<?=$product->getDefaultImageHash()?>" />
+                        <?php
+                        if(!$product->getDefaultImageHash()) {
+                            echo '<img src="http://placehold.it/100x100" />';
+                        } else {
+                            ?><img src="/image/100x100/<?=$product->getDefaultImageHash()?>" /><?php
+                        }
+                        ?>
                     </a>
                 </td>
                 <td>

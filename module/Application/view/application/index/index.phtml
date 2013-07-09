@@ -1,1 +1,23 @@
+<?php
+$products = array();
+foreach ($this->paginator as $product) {
+    $product = $this->product($product['id']);
+    $products[] = $product;
+}
+echo $this->partial('product/product/list.phtml',array(
+    'products'=>$products
+));
+?>
 <?=$this->product_list?>
+<?php // add at the end of the file after the table
+echo $this->paginationControl(
+// the paginator object
+    $this->paginator,
+    // the scrolling style; see http://zf2.readthedocs.org/en/release-2.1.4/modules/zend.paginator.usage.html#rendering-pages-with-view-scripts
+    'sliding',
+    // the partial to use to render the control
+    array('application/pagination.phtml', '')
+    // the route to link to when a user clicks a control link
+
+);
+?>

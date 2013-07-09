@@ -5,7 +5,11 @@ $this->plugin("currencyformat")->setCurrencyCode("USD")->setLocale("en_US");
 <div class="row-fluid">
     <div class="span4">
         <?php
-        echo '<a href="/image/'.$product->getDefaultImageHash().'"><img src="/image/300x300/'.$product->getDefaultImageHash().'" /></a>';
+        if(!$product->getDefaultImageHash()) {
+            echo '<img src="http://placehold.it/300x300" />';
+        } else {
+            echo '<a href="/image/'.$product->getDefaultImageHash().'"><img src="/image/300x300/'.$product->getDefaultImageHash().'" /></a>';
+        }
         echo '<hr />';
         foreach($product->getImageHashes() as $image_hash) {
             echo '<a href="/image/'.$image_hash.'"><img src="/image/100x100/'.$image_hash.'" /></a>';
