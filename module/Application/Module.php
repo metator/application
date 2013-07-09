@@ -9,13 +9,16 @@
 
 namespace Application;
 
+use Zend\Console\Adapter\AdapterInterface as Console;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Application\ProductMapper;
-use Zend\ModuleManager\Feature\BootstrapListenerInterface;
-use Zend\View\Model\ViewModel;
+use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
+use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
 
-class Module
+class Module implements
+    ConsoleBannerProviderInterface,
+    ConsoleUsageProviderInterface
 {
     protected $categoryMapper;
 
@@ -75,6 +78,36 @@ class Module
                 },
             ),
         );
+    }
+
+    /**
+     * Define Console Help text
+     *
+     * @param  Console $console
+     * @return String
+     */
+    public function getConsoleUsage(Console $console)
+    {
+        return array(
+            'Application module commands',
+            'metator sample products --number=<number>' => "Creates the specified <number> of sample products",
+        );
+    }
+
+    /**
+     * Generates the Console Banner text
+     *
+     * @param  Console $console
+     * @return String
+     */
+    public function getConsoleBanner(Console $console)
+    {
+
+        /**
+         * Output version
+         */
+        $figlet = new \Zend\Text\Figlet\Figlet();
+        return $figlet->render('Metator');
     }
 
 }

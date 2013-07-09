@@ -13,7 +13,7 @@ return array(
             'routes' => array(
                 'sample_products' => array(
                     'options' => array(
-                        'route'    => 'metator sampleproducts',
+                        'route'    => 'sample products --number=',
                         'defaults' => array(
                             'controller' => 'Application\Controller\Console',
                             'action'     => 'sampleproducts',

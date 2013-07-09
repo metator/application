@@ -12,6 +12,18 @@ php public/index.php phinx setup
 php public/index.php phinx migrate
 ````
 
+#Sample Data
+To create sample data, use the command line interface of the application:
+````
+./metator sample products --number=1,000,000
+````
+You will receive output like this:
+````
+Created 1,000,000 sample products
+All Done. Took 33.8217s
+````
+Anything non numeric in the number flag is stripped. Run `./metator` without flags for comprehensive usage information.
+
 #About
 
 ###Why yet another open source shopping cart?###
