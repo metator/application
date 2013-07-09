@@ -8,6 +8,22 @@
  */
 
 return array(
+    'console' => Array(
+        'router' => array(
+            'routes' => array(
+                'sample_products' => array(
+                    'options' => array(
+                        'route'    => 'metator sampleproducts',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\Console',
+                            'action'     => 'sampleproducts',
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    ),
+
     'router' => array(
         'routes' => array(
 
@@ -88,6 +104,7 @@ return array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
             'Application\Controller\Attribute' => 'Application\Controller\AttributeController',
+            'Application\Controller\Console' => 'Application\Controller\ConsoleController',
         ),
     ),
     'view_manager' => array(
