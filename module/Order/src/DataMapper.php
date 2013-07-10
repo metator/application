@@ -32,6 +32,7 @@ class DataMapper
             'shipping'=>isset($order['shipping']) ? $order['shipping']['id'] : null,
             'billing'=>isset($order['billing']) ? $order['billing']['id'] : null,
             'cart_id'=>isset($order['cart_id']) ? $order['cart_id'] : 0,
+            'api_reference'=>isset($order['api_reference']) ? $order['api_reference'] : '',
         ));
         return $this->table->getLastInsertValue();
     }
@@ -42,6 +43,7 @@ class DataMapper
             'id'=>$id
         ));
         $order = (array)$rowset->current();
+
         $order['shipping'] = $this->addressDataMapper->load($order['shipping']);
         $order['billing'] = $this->addressDataMapper->load($order['billing']);
         if($order['cart_id']) {

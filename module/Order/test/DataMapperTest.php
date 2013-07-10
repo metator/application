@@ -24,6 +24,17 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEquals(0, $id, 'should assign an order ID');
     }
 
+    function testShouldSaveAPIReference()
+    {
+        $order = array(
+            'api_reference'=>'123456789_0-ABC'
+        );
+        $orderMapper = new DataMapper($this->db);
+        $id = $orderMapper->save($order);
+        $reloaded_order = $orderMapper->load($id);
+        $this->assertEquals('123456789_0-ABC', $reloaded_order['api_reference'], 'should save the reference returned from the API success response');
+    }
+
     function testShouldCreateNewAddressesAndOrder()
     {
         $shipping_address = array(
@@ -69,6 +80,7 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $expected['id'] = $id;
         $expected['billing']['id'] = $reloaded_order['billing']['id'];
         $expected['shipping']['id'] = $reloaded_order['shipping']['id'];
+        $expected['api_reference'] = '';
 
         $this->assertEquals($expected, $reloaded_order, 'should save new order w/ new addresses');
     }
