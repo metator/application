@@ -44,6 +44,17 @@ return array(
                 ),
             ),
 
+            'checkout_confirmation' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/confirmation/:id',
+                    'defaults' => array(
+                        'controller' => 'Cart\Controller\Checkout',
+                        'action'     => 'confirmation',
+                    ),
+                ),
+            ),
+
         ),
     ),
 
