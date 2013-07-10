@@ -20,7 +20,9 @@ class OrderController extends AbstractActionController
 
     function indexAction()
     {
-
+        return array(
+            'orders' => $this->orderMapper()->findAll()
+        );
     }
 
     function viewAction()

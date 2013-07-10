@@ -1,0 +1,24 @@
+<table class="table">
+    <thead>
+        <th></th>
+        <th>ID</th>
+        <th>Items</th>
+        <th>Amount</th>
+        <th>Date &amp; Time</th>
+        <th>Customer</th>
+    </thead>
+    <?php
+    foreach($orders as $order) {
+        ?>
+        <tr>
+            <td><a class="btn" href="<?=$this->url('order_admin_view',array('id'=>$order['id']))?>">View</a></td>
+            <td><?=$this->escapeHTML($order['id'])?></td>
+            <td><?=$this->escapeHTML($order['items']->itemCount())?></td>
+            <td><?=$this->escapeHTML($order['amount'])?></td>
+            <td><?=$this->escapeHTML($order['created'])?></td>
+            <td><?=$this->escapeHTML($order['billing']['first_name'] . ' '.$order['billing']['last_name'])?></td>
+        </tr>
+        <?php
+    }
+    ?>
+</table>

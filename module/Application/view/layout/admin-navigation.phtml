@@ -4,5 +4,6 @@
         <li <?=$this->controller=='Product\Controller\ProductController' ? 'class="active"' : ''?>><a href="/product/manage">Manage Products</a></li>
         <li <?=$this->controller=='Category\Controller\CategoryController' ? 'class="active"' : ''?>><a href="/category/manage">Manage Categories</a></li>
         <li <?=$this->controller=='Application\Controller\AttributeController' ? 'class="active"' : ''?>><a href="/attribute/manage">Manage Attributes</a></li>
+        <li <?=$this->controller=='Order\Controller\OrderController' ? 'class="active"' : ''?>><a href="<?=$this->url('order_admin_list')?>">Orders</a></li>
     </ul>
 </div><!--/.well -->
