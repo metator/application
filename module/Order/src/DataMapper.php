@@ -16,6 +16,16 @@ class DataMapper
         $this->cartDataMapper = new \Metator\Cart\DataMapper($this->db);
     }
 
+    function findAll()
+    {
+        $rowset = $this->table->select();
+        $orders = array();
+        while($row = $rowset->current()) {
+            array_push($orders, $this->load($row['id']));
+        }
+        return $orders;
+    }
+
     function save($order)
     {
         if(isset($order['shipping'])) {

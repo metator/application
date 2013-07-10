@@ -18,10 +18,21 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
 
     function testShouldReturnOrderID()
     {
-        $order = array();
         $orderMapper = new DataMapper($this->db);
-        $id = $orderMapper->save($order);
+        $id = $orderMapper->save(array());
         $this->assertNotEquals(0, $id, 'should assign an order ID');
+    }
+
+    function testShouldListOrders()
+    {
+        $orderMapper = new DataMapper($this->db);
+        $id1 = $orderMapper->save(array());
+        $id2 = $orderMapper->save(array());
+        $orders = $orderMapper->findAll();
+
+        $this->assertEquals(2, count($orders), 'should list 2 orders');
+        $this->assertEquals($id1, $orders[0]['id'], 'should list the 1st order');
+        $this->assertEquals($id2, $orders[1]['id'], 'should list the 2nd order');
     }
 
     function testShouldSaveAPIReference()
