@@ -141,10 +141,15 @@ class DataMapper
         return count($rowset) > 0;
     }
 
-    function find($params=array())
+    function find($params=array(), $offset=null, $limit=null)
     {
         $params['active']=1;
-        $rowset = $this->productTable->select($params);
+        $rowset = $this->productTable->select(function (Select $select) use ($params,$limit,$offset) {
+            $select->where($params);
+            if($limit && $offset) {
+                $select->offset($offset)->limit($limit);
+            }
+        });
         $products = array();
         while($row = $rowset->current()) {
             $products[] = $this->doLoad($row);
