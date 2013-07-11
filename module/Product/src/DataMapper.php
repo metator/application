@@ -162,22 +162,6 @@ class DataMapper
         return current($result->toArray()[0]);
     }
 
-    function findPaginated()
-    {
-        $select = new Select('product');
-
-        $resultSetPrototype = new ResultSet();
-        //$resultSetPrototype->setArrayObjectPrototype(new Album());
-
-        $paginatorAdapter = new DbSelect(
-            $select,
-            $this->productTable->getAdapter(),
-            $resultSetPrototype
-        );
-        $paginator = new Paginator($paginatorAdapter);
-        return $paginator;
-    }
-
     function findByCategory($id)
     {
         $id = (int)$id;

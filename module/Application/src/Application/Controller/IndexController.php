@@ -21,12 +21,24 @@ class IndexController extends AbstractActionController
         if( $this->params()->fromQuery('page') > 100 ) {
             throw new \Exception('You cant go past 100 pages for performance reasons');
         }
-        $paginator = $this->productMapper()->findPaginated();
-        $paginator->setCurrentPageNumber((int)$this->params()->fromQuery('page', 1));
-        $paginator->setItemCountPerPage(9);
+
+        $page = $this->params()->fromQuery('page',1);
+        $perpage = 6;
+        $offset = ($page * $perpage)-$perpage;
+
+        $products = $this->productMapper()->find(array(), $offset, $perpage);
+        $productCount = $this->productMapper()->count();
+
+        $pageAdapter = new \Zend\Paginator\Adapter\Null($productCount);
+        $paginator = new \Zend\Paginator\Paginator($pageAdapter);
+        $paginator->setCurrentPageNumber($page);
 
         return array(
-            'paginator'=>$paginator
+            'start'=>$offset+1,
+            'end'=>$offset+$perpage,
+            'total'=>$productCount,
+            'paginator'=>$paginator,
+            'products'=>$products,
         );
     }
 

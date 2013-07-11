@@ -1,15 +1,9 @@
 <?php
-$products = array();
-foreach ($this->paginator as $product) {
-    $product = $this->product($product['id']);
-    $products[] = $product;
-}
 echo $this->partial('product/product/list.phtml',array(
     'products'=>$products
 ));
-?>
-<?=$this->product_list?>
-<?php // add at the end of the file after the table
+
+printf('Listing %d-%d of about %s', $start, $end, $total);
 echo $this->paginationControl(
 // the paginator object
     $this->paginator,
@@ -20,4 +14,3 @@ echo $this->paginationControl(
     // the route to link to when a user clicks a control link
 
 );
-?>
