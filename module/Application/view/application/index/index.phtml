@@ -3,7 +3,7 @@ echo $this->partial('product/product/list.phtml',array(
     'products'=>$products
 ));
 
-printf('Listing %d-%d of about %s', $start, $end, $total);
+printf('Listing %d-%d of about %s', $start, $end, number_format(round($total,-3)));
 echo $this->paginationControl(
 // the paginator object
     $this->paginator,
