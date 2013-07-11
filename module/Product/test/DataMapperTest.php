@@ -180,6 +180,15 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar',$list[1]->getName(),'should list 2nd product');
     }
 
+    function testShouldCount()
+    {
+        $product_mapper = new DataMapper($this->db);
+        $product_mapper->save(new Product(array('name'=>'foo')));
+        $product_mapper->save(new Product(array('name'=>'bar')));
+        $count = $product_mapper->count();
+        $this->assertEquals(2, $count, 'should count all products');
+    }
+
     function testShouldListPaginatedOffset()
     {
         $product_mapper = new DataMapper($this->db);

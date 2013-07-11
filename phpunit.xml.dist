@@ -34,26 +34,17 @@
     </php>
 
     <testsuites>
-        <testsuite name="address">
+        <testsuite name="unit">
             <directory>module/Address/test</directory>
-        </testsuite>
-        <testsuite name="application">
             <directory>module/Application/test</directory>
-        </testsuite>
-        <testsuite name="product">
             <directory>module/Product/test</directory>
-        </testsuite>
-        <testsuite name="category">
             <directory>module/Category/test</directory>
-        </testsuite>
-        <testsuite name="cart">
             <directory>module/Cart/test</directory>
-        </testsuite>
-        <testsuite name="image">
             <directory>module/Image/test</directory>
-        </testsuite>
-        <testsuite name="order">
             <directory>module/Order/test</directory>
+        </testsuite>
+        <testsuite name="performance">
+            <directory>module/Application/test_performance</directory>
         </testsuite>
     </testsuites>
 

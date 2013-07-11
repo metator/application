@@ -156,6 +156,11 @@ class DataMapper
         return $products;
     }
 
+    function count()
+    {
+        return count($this->find());
+    }
+
     function findPaginated()
     {
         $select = new Select('product');

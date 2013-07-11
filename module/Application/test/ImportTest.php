@@ -71,28 +71,6 @@ class ImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(4, count($products), 'should not re-import previous imports (should cleanup import table when done');
     }
 
-    function testShouldUseSingleQuery()
-    {
-        $profiler = $this->db->getProfiler();
-        $queryProfiles = $profiler->getQueryProfiles();
-        $beforeCount = count($queryProfiles);
-
-        $csv = "sku,name\n";
-        $csv.= "123,name\n";
-        $csv.= "456,name\n";
-        $csv.= "789,name\n";
-        $csv.= "111,name\n";
-        $csv.= "222,name\n";
-
-        $importer = new Importer($this->db);
-        $importer->importFromText($csv);
-
-        $queryProfiles = $profiler->getQueryProfiles();
-        $afterCount = count($queryProfiles);
-
-        $this->assertLessThan(2, $afterCount-$beforeCount, 'should use less than 2 queries to import >5 products');
-    }
-
     function productExists($sku)
     {
         $product_mapper = new ProductDataMapper($this->db);
