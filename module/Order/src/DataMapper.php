@@ -44,6 +44,7 @@ class DataMapper
             'billing'=>isset($order['billing']) ? $order['billing']['id'] : null,
             'cart_id'=>isset($order['cart_id']) ? $order['cart_id'] : 0,
             'api_reference'=>isset($order['api_reference']) ? $order['api_reference'] : '',
+            'amount'=>isset($order['amount']) ? $order['amount'] : 0
         ));
         return $this->table->getLastInsertValue();
     }
