@@ -8,6 +8,11 @@
 
 <div class="container-fluid">
     <div class="row-fluid">
+        <div class="span12">
+            <a href="/">&laquo; Back To Frontend</a>
+        </div>
+    </div>
+    <div class="row-fluid">
         <div class="span2">
             <?=$this->partial('layout/admin-navigation.phtml',array(
                 'controller'=>$this->controller
@@ -17,11 +22,7 @@
             <?php echo $this->content; ?>
         </div>
     </div>
-    <hr>
-
-    <footer>
-        <p>&copy; Vehicle Fits, llc 2013</p>
-    </footer>
+    <?=$this->partial('layout/footer.phtml')?>
 
 </div><!--/.fluid-container-->
 

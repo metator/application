@@ -18,14 +18,8 @@
                     <?php echo $this->content; ?>
                 </div><!--/span-->
             </div><!--/row-->
-
-            <hr>
-
-            <footer>
-                <p>&copy; Vehicle Fits, llc 2013</p>
-            </footer>
-
-        </div><!--/.fluid-container-->
+            <?=$this->partial('layout/footer.phtml')?>
+        </div>
 
 
         <?php echo $this->inlineScript() ?>

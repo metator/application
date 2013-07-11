@@ -9,18 +9,9 @@
         <?=$this->partial('layout/navigation.phtml')?>
 
         <div class="container-fluid">
-
             <?php echo $this->content; ?>
-
-            <hr>
-
-            <footer>
-                <p>&copy; Vehicle Fits, llc 2013</p>
-            </footer>
-
-        </div><!--/.fluid-container-->
-
-
+            <?=$this->partial('layout/footer.phtml')?>
+        </div>
         <?php echo $this->inlineScript() ?>
     </body>
 </html>
