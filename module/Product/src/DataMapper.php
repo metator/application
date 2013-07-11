@@ -158,7 +158,8 @@ class DataMapper
 
     function count()
     {
-        return count($this->find());
+        $result = $this->db->query("SELECT count(*) FROM `product`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        return current($result->toArray()[0]);
     }
 
     function findPaginated()

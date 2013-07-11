@@ -45,16 +45,31 @@ class ImportPerformanceTest extends PHPUnit_Framework_TestCase
         $queryProfiles = $profiler->getQueryProfiles();
         $afterCount = count($queryProfiles);
 
-        $this->assertLessThan(2, $afterCount-$beforeCount, 'should use less than 2 queries to import >5 products');
+        $this->assertLessThan(5, $afterCount-$beforeCount, 'should use less than 5 queries to import >5 products');
     }
 
     function testShouldUpdateCount()
     {
-        `./metator sample products --number=10`;
+        $profiler = $this->db->getProfiler();
+        $queryProfiles = $profiler->getQueryProfiles();
+        $beforeCount = count($queryProfiles);
+
+        `./metator sample products --number=1000`;
         $product_mapper = new \Metator\Product\DataMapper($this->db);
         $count = $product_mapper->count();
-        $this->assertEquals(10, $count, 'should update count');
+        $this->assertEquals(1000, $count, 'should update count');
 
-        return $this->markTestIncomplete('put a larger number and assert it can count them near instantly');
+        $queryProfiles = $profiler->getQueryProfiles();
+        $afterCount = count($queryProfiles);
+
+        $this->assertLessThan(2, $afterCount-$beforeCount, 'should count products with 1 query');
+    }
+
+    function testShouldImport25kProductsQuickly()
+    {
+        $start = microtime(true);
+        `./metator sample products --number=25,000`;
+        $end = microtime(true);
+        $this->assertLessThan(3, $end-$start, 'should import 25K products in less than a few seconds');
     }
 }
