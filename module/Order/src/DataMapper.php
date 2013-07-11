@@ -26,7 +26,7 @@ class DataMapper
         return $orders;
     }
 
-    function save($order)
+    function save($order, $datetime=null)
     {
         if(isset($order['shipping'])) {
             $this->addressDataMapper->save($order['shipping']);
@@ -39,6 +39,7 @@ class DataMapper
             unset($order['items']);
         }
         $this->table->insert(array(
+            'created'=>$datetime ? $datetime : new \Zend\Db\Sql\Expression("NOW()"),
             'shipping'=>isset($order['shipping']) ? $order['shipping']['id'] : null,
             'billing'=>isset($order['billing']) ? $order['billing']['id'] : null,
             'cart_id'=>isset($order['cart_id']) ? $order['cart_id'] : 0,

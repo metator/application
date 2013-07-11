@@ -19,15 +19,24 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
     function testShouldReturnOrderID()
     {
         $orderMapper = new DataMapper($this->db);
-        $id = $orderMapper->save(array());
+        $id = $orderMapper->save(array(), null);
         $this->assertNotEquals(0, $id, 'should assign an order ID');
+    }
+
+    function testShouldSaveCreatedDatetime()
+    {
+        $datetime = date("Y-m-d H:i:s");
+        $orderMapper = new DataMapper($this->db);
+        $id = $orderMapper->save(array(), $datetime);
+        $reloaded_order = $orderMapper->load($id);
+        $this->assertEquals($datetime, $reloaded_order['created'], 'should save created datetime');
     }
 
     function testShouldListOrders()
     {
         $orderMapper = new DataMapper($this->db);
-        $id1 = $orderMapper->save(array());
-        $id2 = $orderMapper->save(array());
+        $id1 = $orderMapper->save(array(), null);
+        $id2 = $orderMapper->save(array(), null);
         $orders = $orderMapper->findAll();
 
         $this->assertEquals(2, count($orders), 'should list 2 orders');
@@ -41,7 +50,7 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
             'api_reference'=>'123456789_0-ABC'
         );
         $orderMapper = new DataMapper($this->db);
-        $id = $orderMapper->save($order);
+        $id = $orderMapper->save($order, null);
         $reloaded_order = $orderMapper->load($id);
         $this->assertEquals('123456789_0-ABC', $reloaded_order['api_reference'], 'should save the reference returned from the API success response');
     }
@@ -79,11 +88,10 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $order = array(
             'shipping'=>$shipping_address,
             'billing'=>$billing_address,
-            'created'=>'0000-00-00 00:00:00'
         );
 
         $orderMapper = new DataMapper($this->db);
-        $id = $orderMapper->save($order);
+        $id = $orderMapper->save($order, '2013-07-10 20:16:35');
 
         $reloaded_order = $orderMapper->load($id);
 
@@ -92,6 +100,7 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $expected['billing']['id'] = $reloaded_order['billing']['id'];
         $expected['shipping']['id'] = $reloaded_order['shipping']['id'];
         $expected['api_reference'] = '';
+        $expected['created'] = '2013-07-10 20:16:35';
 
         $this->assertEquals($expected, $reloaded_order, 'should save new order w/ new addresses');
     }
@@ -109,7 +118,7 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         );
 
         $orderMapper = new DataMapper($this->db);
-        $id = $orderMapper->save($order);
+        $id = $orderMapper->save($order, null);
 
         $reloaded_order = $orderMapper->load($id);
 
