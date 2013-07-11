@@ -11,16 +11,19 @@ class ImportTest extends PHPUnit_Framework_TestCase
     function setUp()
     {
         $this->db = phpunit_bootstrap::getServiceManager()->get('Zend\Db\Adapter\Adapter');
-        $this->db->getDriver()->getConnection()->beginTransaction();
-
-        // seems like LOAD DATA INFILE commits the transaction, so we must manually clean up the tables :/
-        $this->db->query("truncate `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
-        $this->db->query("delete from `product`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->emptyTables();
     }
 
     function tearDown()
     {
-        $this->db->getDriver()->getConnection()->rollback();
+        $this->emptyTables();
+    }
+
+    function emptyTables()
+    {
+        // seems like LOAD DATA INFILE commits the transaction, so we must manually clean up the tables :/
+        $this->db->query("truncate `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->db->query("delete from `product`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
     }
 
     function testShouldImportProduct()

@@ -434,7 +434,7 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $product_mapper->save($product);
 
         $product_mapper->deactivate($product->id());
-        $products = $product_mapper->find();
+        $products = $product_mapper->find(['active'=>1]);
         $this->assertEquals(0, count($products), 'should deactivate product');
     }
 
