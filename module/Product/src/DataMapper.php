@@ -143,7 +143,6 @@ class DataMapper
 
     function find($params=array(), $offset=null, $limit=null)
     {
-        $params['active']=1;
         $rowset = $this->productTable->select(function (Select $select) use ($params,$limit,$offset) {
             $select->where($params);
             if($limit || $offset) {
