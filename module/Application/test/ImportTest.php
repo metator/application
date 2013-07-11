@@ -12,6 +12,10 @@ class ImportTest extends PHPUnit_Framework_TestCase
     {
         $this->db = phpunit_bootstrap::getServiceManager()->get('Zend\Db\Adapter\Adapter');
         $this->db->getDriver()->getConnection()->beginTransaction();
+
+        // seems like LOAD DATA INFILE commits the transaction, so we must manually clean up the tables :/
+        $this->db->query("truncate `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->db->query("delete from `product`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
     }
 
     function tearDown()
@@ -40,6 +44,28 @@ class ImportTest extends PHPUnit_Framework_TestCase
         $importer->importFromText($csv);
 
         $this->assertTrue($this->productExists('123'), 'should import product');
+    }
+
+    function testShouldNotReImportPreviousImports()
+    {
+        $csv = "sku,name\n";
+        $csv.= "123,name\n";
+        $csv.= "456,name";
+
+        $importer = new Importer($this->db);
+        $importer->importFromText($csv);
+
+        $csv = "sku,name\n";
+        $csv.= "789,name\n";
+        $csv.= "abc,name";
+
+        $importer = new Importer($this->db);
+        $importer->importFromText($csv);
+
+        $product_mapper = new ProductDataMapper($this->db);
+        $products = $product_mapper->find();
+
+        $this->assertEquals(4, count($products), 'should not re-import previous imports (should cleanup import table when done');
     }
 
     function testShouldUseSingleQuery()

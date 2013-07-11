@@ -29,10 +29,10 @@ class Importer
 
         $sql = "LOAD DATA INFILE '".$path."' INTO TABLE `import` FIELDS TERMINATED BY ','";
         $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->db->query("DELETE FROM `import` LIMIT 1", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
         $this->db->query("REPLACE INTO `product` (`sku`,`name`) SELECT `sku`, `name` FROM `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
 
-        $import = new TableGateway('import', $this->db);
-        $rowset = $import->select();
+        $this->db->query("truncate `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
     }
 
     function handleRow($row)
