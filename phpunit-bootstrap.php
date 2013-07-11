@@ -27,8 +27,6 @@ class phpunit_bootstrap
         `mysql --user=root -e "drop database IF EXISTS metator_tests"`;
         `mysql --user=root -e "create database metator_tests"`;
         `mysql --user=root metator_tests < install.sql`;
-
-        echo `ls -l`;
     }
 
     static public function getServiceManager()
