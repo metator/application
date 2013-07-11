@@ -146,7 +146,7 @@ class DataMapper
         $params['active']=1;
         $rowset = $this->productTable->select(function (Select $select) use ($params,$limit,$offset) {
             $select->where($params);
-            if($limit && $offset) {
+            if($limit || $offset) {
                 $select->offset($offset)->limit($limit);
             }
         });

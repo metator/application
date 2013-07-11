@@ -190,10 +190,24 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $product_mapper->save(new Product(array('name'=>'foo5')));
         $list = $product_mapper->find(array(), 1,3);
 
-        $this->assertEquals(3,count($list),'should list all products');
+        $this->assertEquals(3,count($list),'should list products');
         $this->assertEquals('foo2',$list[0]->getName(),'should list 2nd product');
         $this->assertEquals('foo3',$list[1]->getName(),'should list 3rd product');
         $this->assertEquals('foo4',$list[2]->getName(),'should list 4th product');
+    }
+
+    function testShouldListPaginatedOffsetFrom0()
+    {
+        $product_mapper = new DataMapper($this->db);
+        $product_mapper->save(new Product(array('name'=>'foo1')));
+        $product_mapper->save(new Product(array('name'=>'foo2')));
+        $product_mapper->save(new Product(array('name'=>'foo3')));
+        $product_mapper->save(new Product(array('name'=>'foo4')));
+        $product_mapper->save(new Product(array('name'=>'foo5')));
+        $list = $product_mapper->find(array(), 0,1);
+
+        $this->assertEquals(1,count($list),'should list products');
+        $this->assertEquals('foo1',$list[0]->getName(),'should list 1st product');
     }
 
     function testShouldSaveAttribute()
