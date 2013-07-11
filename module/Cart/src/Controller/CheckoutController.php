@@ -24,21 +24,22 @@ class CheckoutController extends AbstractActionController
 
         if($this->getRequest()->isPost() && $form->isValid($this->params()->fromPost())) {
 
-            $response = $this->capturePayment($this->amount());
+            $response = $this->capturePayment();
             if ($response->isSuccessful()) {
-                // payment was successful: update database
                 $reference = $response->getTransactionReference();
                 $id = $this->saveOrder($reference, $form);
                 return $this->redirect()->toRoute('checkout_confirmation',array(
                     'id'=>$id
                 ));
-            } elseif ($response->isRedirect()) {
-                // redirect to offsite payment gateway
-                $response->redirect();
-            } else {
-                // payment failed: display message to customer
-                echo $response->getMessage();
             }
+
+            if ($response->isRedirect()) {
+                // redirect to offsite payment gateway
+                return $response->redirect();
+            }
+
+            // payment failed: display message to customer
+            echo $response->getMessage();
         }
 
         return array(
@@ -59,7 +60,7 @@ class CheckoutController extends AbstractActionController
         return $this->cart()->totalPrice();
     }
 
-    function capturePayment($amount)
+    function capturePayment()
     {
         $gateway = GatewayFactory::create('AuthorizeNet_AIM');
         $gateway->setApiLoginId('2Scf4XP24');
@@ -73,7 +74,7 @@ class CheckoutController extends AbstractActionController
         );
         $response = $gateway->purchase(array(
             'developerMode'=>true,
-            'amount' => $amount,
+            'amount' => $this->amount(),
             'currency' => 'USD',
             'card' => $card
         ))->send();
@@ -86,7 +87,8 @@ class CheckoutController extends AbstractActionController
             'shipping'=>$form->getValues()['shipping'],
             'billing'=>$form->getValues()['billing'],
             'items'=> $this->cart(),
-            'api_reference'=>$reference
+            'api_reference'=>$reference,
+            'amount'=>$this->amount()
         );
         $orderMapper = $this->orderMapper();
         $id = $orderMapper->save($order);
