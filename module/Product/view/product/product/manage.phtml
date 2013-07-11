@@ -27,3 +27,11 @@
     }
     ?>
 </table>
+<?php
+printf('Listing %d-%d of about %s', $start, $end, number_format(round($total,-3)));
+echo $this->paginationControl(
+    $this->paginator,
+    'sliding',
+    // the partial to use to render the control
+    array('application/pagination.phtml', '')
+);

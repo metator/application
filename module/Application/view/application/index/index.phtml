@@ -5,12 +5,8 @@ echo $this->partial('product/product/list.phtml',array(
 
 printf('Listing %d-%d of about %s', $start, $end, number_format(round($total,-3)));
 echo $this->paginationControl(
-// the paginator object
     $this->paginator,
-    // the scrolling style; see http://zf2.readthedocs.org/en/release-2.1.4/modules/zend.paginator.usage.html#rendering-pages-with-view-scripts
     'sliding',
     // the partial to use to render the control
     array('application/pagination.phtml', '')
-    // the route to link to when a user clicks a control link
-
 );
