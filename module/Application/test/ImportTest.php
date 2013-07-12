@@ -26,7 +26,7 @@ class ImportTest extends PHPUnit_Framework_TestCase
         $this->db->query("delete from `product`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
     }
 
-    function testShouldImportProduct()
+    function testShouldImportSku()
     {
         $csv = "sku,name\n";
         $csv.= "123,name";
@@ -35,6 +35,17 @@ class ImportTest extends PHPUnit_Framework_TestCase
         $importer->importFromText($csv);
 
         $this->assertTrue($this->productExists('123'), 'should import product');
+    }
+
+    function testShouldImportName()
+    {
+        $csv = "sku,name\n";
+        $csv.= "123,name";
+
+        $importer = new Importer($this->db);
+        $importer->importFromText($csv);
+
+        $this->assertEquals('name', $this->findProductBySku('123')->getName(), 'should import name');
     }
 
     function testShouldImportMultipleProduct()
@@ -75,5 +86,11 @@ class ImportTest extends PHPUnit_Framework_TestCase
     {
         $product_mapper = new ProductDataMapper($this->db);
         return $product_mapper->productExists($sku);
+    }
+
+    function findProductBySku($sku)
+    {
+        $product_mapper = new ProductDataMapper($this->db);
+        return $product_mapper->find(['sku'=>$sku])[0];
     }
 }
