@@ -34,16 +34,4 @@ class Importer
 
         $this->db->query("truncate `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
     }
-
-    function handleRow($row)
-    {
-        $product = new Product(array(
-            'sku'=>$row[0],
-            'name'=>$row[1],
-            'description'=>''
-        ));
-
-        $product_mapper = new ProductDataMapper($this->db);
-        $product_mapper->save($product);
-    }
 }
