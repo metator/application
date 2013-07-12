@@ -48,6 +48,17 @@ class ImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('name', $this->findProductBySku('123')->getName(), 'should import name');
     }
 
+    function testShouldImportPrice()
+    {
+        $csv = "sku,name,base_price\n";
+        $csv.= "123,name,9.99";
+
+        $importer = new Importer($this->db);
+        $importer->importFromText($csv);
+
+        $this->assertEquals(9.99, $this->findProductBySku('123')->getBasePrice(), 'should import price');
+    }
+
     function testShouldImportMultipleProduct()
     {
         $csv = "sku,name\n";

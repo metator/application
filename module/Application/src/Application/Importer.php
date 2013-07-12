@@ -30,7 +30,7 @@ class Importer
         $sql = "LOAD DATA INFILE '".$path."' INTO TABLE `import` FIELDS TERMINATED BY ','";
         $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
         $this->db->query("DELETE FROM `import` LIMIT 1", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
-        $this->db->query("REPLACE INTO `product` (`sku`,`name`) SELECT `sku`, `name` FROM `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->db->query("REPLACE INTO `product` (`sku`,`name`,`base_price`) SELECT `sku`, `name`, `base_price` FROM `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
 
         $this->db->query("truncate `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
     }
