@@ -264,7 +264,7 @@ CREATE TABLE `phinxlog` (
 
 LOCK TABLES `phinxlog` WRITE;
 /*!40000 ALTER TABLE `phinxlog` DISABLE KEYS */;
-INSERT INTO `phinxlog` VALUES (1,'2013-07-12 18:28:14','2013-07-12 18:28:14'),(20130705225216,'2013-07-12 18:28:14','2013-07-12 18:28:14'),(20130706094331,'2013-07-12 18:28:14','2013-07-12 18:28:14'),(20130706190113,'2013-07-12 18:28:14','2013-07-12 18:28:14'),(20130707140658,'2013-07-12 18:28:14','2013-07-12 18:28:14'),(20130707145922,'2013-07-12 18:28:14','2013-07-12 18:28:14'),(20130707154305,'2013-07-12 18:28:14','2013-07-12 18:28:14'),(20130707170001,'2013-07-12 18:28:14','2013-07-12 18:28:14'),(20130707180537,'2013-07-12 18:28:15','2013-07-12 18:28:15'),(20130707182930,'2013-07-12 18:28:15','2013-07-12 18:28:15'),(20130707190150,'2013-07-12 18:28:15','2013-07-12 18:28:15'),(20130707191106,'2013-07-12 18:28:15','2013-07-12 18:28:15'),(20130707192749,'2013-07-12 18:28:15','2013-07-12 18:28:15'),(20130708191852,'2013-07-12 18:28:15','2013-07-12 18:28:15'),(20130710192715,'2013-07-12 18:28:15','2013-07-12 18:28:15'),(20130710202104,'2013-07-12 18:28:15','2013-07-12 18:28:15'),(20130710231624,'2013-07-12 18:28:15','2013-07-12 18:28:15'),(20130712182634,'2013-07-12 18:28:15','2013-07-12 18:28:15');
+INSERT INTO `phinxlog` VALUES (1,'2013-07-12 19:58:44','2013-07-12 19:58:44'),(20130705225216,'2013-07-12 19:58:44','2013-07-12 19:58:44'),(20130706094331,'2013-07-12 19:58:44','2013-07-12 19:58:44'),(20130706190113,'2013-07-12 19:58:44','2013-07-12 19:58:44'),(20130707140658,'2013-07-12 19:58:44','2013-07-12 19:58:44'),(20130707145922,'2013-07-12 19:58:44','2013-07-12 19:58:44'),(20130707154305,'2013-07-12 19:58:44','2013-07-12 19:58:44'),(20130707170001,'2013-07-12 19:58:44','2013-07-12 19:58:44'),(20130707180537,'2013-07-12 19:58:44','2013-07-12 19:58:44'),(20130707182930,'2013-07-12 19:58:44','2013-07-12 19:58:44'),(20130707190150,'2013-07-12 19:58:44','2013-07-12 19:58:45'),(20130707191106,'2013-07-12 19:58:45','2013-07-12 19:58:45'),(20130707192749,'2013-07-12 19:58:45','2013-07-12 19:58:45'),(20130708191852,'2013-07-12 19:58:45','2013-07-12 19:58:45'),(20130710192715,'2013-07-12 19:58:45','2013-07-12 19:58:45'),(20130710202104,'2013-07-12 19:58:45','2013-07-12 19:58:45'),(20130710231624,'2013-07-12 19:58:45','2013-07-12 19:58:45'),(20130712182634,'2013-07-12 19:58:45','2013-07-12 19:58:45'),(20130712195348,'2013-07-12 19:58:45','2013-07-12 19:58:45');
 /*!40000 ALTER TABLE `phinxlog` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -295,61 +295,6 @@ CREATE TABLE `product` (
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `product_attribute`
---
-
-DROP TABLE IF EXISTS `product_attribute`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `product_attribute` (
-  `product_id` int(8) NOT NULL,
-  `attribute_id` int(8) NOT NULL,
-  UNIQUE KEY `product_id` (`product_id`,`attribute_id`),
-  CONSTRAINT `product_attribute_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `product_attribute`
---
-
-LOCK TABLES `product_attribute` WRITE;
-/*!40000 ALTER TABLE `product_attribute` DISABLE KEYS */;
-/*!40000 ALTER TABLE `product_attribute` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `product_attribute_pricemodifiers`
---
-
-DROP TABLE IF EXISTS `product_attribute_pricemodifiers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `product_attribute_pricemodifiers` (
-  `product_id` int(10) NOT NULL,
-  `attribute_id` int(10) NOT NULL,
-  `attribute_option_id` int(15) NOT NULL,
-  `flat_fee` float DEFAULT NULL,
-  `percentage` float DEFAULT NULL,
-  UNIQUE KEY `unique` (`product_id`,`attribute_id`,`attribute_option_id`),
-  KEY `attribute_id` (`attribute_id`),
-  KEY `attribute_option_id` (`attribute_option_id`),
-  CONSTRAINT `product_attribute_pricemodifiers_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `product_attribute_pricemodifiers_ibfk_2` FOREIGN KEY (`attribute_id`) REFERENCES `attribute` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `product_attribute_pricemodifiers_ibfk_3` FOREIGN KEY (`attribute_option_id`) REFERENCES `attribute_option` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `product_attribute_pricemodifiers`
---
-
-LOCK TABLES `product_attribute_pricemodifiers` WRITE;
-/*!40000 ALTER TABLE `product_attribute_pricemodifiers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `product_attribute_pricemodifiers` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -438,4 +383,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-07-12 18:28:15
+-- Dump completed on 2013-07-12 19:58:45

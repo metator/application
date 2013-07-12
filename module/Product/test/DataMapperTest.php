@@ -222,122 +222,13 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
     function testShouldSaveAttribute()
     {
         $product = new Product(array('name'=>'widget'));
-        $product->addAttribute('color');
+        $product->setAttributeValue('color', 'red');
 
-        // save attribute
-        $attribute_mapper = new AttributeMapper($this->db);
-        $attribute_mapper->save($product->attribute('color'));
-
-        // save product !
         $product_mapper = new DataMapper($this->db);
         $id = $product_mapper->save($product);
 
         $loaded_product = $product_mapper->load($id);
-        $this->assertTrue( $loaded_product->hasAttribute('color'), 'should save attribute');
-    }
-
-    function testShouldSaveAttributeOptions()
-    {
-        $product = new Product(array('name'=>'widget'));
-        $product->addAttribute('color',array(
-            'options'=>array('red','blue')
-        ));
-
-        // save attribute
-        $attribute_mapper = new AttributeMapper($this->db);
-        $attribute_mapper->save($product->attribute('color'));
-
-        // save product !
-        $product_mapper = new DataMapper($this->db);
-        $id = $product_mapper->save($product);
-
-        $loaded_product = $product_mapper->load($id);
-        $this->assertEquals(array('blue','red'), $loaded_product->attribute('color')->options(), 'should save attribute options');
-    }
-
-    function testShouldSaveConfigurableAttributeFlatFee()
-    {
-        $product = new Product(array('name'=>'widget'));
-
-        // add "color" attribute
-        $product->addAttribute('color',array(
-            'options'=>array(
-                'red' => array('flat_fee'=>5)
-            )
-        ));
-
-        // save attribute "color" !
-        $attribute_mapper = new AttributeMapper($this->db);
-        $attribute_mapper->save($product->attribute('color'));
-
-        // save product !
-        $product_mapper = new DataMapper($this->db);
-        $id = $product_mapper->save($product);
-
-        $new_product = $product_mapper->load($id);
-        $this->assertEquals(5,$new_product->priceModifierFor('color','red')->flatFee(), 'should save price modifier');
-    }
-
-    function testShouldSaveConfigurableAttributePercentage()
-    {
-        $product = new Product(array('name'=>'widget'));
-
-        // add "color" attribute
-        $product->addAttribute('color',array(
-            'options'=>array(
-                'red' => array('percentage'=>5)
-            )
-        ));
-
-        // save attribute "color" !
-        $attribute_mapper = new AttributeMapper($this->db);
-        $attribute_mapper->save($product->attribute('color'));
-
-        // save product !
-        $product_mapper = new DataMapper($this->db);
-        $id = $product_mapper->save($product);
-
-        $new_product = $product_mapper->load($id);
-        $this->assertEquals(5,$new_product->priceModifierFor('color','red')->percentage(), 'should save price modifier');
-    }
-
-    function testShouldSaveConfigurableAttributesMultiple()
-    {
-        $product = new Product(array('name'=>'widget'));
-
-        // add "color" attribute
-        $product->addAttribute('color',array(
-            'options'=>array(
-                'red' => array('percentage'=>5),
-                'blue'=> array('flat_fee'=>8)
-            )
-        ));
-
-        // save attribute "color" !
-        $attribute_mapper = new AttributeMapper($this->db);
-        $attribute_mapper->save($product->attribute('color'));
-
-        // add "size" attribute
-        $product->addAttribute('size',array(
-            'options'=>array(
-                'small' => array('percentage'=>5),
-                'large'=> array('flat_fee'=>8)
-            )
-        ));
-
-        // save attribute "size" !
-        $attribute_mapper = new AttributeMapper($this->db);
-        $attribute_mapper->save($product->attribute('size'));
-
-        // save product !
-        $product_mapper = new DataMapper($this->db);
-        $id = $product_mapper->save($product);
-
-        $new_product = $product_mapper->load($id);
-        $this->assertEquals(5,$new_product->priceModifierFor('color','red')->percentage(), 'should save price modifier');
-        $this->assertEquals(8,$new_product->priceModifierFor('color','blue')->flatFee(), 'should save price modifier');
-        $this->assertEquals(5,$new_product->priceModifierFor('size','small')->percentage(), 'should save price modifier');
-        $this->assertEquals(8,$new_product->priceModifierFor('size','large')->flatFee(), 'should save price modifier');
+        $this->assertEquals('red', $loaded_product->attributeValue('color'), 'should save attribute');
     }
 
     function testShouldFindBySKU()

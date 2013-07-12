@@ -43,14 +43,14 @@ class DataMapper
         ));
     }
 
-    /** @param Product */
+    /** @param \Metator\Product\Product */
     function save($product)
     {
         if($product->id()) {
             $this->productTable->update(array(
                 'sku'=>$product->getSku(),
                 'name'=>$product->getName(),
-                'attributes'=>$this->serializeAttributes($product->attributes()),
+                //'attributes'=>$this->serializeAttributes($product->attributes()),
                 'base_price'=>$product->getBasePrice(),
                 'description'=>$product->getDescription(),
             ), array('id'=>$product->id()));
@@ -67,20 +67,10 @@ class DataMapper
             $product_id = $this->productTable->getLastInsertValue();
             $product->setId($product_id);
         }
-        $this->associateAttributeToProduct($product_id, $product->attributes());
-        $this->savePriceModifiers($product_id, $product);
+
         $this->saveCategories($product_id, $product->getCategories());
         $this->saveImageHashes($product_id, $product);
         return $product_id;
-    }
-
-    function serializeAttributes($attributes)
-    {
-        $attributesArray = array();
-        foreach($attributes as $attribute) {
-            $attributesArray[$attribute->id()] = $attribute->options();
-        }
-        return Json::encode($attributesArray);
     }
 
     function associateAttributeToProduct($product_id, $attributes)
@@ -90,24 +80,6 @@ class DataMapper
                 'product_id'=>$product_id,
                 'attribute_id'=>$attribute->id()
             ));
-        }
-    }
-
-    /** @param Product $product */
-    function savePriceModifiers($product_id, $product)
-    {
-        foreach($product->attributes() as $attribute) {
-            foreach($attribute->options() as $option) {
-                $this->priceModifierTable->insert(array(
-                    'product_id'=>$product_id,
-                    'attribute_id'=>$attribute->id(),
-                    'attribute_option_id'=>$attribute->optionId($option),
-                    'flat_fee'=>$product->hasPriceModifier($attribute->name(),$option) ?
-                        $product->priceModifierFor($attribute->name(), $option)->flatFee() : 0,
-                    'percentage'=>$product->hasPriceModifier($attribute->name(),$option) ?
-                        $product->priceModifierFor($attribute->name(), $option)->percentage() : 0,
-                ));
-            }
         }
     }
 
@@ -195,22 +167,10 @@ class DataMapper
     function doLoad($data)
     {
         $product = new Product($data);
-        $this->loadAttributes($product);
         $this->loadCategories($product);
         $this->loadImages($product);
-        $this->loadPriceModifiers($product);
+        $this->unserializeAttributes($product, $data['attributes']);
         return $product;
-    }
-
-    function loadAttributes($product)
-    {
-        $rowset = $select = $this->productAttributeTable->select(array(
-            'product_id'=>$product->id()
-        ));
-        while($row = $rowset->current()) {
-            $attribute = $this->loadAttribute($row['attribute_id']);
-            $product->addAttribute($attribute);
-        }
     }
 
     function loadCategories($product)
@@ -239,27 +199,25 @@ class DataMapper
         }
     }
 
-    function loadPriceModifiers($product)
-    {
-        foreach($product->attributes() as $attribute) {
-            foreach($attribute->options() as $option) {
-                $rowset = $select = $this->priceModifierTable->select(array(
-                    'attribute_option_id'=>$attribute->optionId($option)
-                ));
-                $row = $rowset->current();
-
-                $product->addPriceModifiersForOption($attribute->name(), $option, array(
-                    'flat_fee'=>$row['flat_fee'],
-                    'percentage'=>$row['percentage']
-                ));
-
-            }
-        }
-    }
-
     function loadAttribute($attributeID)
     {
         $attribute_mapper = new AttributeMapper($this->db);
         return $attribute_mapper->load($attributeID);
+    }
+
+    function serializeAttributes($attributes)
+    {
+        return Json::encode($attributes);
+    }
+
+    function unserializeAttributes($product, $attributesBlob)
+    {
+        $attributes = Json::decode($attributesBlob);
+        if(is_null($attributes)) {
+            return;
+        }
+        foreach($attributes as $attribute=>$value) {
+            $product->setAttributeValue($attribute, $value);
+        }
     }
 }
