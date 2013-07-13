@@ -118,7 +118,20 @@ class ImportTest extends PHPUnit_Framework_TestCase
 
     function testShouldImportExistingCategoryByName()
     {
-        return $this->markTestIncomplete();
+        $categoryMapper = new \Metator\Category\DataMapper($this->db);
+        $id = $categoryMapper->save(['name'=>'test']);
+
+        $csv = "sku,name,base_price,attributes,categories\n";
+        $csv.= '123,name,0,null,test';
+
+        $importer = new Importer($this->db);
+        $importer->importFromText($csv);
+
+        $this->assertEquals(array($id), $this->findProductBySku('123')->getCategories(), 'should import existing category by name');
+    }
+
+    function testShouldNotCreateDuplicateCategory()
+    {
         $categoryMapper = new \Metator\Category\DataMapper($this->db);
         $id = $categoryMapper->save(['name'=>'test']);
 
@@ -130,8 +143,7 @@ class ImportTest extends PHPUnit_Framework_TestCase
 
         $categoryMapper = new \Metator\Category\DataMapper($this->db);
         $categories = $categoryMapper->findAll();
-
-        $this->assertEquals(array($id), $this->findProductBySku('123')->getCategories());
+        $this->assertEquals(1, count($categories), 'should not create duplicate categories');
     }
 
     function testShouldImportMultipleProduct()

@@ -136,7 +136,7 @@ class DataMapper
     {
         $this->categoryTable->update(array(
             'name'=>$category['name']
-        ),$category['id']);
+        ),array('id'=>$category['id']));
         $this->categoryStructureTable->delete(array(
             'category_id'=>$category['id']
         ));
