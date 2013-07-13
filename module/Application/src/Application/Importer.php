@@ -31,7 +31,7 @@ class Importer
 
         $processedHandle = fopen($processedFile,'w');
 
-        $this->preprocessRows($inputFile, $processedHandle);
+        $this->preProcessRows($inputFile, $processedHandle);
 
         $sql = "LOAD DATA INFILE '".$processedFile."' INTO TABLE `import`
         FIELDS TERMINATED BY ','
@@ -50,7 +50,7 @@ class Importer
     }
 
     /** Necessary pre-processing to the import rows */
-    function preprocessRows($inputFile, $processedHandle)
+    function preProcessRows($inputFile, $processedHandle)
     {
         $reader = new \Csv_Reader($inputFile, new \Csv_Dialect());
         while($row = $reader->getAssociativeRow()) {
