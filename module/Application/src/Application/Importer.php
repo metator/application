@@ -41,7 +41,6 @@ class Importer
 
         $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
 
-        $this->db->query("DELETE FROM `import` LIMIT 1", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
         $this->db->query("REPLACE INTO `product` (`sku`,`name`,`base_price`,`attributes`) SELECT `sku`, `name`, `base_price`,`attributes` FROM `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
         $this->db->query("UPDATE import i, product p SET i.product_id = p.id WHERE i.sku = p.sku", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
         $this->db->query("INSERT INTO product_categories (product_id,category_id) SELECT product_id,categories FROM `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
@@ -49,13 +48,19 @@ class Importer
         $this->db->query("truncate `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
     }
 
-    /** Necessary pre-processing to the import rows */
+    /** Necessary pre-processing to the import rows, like removing the header, exploding multi-valued strings, etc. */
     function preProcessRows($inputFile, $processedHandle)
     {
         $reader = new \Csv_Reader($inputFile, new \Csv_Dialect());
+        $i = 0;
         while($row = $reader->getAssociativeRow()) {
             $rows = $this->explodeCategories($row);
             foreach($rows as $row) {
+                $i++;
+                // skip the header
+                if($i==1) {
+                    continue;
+                }
                 fputcsv($processedHandle, $row);
             }
         }
