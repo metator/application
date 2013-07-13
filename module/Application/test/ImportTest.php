@@ -24,6 +24,8 @@ class ImportTest extends PHPUnit_Framework_TestCase
         // seems like LOAD DATA INFILE commits the transaction, so we must manually clean up the tables :/
         $this->db->query("truncate `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
         $this->db->query("delete from `product`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->db->query("delete from `category`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->db->query("delete from `product_categories`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
     }
 
     function testShouldImportSku()
@@ -59,7 +61,7 @@ class ImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(9.99, $this->findProductBySku('123')->getBasePrice(), 'should import price');
     }
 
-    function testShouldImportAttribute()
+    function testShouldImportAttributes()
     {
         $csv = "sku,name,base_price,attributes\n";
         $csv.= '123,name,0,{"color":"red"}';
@@ -67,6 +69,36 @@ class ImportTest extends PHPUnit_Framework_TestCase
         $importer = new Importer($this->db);
         $importer->importFromText($csv);
 
+        $this->assertEquals('red', $this->findProductBySku('123')->attributeValue('color'), 'should import attribute');
+    }
+
+    function testShouldImportCategoryId()
+    {
+        $categoryMapper = new \Metator\Category\DataMapper($this->db);
+        $id = $categoryMapper->save(['name'=>'test']);
+
+        $csv = "sku,name,base_price,attributes,categories\n";
+        $csv.= "123,name,0,null,$id";
+
+        $importer = new Importer($this->db);
+        $importer->importFromText($csv);
+
+        $this->assertEquals(array($id), $this->findProductBySku('123')->getCategories());
+    }
+
+    function testShouldImportCategory()
+    {
+//        $csv = "sku,name,base_price,attributes,categories\n";
+//        $csv.= '123,name,0,null,test';
+//
+//        $importer = new Importer($this->db);
+//        $importer->importFromText($csv);
+//
+//        $categoryMapper = new \Metator\Category\DataMapper($this->db);
+//        $categories = $categoryMapper->findAll();
+////        print_r($categories);
+
+        return $this->markTestIncomplete();
         $this->assertEquals('red', $this->findProductBySku('123')->attributeValue('color'), 'should import attribute');
     }
 

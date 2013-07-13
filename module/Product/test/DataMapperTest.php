@@ -172,8 +172,8 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
     function testShouldList()
     {
         $product_mapper = new DataMapper($this->db);
-        $product_mapper->save(new Product(array('name'=>'foo')));
-        $product_mapper->save(new Product(array('name'=>'bar')));
+        $product_mapper->save(new Product(array('sku'=>1,'name'=>'foo')));
+        $product_mapper->save(new Product(array('sku'=>2,'name'=>'bar')));
         $list = $product_mapper->find();
         $this->assertEquals(2,count($list),'should list all products');
         $this->assertEquals('foo',$list[0]->getName(),'should list 1st product');
@@ -183,8 +183,8 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
     function testShouldCount()
     {
         $product_mapper = new DataMapper($this->db);
-        $product_mapper->save(new Product(array('name'=>'foo')));
-        $product_mapper->save(new Product(array('name'=>'bar')));
+        $product_mapper->save(new Product(array('sku'=>1,'name'=>'foo')));
+        $product_mapper->save(new Product(array('sku'=>2,'name'=>'bar')));
         $count = $product_mapper->count();
         $this->assertEquals(2, $count, 'should count all products');
     }
@@ -192,11 +192,11 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
     function testShouldListPaginatedOffset()
     {
         $product_mapper = new DataMapper($this->db);
-        $product_mapper->save(new Product(array('name'=>'foo1')));
-        $product_mapper->save(new Product(array('name'=>'foo2')));
-        $product_mapper->save(new Product(array('name'=>'foo3')));
-        $product_mapper->save(new Product(array('name'=>'foo4')));
-        $product_mapper->save(new Product(array('name'=>'foo5')));
+        $product_mapper->save(new Product(array('sku'=>1, 'name'=>'foo1')));
+        $product_mapper->save(new Product(array('sku'=>2, 'name'=>'foo2')));
+        $product_mapper->save(new Product(array('sku'=>3, 'name'=>'foo3')));
+        $product_mapper->save(new Product(array('sku'=>4, 'name'=>'foo4')));
+        $product_mapper->save(new Product(array('sku'=>5, 'name'=>'foo5')));
         $list = $product_mapper->find(array(), 1,3);
 
         $this->assertEquals(3,count($list),'should list products');
@@ -208,11 +208,11 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
     function testShouldListPaginatedOffsetFrom0()
     {
         $product_mapper = new DataMapper($this->db);
-        $product_mapper->save(new Product(array('name'=>'foo1')));
-        $product_mapper->save(new Product(array('name'=>'foo2')));
-        $product_mapper->save(new Product(array('name'=>'foo3')));
-        $product_mapper->save(new Product(array('name'=>'foo4')));
-        $product_mapper->save(new Product(array('name'=>'foo5')));
+        $product_mapper->save(new Product(array('sku'=>1, 'name'=>'foo1')));
+        $product_mapper->save(new Product(array('sku'=>2, 'name'=>'foo2')));
+        $product_mapper->save(new Product(array('sku'=>3, 'name'=>'foo3')));
+        $product_mapper->save(new Product(array('sku'=>4, 'name'=>'foo4')));
+        $product_mapper->save(new Product(array('sku'=>5, 'name'=>'foo5')));
         $list = $product_mapper->find(array(), 0,1);
 
         $this->assertEquals(1,count($list),'should list products');
