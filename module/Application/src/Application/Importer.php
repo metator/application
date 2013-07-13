@@ -22,47 +22,63 @@ class Importer
 
     function importFromText($csvText)
     {
+        /** Split the import file into a product file & categories file */
         $inputFile = sys_get_temp_dir().'/'.uniqid();
-        $processedFile = sys_get_temp_dir().'/'.uniqid();
+        $productImportFile = sys_get_temp_dir().'/'.uniqid();
+        $productCategoriesFile = sys_get_temp_dir().'/'.uniqid();
 
         $inputHandle = fopen($inputFile,'w');
         fwrite($inputHandle,$csvText);
         fclose($inputHandle);
 
-        $processedHandle = fopen($processedFile,'w');
+        $productImportHandle = fopen($productImportFile,'w');
+        $productCategoriesHandle = fopen($productCategoriesFile,'w');
 
-        $this->preProcessRows($inputFile, $processedHandle);
+        $this->preProcessRows($inputFile, $productImportHandle, $productCategoriesHandle);
 
-        $sql = "LOAD DATA INFILE '".$processedFile."' INTO TABLE `product_import`
+        /** Load the products file */
+        $sql = "LOAD DATA INFILE '".$productImportFile."' INTO TABLE `product_import`
         FIELDS TERMINATED BY ','
          OPTIONALLY ENCLOSED BY '\"'
 
-        (sku,name,base_price,attributes,categories) ";
-
+        (sku,name,base_price,attributes) ";
         $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
 
+        /** Load the categories file */
+        $sql = "LOAD DATA INFILE '".$productCategoriesFile."' INTO TABLE `product_categories_import`
+        FIELDS TERMINATED BY ','
+         OPTIONALLY ENCLOSED BY '\"'
+
+        (product_sku,category_id) ";
+        $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+
+        /** Insert the products & update the product IDs in the categories table afterwards */
         $this->db->query("REPLACE INTO `product` (`sku`,`name`,`base_price`,`attributes`) SELECT `sku`, `name`, `base_price`,`attributes` FROM `product_import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
-        $this->db->query("UPDATE product_import i, product p SET i.product_id = p.id WHERE i.sku = p.sku", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
-        $this->db->query("INSERT INTO product_categories (product_id,category_id) SELECT product_id,categories FROM `product_import` ", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->db->query("UPDATE product_categories_import i, product p SET i.product_id = p.id WHERE i.product_sku = p.sku", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+
+        $this->db->query("INSERT INTO product_categories (product_id,category_id) SELECT product_id,category_id FROM `product_categories_import` ", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
 
         $this->db->query("truncate `product_import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
     }
 
     /** Necessary pre-processing to the import rows, like removing the header, exploding multi-valued strings, etc. */
-    function preProcessRows($inputFile, $processedHandle)
+    function preProcessRows($inputFile, $productImportHandle, $productCategoriesHandle)
     {
-        $reader = new \Csv_Reader($inputFile, new \Csv_Dialect());
+        $inputReader = new \Csv_Reader($inputFile, new \Csv_Dialect());
         $i = 0;
-        while($row = $reader->getAssociativeRow()) {
-            $rows = $this->explodeCategories($row);
-            foreach($rows as $row) {
-                $i++;
-                // skip the header
-                if($i==1) {
-                    continue;
-                }
-
-                fputcsv($processedHandle, $row);
+        while($row = $inputReader->getAssociativeRow()) {
+            $i++;
+            // skip the header
+            if($i==1) {
+                continue;
+            }
+            fputcsv($productImportHandle, $row);
+            $categories = $this->explodeCategories($row);
+            foreach($categories as $category) {
+                fputcsv($productCategoriesHandle, array(
+                    'product_sku'=>$row['sku'],
+                    'category_id'=>$category,
+                ));
             }
         }
     }
@@ -70,20 +86,15 @@ class Importer
     /**
      * This explodes the rows so MYSQL can select the categoryIDs for a product
      * Example:  a row with 1 category ID stays the same, a row with 3 category IDs becomes 3 rows, etc..
-     *          then MYSQL can SELECT categires WHERE product_id = <ID>
+     *          then MYSQL can SELECT categories WHERE product_id = <ID>
      */
     function explodeCategories($row)
     {
         if(isset($row['categories'])) {
-            $row['categories'] = explode(';', $row['categories']);
-            $rows = array();
-            foreach($row['categories'] as $category) {
-                unset($row['categories']);
-                $rows[] = $row + array('categories'=>$category);
-            }
-            return $rows;
+            $categories = explode(';', $row['categories']);
+            return $categories;
         } else {
-            return array($row);
+            return array();
         }
     }
 }
