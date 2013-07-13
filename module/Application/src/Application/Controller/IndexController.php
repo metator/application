@@ -26,15 +26,15 @@ class IndexController extends AbstractActionController
 
         $products = $this->productMapper()->find(array(), $offset, $perpage);
         $productCount = $this->productMapper()->count();
-
+var_dump($productCount);
         $pageAdapter = new \Zend\Paginator\Adapter\Null($productCount);
         $paginator = new \Zend\Paginator\Paginator($pageAdapter);
         $paginator->setCurrentPageNumber($page);
 
         return array(
             'start'=>$offset+1,
-            'end'=>$offset+$perpage > $productCount ? $productCount : $offset+$perpage,
-            'total'=>$productCount,
+            'end'=>$offset+$perpage,
+            'total'=>$offset+$perpage > $productCount ? $offset+$perpage : $productCount,
             'paginator'=>$paginator,
             'products'=>$products,
         );

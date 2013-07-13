@@ -9,7 +9,11 @@ echo $this->partial('product/product/list.phtml',array(
     'products'=>$products
 ));
 
-printf('Listing %d-%d of about %s', $start, $end, number_format(round($total,-3)));
+if($total>1000) {
+    printf('Listing %d-%d of about %s', $start, $end, number_format(round($total,-3)));
+} else {
+    printf('Listing %d-%d of %s', $start, $end, number_format($total));
+}
 echo $this->paginationControl(
     $this->paginator,
     'sliding',
