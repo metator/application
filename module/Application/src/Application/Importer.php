@@ -25,20 +25,14 @@ class Importer
         $this->preProcessRows();
 
         /** Load the products file */
-        $sql = "LOAD DATA INFILE '".$this->productFile."' INTO TABLE `product_import`
-        FIELDS TERMINATED BY ','
-         OPTIONALLY ENCLOSED BY '\"'
-
-        (sku,name,base_price,attributes) ";
-        $this->query($sql);
+        $this->query("LOAD DATA INFILE '".$this->productFile."' INTO TABLE `product_import`
+            FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"'
+            (sku,name,base_price,attributes) ");
 
         /** Load the categories file */
-        $sql = "LOAD DATA INFILE '".$this->categoriesFile."' INTO TABLE `product_categories_import`
-        FIELDS TERMINATED BY ','
-         OPTIONALLY ENCLOSED BY '\"'
-
-        (product_sku,category_id,category_name) ";
-        $this->query($sql);
+        $this->query("LOAD DATA INFILE '".$this->categoriesFile."' INTO TABLE `product_categories_import`
+            FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"'
+            (product_sku,category_id,category_name) ");
 
         /** Insert the products & update the product IDs in the categories table afterwards */
         $this->query("REPLACE INTO `product` (`sku`,`name`,`base_price`,`attributes`) SELECT `sku`, `name`, `base_price`,`attributes` FROM `product_import`");
