@@ -31,7 +31,7 @@ class Importer
 
         $processedHandle = fopen($processedFile,'w');
 
-        $this->explodeCategories($inputFile, $processedHandle);
+        $this->preprocessRows($inputFile, $processedHandle);
 
         $sql = "LOAD DATA INFILE '".$processedFile."' INTO TABLE `import`
         FIELDS TERMINATED BY ','
@@ -49,27 +49,35 @@ class Importer
         $this->db->query("truncate `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
     }
 
-    /**
-     * This explodes the rows so MYSQL can select the categoryIDs for a product
-     * Example:  a row with 1 category ID stays the same, a row with 3 category IDs becomes 3 rows, etc..
-     */
-    function explodeCategories($inputFile, $processedHandle)
+    /** Necessary pre-processing to the import rows */
+    function preprocessRows($inputFile, $processedHandle)
     {
         $reader = new \Csv_Reader($inputFile, new \Csv_Dialect());
         while($row = $reader->getAssociativeRow()) {
-            if(isset($row['categories'])) {
-                $row['categories'] = explode(';', $row['categories']);
-                $rows = array();
-                foreach($row['categories'] as $category) {
-                    unset($row['categories']);
-                    $rows[] = $row + array('categories'=>$category);
-                }
-                foreach($rows as $row) {
-                    fputcsv($processedHandle, $row);
-                }
-            } else {
+            $rows = $this->explodeCategories($row);
+            foreach($rows as $row) {
                 fputcsv($processedHandle, $row);
             }
+        }
+    }
+
+    /**
+     * This explodes the rows so MYSQL can select the categoryIDs for a product
+     * Example:  a row with 1 category ID stays the same, a row with 3 category IDs becomes 3 rows, etc..
+     *          then MYSQL can SELECT categires WHERE product_id = <ID>
+     */
+    function explodeCategories($row)
+    {
+        if(isset($row['categories'])) {
+            $row['categories'] = explode(';', $row['categories']);
+            $rows = array();
+            foreach($row['categories'] as $category) {
+                unset($row['categories']);
+                $rows[] = $row + array('categories'=>$category);
+            }
+            return $rows;
+        } else {
+            return array($row);
         }
     }
 }
