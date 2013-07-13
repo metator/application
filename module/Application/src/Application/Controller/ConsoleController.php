@@ -42,15 +42,15 @@ class ConsoleController extends AbstractActionController
     function create($products, $categories)
     {
         if(!$categories) {
-            $csv = "sku,name\n";
+            $csv = "sku,active,name\n";
             for($i=0; $i<$products; $i++) {
-                $csv.= "sku-$i,name-$i\n";
+                $csv.= "sku-$i,1,name-$i\n";
             }
         } else {
-            $csv = "sku,name,categories\n";
+            $csv = "sku,active,name,categories\n";
             for($i=0; $i<$products; $i++) {
                 $j = rand(1,$categories);
-                $csv.= "sku-$i,name-$i,category-$j\n";
+                $csv.= "sku-$i,1,name-$i,category-$j\n";
             }
         }
 

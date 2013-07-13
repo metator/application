@@ -189,6 +189,16 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $count, 'should count all products');
     }
 
+    function testShouldNotCountInactive()
+    {
+        $product_mapper = new DataMapper($this->db);
+        $product_mapper->save(new Product(array('sku'=>1,'name'=>'foo')));
+        $id = $product_mapper->save(new Product(array('sku'=>2,'name'=>'bar')));
+        $product_mapper->deactivate($id);
+        $count = $product_mapper->count();
+        $this->assertEquals(1, $count, 'should count only active products');
+    }
+
     function testShouldCountByCategory()
     {
         $product_mapper = new DataMapper($this->db);
@@ -197,6 +207,16 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $product_mapper->save(new Product(array('sku'=>3, 'name'=>'bar', 'categories'=>[2])));
         $count = $product_mapper->countByCategory(1);
         $this->assertEquals(2, $count, 'should count products by category');
+    }
+
+    function testShouldNotCountInactiveByCategory()
+    {
+        $product_mapper = new DataMapper($this->db);
+        $product_mapper->save(new Product(array('sku'=>1, 'name'=>'foo', 'categories'=>[1])));
+        $id = $product_mapper->save(new Product(array('sku'=>2, 'name'=>'bar', 'categories'=>[1])));
+        $product_mapper->deactivate($id);
+        $count = $product_mapper->countByCategory(1);
+        $this->assertEquals(1, $count, 'should count products by category');
     }
 
     function testShouldListPaginatedOffset()

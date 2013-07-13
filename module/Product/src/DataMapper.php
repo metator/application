@@ -131,13 +131,13 @@ class DataMapper
 
     function count()
     {
-        $result = $this->db->query("SELECT count(*) FROM `product`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $result = $this->db->query("SELECT count(*) FROM `product` WHERE `active` = 1", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
         return current($result->toArray()[0]);
     }
 
     function countByCategory($id)
     {
-        $result = $this->db->query("SELECT count(*) FROM `product` WHERE `id` IN (SELECT `product_id` FROM `product_categories` WHERE `category_id` = $id)", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $result = $this->db->query("SELECT count(*) FROM `product` WHERE `active` = 1 && `id` IN (SELECT `product_id` FROM `product_categories` WHERE `category_id` = $id)", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
         return current($result->toArray()[0]);
     }
 
