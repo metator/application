@@ -115,8 +115,19 @@ class DataMapper
 
     function find($params=array(), $offset=null, $limit=null)
     {
-        $rowset = $this->productTable->select(function (Select $select) use ($params,$limit,$offset) {
+        if(isset($params['attributes'])) {
+            $attributes = $params['attributes'];
+            unset($params['attributes']);
+        } else {
+            $attributes = array();
+        }
+
+        $rowset = $this->productTable->select(function (Select $select) use ($params,$limit,$offset,$attributes) {
             $select->where($params);
+            foreach($attributes as $attribute=>$value) {
+                $matchString = sprintf('"%s":"%s"', mysql_real_escape_string($attribute), mysql_real_escape_string($value));
+                $select->where("attributes LIKE '%$matchString%'");
+            }
             if($limit || $offset) {
                 $select->offset($offset)->limit($limit);
             }
