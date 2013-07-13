@@ -32,7 +32,7 @@ $this->plugin("currencyformat")->setCurrencyCode("USD")->setLocale("en_US");
             <div class="outline">
                 <p>SKU: <?=$this->escapeHTML($product->getSku())?></p>
 
-                <p>Price:   <?=$this->currencyFormat($product->price())?></p>
+                <p>Price:   <?=$this->currencyFormat($product->getBasePrice())?></p>
                 <a class="btn btn-large btn-success" href="<?=$this->url('cart_add',array('id'=>$product->id()))?>">
                     <i class="icon-shopping-cart icon-white icon-large"></i>
                     Add To Cart

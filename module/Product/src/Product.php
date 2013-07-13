@@ -103,33 +103,9 @@ class Product
         return $this->price;
     }
 
-    /**
-     * Sets the price for this product, which can be modified if the product is configurable. For example if you
-     * add an attribute called "size" to a T-Shirt product, you may declare that 'large' T-Shirts cost 10% more.
-     * In that case this is actually the "base" price not the final price used.
-     *
-     * @param float $price
-     */
     function setBasePrice($price)
     {
         $this->price = $price;
-    }
-
-    /**
-     * Returns the price for this product as configured. For example if this is a T-Shirt with an attribute called
-     * "size" and you have declared "large" T-Shirts cost 10% more, this method will return the base price passed
-     * to setPrice() after applying the 10% markup (if the customer configured the product as "large")
-     * @return float
-     */
-    function price()
-    {
-        $price = $this->price;
-        foreach($this->attributes() as $attribute) {
-            $attributeName = $attribute->name();
-            $value = $this->attributeValue($attributeName);
-            $price = $this->modifyPrice($attributeName,$value,$price);
-        }
-        return $price;
     }
 
     function attributes()

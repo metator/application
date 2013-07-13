@@ -45,7 +45,7 @@ class CartController extends AbstractActionController
     function addAction()
     {
         $id = $this->params('id');
-        $price = $this->productMapper()->load($id)->price();
+        $price = $this->productMapper()->load($id)->getBasePrice();
 
         $this->cart()->add($id, $price);
         $this->redirect()->toRoute('cart');

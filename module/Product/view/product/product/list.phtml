@@ -26,7 +26,7 @@ foreach($this->products as $product) {
         }
         echo '</a>';
         ?>
-        <p><?=$this->currencyFormat($product->price())?></p></a>
+        <p><?=$this->currencyFormat($product->getBasePrice())?></p></a>
         <p><?=$this->escapeHTML($product->getDescription())?></p>
         <p>
             <a class="btn btn-success" href="<?=$this->url('cart_add',array('id'=>$product->id()))?>">
