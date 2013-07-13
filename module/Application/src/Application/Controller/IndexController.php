@@ -35,7 +35,7 @@ class IndexController extends AbstractActionController
 
         return array(
             'start'=>$offset+1,
-            'end'=>$offset+$perpage,
+            'end'=>$offset+$perpage > $productCount ? $productCount : $offset+$perpage,
             'total'=>$productCount,
             'paginator'=>$paginator,
             'products'=>$products,
