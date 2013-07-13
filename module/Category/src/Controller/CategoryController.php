@@ -18,10 +18,32 @@ class CategoryController extends AbstractActionController
     function viewAction()
     {
         $category = $this->categoryMapper()->load($this->params('id'));
-        $products = $this->productMapper()->findByCategory($this->params('id'));
+
+        $page = $this->params()->fromQuery('page',1);
+        $perpage = 6;
+        $offset = ($page * $perpage)-$perpage;
+
+        $products = $this->productMapper()->findByCategory($this->params('id'), $offset, $perpage);
+        $productCount = $this->productMapper()->countByCategory($this->params('id'));
+
+        $pageAdapter = new \Zend\Paginator\Adapter\Null($productCount);
+        $paginator = new \Zend\Paginator\Paginator($pageAdapter);
+        $paginator->setItemCountPerPage($perpage);
+        $paginator->setCurrentPageNumber($page);
+
+        if($offset+$perpage > $productCount) {
+            $end = $productCount;
+        } else {
+            $end = $offset+$perpage;
+        }
+
         return array(
             'category'=>$category['name'],
-            'products'=>$products
+            'start'=>$offset+1,
+            'end'=>$end,
+            'total'=>$productCount,
+            'paginator'=>$paginator,
+            'products'=>$products,
         );
     }
 

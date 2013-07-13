@@ -145,10 +145,21 @@ class DataMapper
         return current($result->toArray()[0]);
     }
 
-    function findByCategory($id)
+    function countByCategory($id)
+    {
+        $result = $this->db->query("SELECT count(*) FROM `product` WHERE `id` IN (SELECT `product_id` FROM `product_categories` WHERE `category_id` = $id)", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        return current($result->toArray()[0]);
+    }
+
+    function findByCategory($id, $offset=null, $limit=null)
     {
         $id = (int)$id;
-        $rowset = $this->productTable->select("`active` = 1 && `id` IN (SELECT `product_id` FROM `product_categories` WHERE `category_id` = $id)");
+        $rowset = $this->productTable->select(function (Select $select) use ($id,$limit,$offset) {
+            $select->where("`active` = 1 && `id` IN (SELECT `product_id` FROM `product_categories` WHERE `category_id` = $id)");
+            if($limit || $offset) {
+                $select->offset($offset)->limit($limit);
+            }
+        });
         $products = array();
         while($row = $rowset->current()) {
             $products[] = $this->doLoad($row);

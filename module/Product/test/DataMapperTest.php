@@ -189,6 +189,16 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $count, 'should count all products');
     }
 
+    function testShouldCountByCategory()
+    {
+        $product_mapper = new DataMapper($this->db);
+        $product_mapper->save(new Product(array('sku'=>1, 'name'=>'foo', 'categories'=>[1])));
+        $product_mapper->save(new Product(array('sku'=>2, 'name'=>'bar', 'categories'=>[1])));
+        $product_mapper->save(new Product(array('sku'=>3, 'name'=>'bar', 'categories'=>[2])));
+        $count = $product_mapper->countByCategory(1);
+        $this->assertEquals(2, $count, 'should count products by category');
+    }
+
     function testShouldListPaginatedOffset()
     {
         $product_mapper = new DataMapper($this->db);
@@ -324,6 +334,22 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(1,count($products));
         $this->assertEquals($product->id(), $products[0]->id(), 'should find products by category');
+    }
+
+    function testShouldPaginateFindByCategory()
+    {
+        $product_mapper = new DataMapper($this->db);
+        $product_mapper->save(new Product(array('sku'=>1, 'name'=>'foo1', 'categories'=>[77])));
+        $product_mapper->save(new Product(array('sku'=>2, 'name'=>'foo2', 'categories'=>[77])));
+        $product_mapper->save(new Product(array('sku'=>3, 'name'=>'foo3', 'categories'=>[77])));
+        $product_mapper->save(new Product(array('sku'=>4, 'name'=>'foo4', 'categories'=>[77])));
+        $product_mapper->save(new Product(array('sku'=>5, 'name'=>'foo5', 'categories'=>[77])));
+        $list = $product_mapper->findByCategory(77, 1, 3);
+
+        $this->assertEquals(3,count($list),'should list products');
+        $this->assertEquals('foo2',$list[0]->getName(),'should list 2nd product');
+        $this->assertEquals('foo3',$list[1]->getName(),'should list 3rd product');
+        $this->assertEquals('foo4',$list[2]->getName(),'should list 4th product');
     }
 
     function testShouldDeactivate()
