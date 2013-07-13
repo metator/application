@@ -19,8 +19,16 @@
             <exclude>
                 <!-- dont include test files -->
                 <directory suffix="Test.php">./module</directory>
+
                 <!-- dont include view scripts -->
                 <directory suffix=".phtml">./module</directory>
+
+                <!-- dont include controllers -->
+                <directory suffix="Controller.php">./module</directory>
+
+                <!-- dont include forms -->
+                <directory suffix="Form.php">./module</directory>
+
                 <!-- dont include ZF scaffolding -->
                 <directory suffix="Module.php">./module</directory>
                 <directory suffix="config/module.config.php">./module</directory>
