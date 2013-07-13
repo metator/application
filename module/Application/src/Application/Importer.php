@@ -27,7 +27,7 @@ class Importer
         /** Load the products file */
         $this->query("LOAD DATA INFILE '".$this->productFile."' INTO TABLE `product_import`
             FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"'
-            (sku,name,base_price,attributes) ");
+            (sku,name,active,base_price,attributes) ");
 
         /** Load the categories file */
         $this->query("LOAD DATA INFILE '".$this->categoriesFile."' INTO TABLE `product_categories_import`
@@ -35,7 +35,7 @@ class Importer
             (product_sku,category_id,category_name) ");
 
         /** Insert the products & update the product IDs in the categories table afterwards */
-        $this->query("REPLACE INTO `product` (`sku`,`name`,`base_price`,`attributes`) SELECT `sku`, `name`, `base_price`,`attributes` FROM `product_import`");
+        $this->query("REPLACE INTO `product` (`sku`, `active`, `name`, `base_price`, `attributes`) SELECT `sku`, `active`, `name`, `base_price`,`attributes` FROM `product_import`");
         $this->query("UPDATE product_categories_import i, product p SET i.product_id = p.id WHERE i.product_sku = p.sku");
 
         /** Insert the new categories & update their category ID after */
@@ -79,8 +79,10 @@ class Importer
             fputcsv($this->productHandle, array(
                 'sku'=>$row['sku'],
                 'name'=>$row['name'],
+                'active'=>isset($row['active']) ? $row['active'] : '',
                 'base_price'=>isset($row['base_price']) ? $row['base_price'] : '',
                 'attributes'=>isset($row['attributes']) ? $row['attributes'] : '',
+                
             ));
 
             $categories = $this->explodeCategories($row);

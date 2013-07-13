@@ -51,6 +51,19 @@ class ImportTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->productExists('123'), 'should import fields in any order');
     }
 
+    function testShouldImportActiveFlag()
+    {
+        $csv = "sku,name,active\n";
+        $csv.= "123,name1,1\n";
+        $csv.= "456,name2,0";
+
+        $importer = new Importer($this->db);
+        $importer->importFromText($csv);
+
+        $products = $this->productDataMapper()->find(['active'=>1]);
+        $this->assertEquals(1, count($products), 'should import active flag');
+    }
+
     function testShouldImportName()
     {
         $csv = "sku,name\n";
@@ -185,21 +198,24 @@ class ImportTest extends PHPUnit_Framework_TestCase
         $importer = new Importer($this->db);
         $importer->importFromText($csv);
 
-        $product_mapper = new ProductDataMapper($this->db);
-        $products = $product_mapper->find();
+        $products = $this->productDataMapper()->find();
 
         $this->assertEquals(4, count($products), 'should not re-import previous imports (should cleanup import table when done');
     }
 
     function productExists($sku)
     {
-        $product_mapper = new ProductDataMapper($this->db);
-        return $product_mapper->productExists($sku);
+        return $this->productDataMapper()->productExists($sku);
     }
 
+    /** @return \Metator\Product\Product */
     function findProductBySku($sku)
     {
-        $product_mapper = new ProductDataMapper($this->db);
-        return $product_mapper->find(['sku'=>$sku])[0];
+        return $this->productDataMapper()->find(['sku'=>$sku])[0];
+    }
+
+    function productDataMapper()
+    {
+        return new ProductDataMapper($this->db);
     }
 }
