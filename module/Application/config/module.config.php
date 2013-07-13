@@ -13,7 +13,7 @@ return array(
             'routes' => array(
                 'sample_products' => array(
                     'options' => array(
-                        'route'    => 'sample products --number=',
+                        'route'    => 'sample products --number= [--categories=]',
                         'defaults' => array(
                             'controller' => 'Application\Controller\Console',
                             'action'     => 'sampleproducts',

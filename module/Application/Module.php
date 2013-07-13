@@ -88,7 +88,7 @@ class Module implements
     {
         return array(
             'Application module commands',
-            'metator sample products --number=<number>' => "Creates the specified <number> of sample products",
+            'metator sample products --number=<number> [--categories=<categories>]' => "Creates the specified <number> of sample products, optionally distributed randomly within categories",
         );
     }
 

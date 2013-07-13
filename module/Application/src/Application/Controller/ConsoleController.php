@@ -25,24 +25,33 @@ class ConsoleController extends AbstractActionController
             throw new \RuntimeException('You can only use this action from a console!');
         }
 
-        $number = preg_replace('/[^0-9]/','',$this->params('number'));
+        $products = preg_replace('/[^0-9]/','',$this->params('number'));
+        $categories = preg_replace('/[^0-9]/','',$this->params('categories', 0));
 
         $start = microtime(true);
-        $this->create($number);
+        $this->create($products, $categories);
         $end = microtime(true);
 
         $console = $this->getServiceLocator()->get('console');
-        $console->write('Created '.number_format($number) .' sample products', ColorInterface::LIGHT_CYAN);
+        $console->write('Created '.number_format($products) .' sample products', ColorInterface::LIGHT_CYAN);
         echo "\n";
         $console->write('All Done. Took '.sprintf('%.4fs', $end - $start).'', ColorInterface::YELLOW);
         echo "\n";
     }
 
-    function create($number)
+    function create($products, $categories)
     {
-        $csv = "sku,name\n";
-        for($i=0; $i<$number; $i++) {
-            $csv.= "sku-$i,name-$i\n";
+        if(!$categories) {
+            $csv = "sku,name\n";
+            for($i=0; $i<$products; $i++) {
+                $csv.= "sku-$i,name-$i\n";
+            }
+        } else {
+            $csv = "sku,name,categories\n";
+            for($i=0; $i<$products; $i++) {
+                $j = rand(1,$categories);
+                $csv.= "sku-$i,name-$i,category-$j\n";
+            }
         }
 
         $db = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
