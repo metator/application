@@ -6,14 +6,13 @@
  */
 namespace Application;
 
-use Metator\Product\DataMapper as ProductDataMapper;
-use Metator\Product\Product;
-use Zend\Db\TableGateway\TableGateway;
-
 class Importer
 {
     protected $db;
     protected $fieldPositions;
+    
+    protected $intputFile, $productFile, $categoriesFile;
+    protected $productHandle, $categoriesHandle;
 
     function __construct($db)
     {
@@ -22,22 +21,11 @@ class Importer
 
     function importFromText($csvText)
     {
-        /** Split the import file into a product file & categories file */
-        $inputFile = sys_get_temp_dir().'/'.uniqid();
-        $productImportFile = sys_get_temp_dir().'/'.uniqid();
-        $productCategoriesFile = sys_get_temp_dir().'/'.uniqid();
-
-        $inputHandle = fopen($inputFile,'w');
-        fwrite($inputHandle,$csvText);
-        fclose($inputHandle);
-
-        $productImportHandle = fopen($productImportFile,'w');
-        $productCategoriesHandle = fopen($productCategoriesFile,'w');
-
-        $this->preProcessRows($inputFile, $productImportHandle, $productCategoriesHandle);
+        $this->setupFiles($csvText);
+        $this->preProcessRows();
 
         /** Load the products file */
-        $sql = "LOAD DATA INFILE '".$productImportFile."' INTO TABLE `product_import`
+        $sql = "LOAD DATA INFILE '".$this->productFile."' INTO TABLE `product_import`
         FIELDS TERMINATED BY ','
          OPTIONALLY ENCLOSED BY '\"'
 
@@ -45,7 +33,7 @@ class Importer
         $this->query($sql);
 
         /** Load the categories file */
-        $sql = "LOAD DATA INFILE '".$productCategoriesFile."' INTO TABLE `product_categories_import`
+        $sql = "LOAD DATA INFILE '".$this->categoriesFile."' INTO TABLE `product_categories_import`
         FIELDS TERMINATED BY ','
          OPTIONALLY ENCLOSED BY '\"'
 
@@ -64,11 +52,26 @@ class Importer
 
         $this->query("truncate `product_import`");
     }
+    
+    function setupFiles($csvText)
+    {
+        /** Split the import file into a product file & categories file */
+        $this->inputFile = sys_get_temp_dir().'/'.uniqid();
+        $this->productFile = sys_get_temp_dir().'/'.uniqid();
+        $this->categoriesFile = sys_get_temp_dir().'/'.uniqid();
+
+        $inputHandle = fopen($this->inputFile,'w');
+        fwrite($inputHandle,$csvText);
+        fclose($inputHandle);
+
+        $this->productHandle = fopen($this->productFile,'w');
+        $this->categoriesHandle = fopen($this->categoriesFile,'w');
+    }
 
     /** Necessary pre-processing to the import rows, like removing the header, exploding multi-valued strings, etc. */
-    function preProcessRows($inputFile, $productImportHandle, $productCategoriesHandle)
+    function preProcessRows()
     {
-        $inputReader = new \Csv_Reader($inputFile, new \Csv_Dialect());
+        $inputReader = new \Csv_Reader($this->inputFile, new \Csv_Dialect());
         $i = 0;
         while($row = $inputReader->getAssociativeRow()) {
             $i++;
@@ -76,11 +79,11 @@ class Importer
             if($i==1) {
                 continue;
             }
-            fputcsv($productImportHandle, $row);
+            fputcsv($this->productHandle, $row);
 
             $categories = $this->explodeCategories($row);
             foreach($categories as $category) {
-                fputcsv($productCategoriesHandle, array(
+                fputcsv($this->categoriesHandle, array(
                     'product_sku'=>$row['sku'],
                     'category_id'=>$category,
                     'category_name'=>''
@@ -89,7 +92,7 @@ class Importer
 
             $categoryNames = $this->explodeCategoryNames($row);
             foreach($categoryNames as $category) {
-                fputcsv($productCategoriesHandle, array(
+                fputcsv($this->categoriesHandle, array(
                     'product_sku'=>$row['sku'],
                     'category_id'=>'',
                     'category_name'=>$category
