@@ -31,23 +31,7 @@ class Importer
 
         $processedHandle = fopen($processedFile,'w');
 
-        $reader = new \Csv_Reader($inputFile, new \Csv_Dialect());
-        $writer = new \Csv_Writer($processedFile, new \Csv_Dialect());
-        while($row = $reader->getAssociativeRow()) {
-            if(isset($row['categories'])) {
-                $row['categories'] = explode(';', $row['categories']);
-                $rows = array();
-                foreach($row['categories'] as $category) {
-                    unset($row['categories']);
-                    $rows[] = $row + array('categories'=>$category);
-                }
-                foreach($rows as $row) {
-                    fputcsv($processedHandle, $row);
-                }
-            } else {
-                fputcsv($processedHandle, $row);
-            }
-        }
+        $this->explodeCategories($inputFile, $processedHandle);
 
         $sql = "LOAD DATA INFILE '".$processedFile."' INTO TABLE `import`
         FIELDS TERMINATED BY ','
@@ -63,5 +47,29 @@ class Importer
         $this->db->query("INSERT INTO product_categories (product_id,category_id) SELECT product_id,categories FROM `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
 
         $this->db->query("truncate `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+    }
+
+    /**
+     * This explodes the rows so MYSQL can select the categoryIDs for a product
+     * Example:  a row with 1 category ID stays the same, a row with 3 category IDs becomes 3 rows, etc..
+     */
+    function explodeCategories($inputFile, $processedHandle)
+    {
+        $reader = new \Csv_Reader($inputFile, new \Csv_Dialect());
+        while($row = $reader->getAssociativeRow()) {
+            if(isset($row['categories'])) {
+                $row['categories'] = explode(';', $row['categories']);
+                $rows = array();
+                foreach($row['categories'] as $category) {
+                    unset($row['categories']);
+                    $rows[] = $row + array('categories'=>$category);
+                }
+                foreach($rows as $row) {
+                    fputcsv($processedHandle, $row);
+                }
+            } else {
+                fputcsv($processedHandle, $row);
+            }
+        }
     }
 }
