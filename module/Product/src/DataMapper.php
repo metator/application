@@ -223,6 +223,9 @@ class DataMapper
 
     function unserializeAttributes($product, $attributesBlob)
     {
+        if(!$attributesBlob) {
+            return;
+        }
         $attributes = Json::decode($attributesBlob);
         if(is_null($attributes)) {
             return;

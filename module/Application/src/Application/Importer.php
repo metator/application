@@ -23,21 +23,44 @@ class Importer
     function importFromText($csvText)
     {
         $path = sys_get_temp_dir().'/'.uniqid();
+        $path2 = sys_get_temp_dir().'/'.uniqid();
+
         $h = fopen($path,'w');
+        $h2 = fopen($path2,'w');
         fwrite($h,$csvText);
         fclose($h);
 
         $reader = new \Csv_Reader($path, new \Csv_Dialect());
+        $writer = new \Csv_Writer($path2, new \Csv_Dialect());
         while($row = $reader->getAssociativeRow()) {
-            //print_r($row);
+            if(isset($row['categories'])) {
+                $row['categories'] = explode(';', $row['categories']);
+                $rows = array();
+                foreach($row['categories'] as $category) {
+                    unset($row['categories']);
+                    $rows[] = $row + array('categories'=>$category);
+                }
+                foreach($rows as $row) {
+                    fputcsv($h2, $row);
+                }
+            } else {
+                fputcsv($h2, $row);
+            }
         }
 
-        $sql = "LOAD DATA INFILE '".$path."' INTO TABLE `import` FIELDS TERMINATED BY ','  (sku,name,base_price,attributes,categories)";
+        $sql = "LOAD DATA INFILE '".$path2."' INTO TABLE `import`
+        FIELDS TERMINATED BY ','
+         OPTIONALLY ENCLOSED BY '\"'
+
+        (sku,name,base_price,attributes,categories) ";
+
         $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+
         $this->db->query("DELETE FROM `import` LIMIT 1", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
         $this->db->query("REPLACE INTO `product` (`sku`,`name`,`base_price`,`attributes`) SELECT `sku`, `name`, `base_price`,`attributes` FROM `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
         $this->db->query("UPDATE import i, product p SET i.product_id = p.id WHERE i.sku = p.sku", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
         $this->db->query("INSERT INTO product_categories (product_id,category_id) SELECT product_id,categories FROM `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+
         $this->db->query("truncate `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
     }
 }

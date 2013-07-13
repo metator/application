@@ -86,6 +86,21 @@ class ImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array($id), $this->findProductBySku('123')->getCategories());
     }
 
+    function testShouldImportMultipleCategoryId()
+    {
+        $categoryMapper = new \Metator\Category\DataMapper($this->db);
+        $id1 = $categoryMapper->save(['name'=>'test1']);
+        $id2 = $categoryMapper->save(['name'=>'test2']);
+
+        $csv = "sku,name,base_price,attributes,categories\n";
+        $csv.= "123,name,0,null,$id1;$id2";
+
+        $importer = new Importer($this->db);
+        $importer->importFromText($csv);
+
+        $this->assertEquals(array($id1,$id2), $this->findProductBySku('123')->getCategories());
+    }
+
     function testShouldImportCategory()
     {
 //        $csv = "sku,name,base_price,attributes,categories\n";
