@@ -102,10 +102,23 @@ class ImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array($id1,$id2), $this->findProductBySku('123')->getCategories());
     }
 
-    function testShouldImportCategoryByName()
+    function testShouldAddNewCategoryByName()
+    {
+        $csv = "sku,name,base_price,attributes,categories\n";
+        $csv.= '123,name,0,null,test';
+
+        $importer = new Importer($this->db);
+        $importer->importFromText($csv);
+
+        $categoryMapper = new \Metator\Category\DataMapper($this->db);
+        $categories = $categoryMapper->findAll();
+
+        $this->assertEquals('test', $categories[0]['name'], 'should add a new category by name');
+    }
+
+    function testShouldImportExistingCategoryByName()
     {
         return $this->markTestIncomplete();
-
         $categoryMapper = new \Metator\Category\DataMapper($this->db);
         $id = $categoryMapper->save(['name'=>'test']);
 

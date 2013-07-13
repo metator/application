@@ -53,7 +53,7 @@ class ImportPerformanceTest extends PHPUnit_Framework_TestCase
         $queryProfiles = $profiler->getQueryProfiles();
         $afterCount = count($queryProfiles);
 
-        $this->assertLessThan(7, $afterCount-$beforeCount, 'should use <=6 queries to import >=10 products');
+        $this->assertLessThan(9, $afterCount-$beforeCount, 'should use <=9 queries to import >=10 products');
     }
 
     function testShouldUpdateCount()

@@ -49,12 +49,16 @@ class Importer
         FIELDS TERMINATED BY ','
          OPTIONALLY ENCLOSED BY '\"'
 
-        (product_sku,category_id) ";
+        (product_sku,category_id,category_name) ";
         $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
 
         /** Insert the products & update the product IDs in the categories table afterwards */
         $this->db->query("REPLACE INTO `product` (`sku`,`name`,`base_price`,`attributes`) SELECT `sku`, `name`, `base_price`,`attributes` FROM `product_import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
         $this->db->query("UPDATE product_categories_import i, product p SET i.product_id = p.id WHERE i.product_sku = p.sku", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+
+        /** Insert the new categories & update their category ID after */
+        $this->db->query("REPLACE INTO `category` (`name`) SELECT `category_name` FROM `product_categories_import` i WHERE i.category_name != ''", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->db->query("UPDATE product_categories_import i, category c SET i.category_id = c.id WHERE i.category_name = c.name", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
 
         $this->db->query("INSERT INTO product_categories (product_id,category_id) SELECT product_id,category_id FROM `product_categories_import` ", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
 
@@ -73,11 +77,22 @@ class Importer
                 continue;
             }
             fputcsv($productImportHandle, $row);
+
             $categories = $this->explodeCategories($row);
             foreach($categories as $category) {
                 fputcsv($productCategoriesHandle, array(
                     'product_sku'=>$row['sku'],
                     'category_id'=>$category,
+                    'category_name'=>''
+                ));
+            }
+
+            $categoryNames = $this->explodeCategoryNames($row);
+            foreach($categoryNames as $category) {
+                fputcsv($productCategoriesHandle, array(
+                    'product_sku'=>$row['sku'],
+                    'category_id'=>'',
+                    'category_name'=>$category
                 ));
             }
         }
@@ -91,7 +106,29 @@ class Importer
     function explodeCategories($row)
     {
         if(isset($row['categories'])) {
-            $categories = explode(';', $row['categories']);
+            $categories = array();
+            foreach(explode(';', $row['categories']) as $category) {
+                if(!is_numeric($category)) {
+                    continue;
+                }
+                array_push($categories, $category);
+            }
+            return $categories;
+        } else {
+            return array();
+        }
+    }
+
+    function explodeCategoryNames($row)
+    {
+        if(isset($row['categories'])) {
+            $categories = array();
+            foreach(explode(';', $row['categories']) as $category) {
+                if(is_numeric($category)) {
+                    continue;
+                }
+                array_push($categories, $category);
+            }
             return $categories;
         } else {
             return array();
