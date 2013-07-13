@@ -41,7 +41,7 @@ class Importer
         /** Insert the new categories & update their category ID after */
         $this->query("UPDATE product_categories_import i, category c SET i.category_id = c.id WHERE i.category_name = c.name");
         $this->query("INSERT INTO `category` (`name`) SELECT DISTINCT(`category_name`) FROM `product_categories_import` i WHERE i.category_name != '' && i.category_id=0");
-        exit;
+        
         $this->query("UPDATE product_categories_import i, category c SET i.category_id = c.id WHERE i.category_name = c.name");
 
         $this->query("INSERT INTO product_categories (product_id,category_id) SELECT product_id,category_id FROM `product_categories_import` ");
