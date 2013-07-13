@@ -47,6 +47,7 @@ class Importer
         $this->query("INSERT INTO product_categories (product_id,category_id) SELECT product_id,category_id FROM `product_categories_import` ");
 
         $this->query("truncate `product_import`");
+        $this->query("truncate `product_categories_import`");
     }
     
     function setupFiles($csvText)

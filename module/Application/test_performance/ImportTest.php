@@ -35,17 +35,7 @@ class ImportPerformanceTest extends PHPUnit_Framework_TestCase
         $queryProfiles = $profiler->getQueryProfiles();
         $beforeCount = count($queryProfiles);
 
-        $csv = "sku,name\n";
-        $csv.= "123,name\n";
-        $csv.= "456,name\n";
-        $csv.= "789,name\n";
-        $csv.= "111,name\n";
-        $csv.= "222,name\n";
-        $csv.= "333,name\n";
-        $csv.= "444,name\n";
-        $csv.= "555,name\n";
-        $csv.= "777,name\n";
-        $csv.= "888,name\n";
+        $csv = $this->generateCSV(100);
 
         $importer = new Importer($this->db);
         $importer->importFromText($csv);
@@ -53,7 +43,7 @@ class ImportPerformanceTest extends PHPUnit_Framework_TestCase
         $queryProfiles = $profiler->getQueryProfiles();
         $afterCount = count($queryProfiles);
 
-        $this->assertLessThan(10, $afterCount-$beforeCount, 'should use <=9 queries to import >=10 products');
+        $this->assertLessThanOrEqual(10, $afterCount-$beforeCount, 'should use <=10 queries to import >=100 products');
     }
 
     function testShouldUpdateCount()
@@ -79,5 +69,14 @@ class ImportPerformanceTest extends PHPUnit_Framework_TestCase
         `php ./metator sample products --number=5,000`;
         $end = microtime(true);
         $this->assertLessThan(10, $end-$start, 'should import 5K products in < 10s');
+    }
+
+    function generateCSV($lines)
+    {
+        $csv = "sku,name\n";
+        for($i=1; $i<=$lines; $i++) {
+            $csv.= "sku-$i,name-$i\n";
+        }
+        return $csv;
     }
 }

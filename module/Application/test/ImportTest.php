@@ -160,16 +160,16 @@ class ImportTest extends PHPUnit_Framework_TestCase
 
     function testShouldNotReImportPreviousImports()
     {
-        $csv = "sku,name\n";
-        $csv.= "123,name\n";
-        $csv.= "456,name";
+        $csv = "sku,name,categories\n";
+        $csv.= "123,name,test\n";
+        $csv.= "456,name,test";
 
         $importer = new Importer($this->db);
         $importer->importFromText($csv);
 
-        $csv = "sku,name\n";
-        $csv.= "789,name\n";
-        $csv.= "abc,name";
+        $csv = "sku,name,categories\n";
+        $csv.= "789,name,test2\n";
+        $csv.= "abc,name,test2";
 
         $importer = new Importer($this->db);
         $importer->importFromText($csv);
