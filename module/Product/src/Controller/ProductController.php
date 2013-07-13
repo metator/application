@@ -25,7 +25,7 @@ class ProductController extends AbstractActionController
     function manageAction()
     {
         $page = $this->params()->fromQuery('page',1);
-        $perpage = 10;
+        $perpage = 6;
         $offset = ($page * $perpage)-$perpage;
 
         $products = $this->productMapper()->find(array(), $offset, $perpage);
@@ -33,12 +33,18 @@ class ProductController extends AbstractActionController
 
         $pageAdapter = new \Zend\Paginator\Adapter\Null($productCount);
         $paginator = new \Zend\Paginator\Paginator($pageAdapter);
+        $paginator->setItemCountPerPage($perpage);
         $paginator->setCurrentPageNumber($page);
 
+        if($offset+$perpage > $productCount) {
+            $end = $productCount;
+        } else {
+            $end = $offset+$perpage;
+        }
 
         return array(
             'start'=>$offset+1,
-            'end'=>$offset+$perpage,
+            'end'=>$end,
             'total'=>$productCount,
             'paginator'=>$paginator,
             'products'=>$products,
