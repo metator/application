@@ -42,7 +42,7 @@ class Importer
          OPTIONALLY ENCLOSED BY '\"'
 
         (sku,name,base_price,attributes) ";
-        $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->query($sql);
 
         /** Load the categories file */
         $sql = "LOAD DATA INFILE '".$productCategoriesFile."' INTO TABLE `product_categories_import`
@@ -50,19 +50,19 @@ class Importer
          OPTIONALLY ENCLOSED BY '\"'
 
         (product_sku,category_id,category_name) ";
-        $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->query($sql);
 
         /** Insert the products & update the product IDs in the categories table afterwards */
-        $this->db->query("REPLACE INTO `product` (`sku`,`name`,`base_price`,`attributes`) SELECT `sku`, `name`, `base_price`,`attributes` FROM `product_import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
-        $this->db->query("UPDATE product_categories_import i, product p SET i.product_id = p.id WHERE i.product_sku = p.sku", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->query("REPLACE INTO `product` (`sku`,`name`,`base_price`,`attributes`) SELECT `sku`, `name`, `base_price`,`attributes` FROM `product_import`");
+        $this->query("UPDATE product_categories_import i, product p SET i.product_id = p.id WHERE i.product_sku = p.sku");
 
         /** Insert the new categories & update their category ID after */
-        $this->db->query("REPLACE INTO `category` (`name`) SELECT `category_name` FROM `product_categories_import` i WHERE i.category_name != ''", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
-        $this->db->query("UPDATE product_categories_import i, category c SET i.category_id = c.id WHERE i.category_name = c.name", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->query("REPLACE INTO `category` (`name`) SELECT `category_name` FROM `product_categories_import` i WHERE i.category_name != ''");
+        $this->query("UPDATE product_categories_import i, category c SET i.category_id = c.id WHERE i.category_name = c.name");
 
-        $this->db->query("INSERT INTO product_categories (product_id,category_id) SELECT product_id,category_id FROM `product_categories_import` ", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->query("INSERT INTO product_categories (product_id,category_id) SELECT product_id,category_id FROM `product_categories_import` ");
 
-        $this->db->query("truncate `product_import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->query("truncate `product_import`");
     }
 
     /** Necessary pre-processing to the import rows, like removing the header, exploding multi-valued strings, etc. */
@@ -133,5 +133,10 @@ class Importer
         } else {
             return array();
         }
+    }
+
+    function query($sql)
+    {
+        $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
     }
 }
