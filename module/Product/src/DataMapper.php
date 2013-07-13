@@ -73,16 +73,6 @@ class DataMapper
         return $product_id;
     }
 
-    function associateAttributeToProduct($product_id, $attributes)
-    {
-        foreach($attributes as $attribute) {
-            $this->productAttributeTable->insert(array(
-                'product_id'=>$product_id,
-                'attribute_id'=>$attribute->id()
-            ));
-        }
-    }
-
     function saveCategories($product_id, $categories)
     {
         $this->productCategoriesAssociationTable->delete(array('product_id'=>$product_id));
