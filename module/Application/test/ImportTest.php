@@ -22,7 +22,7 @@ class ImportTest extends PHPUnit_Framework_TestCase
     function emptyTables()
     {
         // seems like LOAD DATA INFILE commits the transaction, so we must manually clean up the tables :/
-        $this->db->query("truncate `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->db->query("truncate `product_import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
         $this->db->query("delete from `product`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
         $this->db->query("delete from `category`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
         $this->db->query("delete from `product_categories`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
@@ -101,20 +101,23 @@ class ImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array($id1,$id2), $this->findProductBySku('123')->getCategories());
     }
 
-    function testShouldImportCategory()
+    function testShouldImportCategoryByName()
     {
-//        $csv = "sku,name,base_price,attributes,categories\n";
-//        $csv.= '123,name,0,null,test';
-//
-//        $importer = new Importer($this->db);
-//        $importer->importFromText($csv);
-//
-//        $categoryMapper = new \Metator\Category\DataMapper($this->db);
-//        $categories = $categoryMapper->findAll();
-////        print_r($categories);
-
         return $this->markTestIncomplete();
-        $this->assertEquals('red', $this->findProductBySku('123')->attributeValue('color'), 'should import attribute');
+
+        $categoryMapper = new \Metator\Category\DataMapper($this->db);
+        $id = $categoryMapper->save(['name'=>'test']);
+
+        $csv = "sku,name,base_price,attributes,categories\n";
+        $csv.= '123,name,0,null,test';
+
+        $importer = new Importer($this->db);
+        $importer->importFromText($csv);
+
+        $categoryMapper = new \Metator\Category\DataMapper($this->db);
+        $categories = $categoryMapper->findAll();
+
+        $this->assertEquals(array($id), $this->findProductBySku('123')->getCategories());
     }
 
     function testShouldImportMultipleProduct()

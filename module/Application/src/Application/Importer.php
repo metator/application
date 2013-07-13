@@ -33,7 +33,7 @@ class Importer
 
         $this->preProcessRows($inputFile, $processedHandle);
 
-        $sql = "LOAD DATA INFILE '".$processedFile."' INTO TABLE `import`
+        $sql = "LOAD DATA INFILE '".$processedFile."' INTO TABLE `product_import`
         FIELDS TERMINATED BY ','
          OPTIONALLY ENCLOSED BY '\"'
 
@@ -41,11 +41,11 @@ class Importer
 
         $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
 
-        $this->db->query("REPLACE INTO `product` (`sku`,`name`,`base_price`,`attributes`) SELECT `sku`, `name`, `base_price`,`attributes` FROM `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
-        $this->db->query("UPDATE import i, product p SET i.product_id = p.id WHERE i.sku = p.sku", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
-        $this->db->query("INSERT INTO product_categories (product_id,category_id) SELECT product_id,categories FROM `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->db->query("REPLACE INTO `product` (`sku`,`name`,`base_price`,`attributes`) SELECT `sku`, `name`, `base_price`,`attributes` FROM `product_import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->db->query("UPDATE product_import i, product p SET i.product_id = p.id WHERE i.sku = p.sku", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->db->query("INSERT INTO product_categories (product_id,category_id) SELECT product_id,categories FROM `product_import` ", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
 
-        $this->db->query("truncate `import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $this->db->query("truncate `product_import`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
     }
 
     /** Necessary pre-processing to the import rows, like removing the header, exploding multi-valued strings, etc. */
@@ -61,6 +61,7 @@ class Importer
                 if($i==1) {
                     continue;
                 }
+
                 fputcsv($processedHandle, $row);
             }
         }
