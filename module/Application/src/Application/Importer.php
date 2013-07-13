@@ -22,16 +22,17 @@ class Importer
 
     function importFromText($csvText)
     {
-        $path = sys_get_temp_dir().'/'.uniqid();
-        $path2 = sys_get_temp_dir().'/'.uniqid();
+        $inputFile = sys_get_temp_dir().'/'.uniqid();
+        $processedFile = sys_get_temp_dir().'/'.uniqid();
 
-        $h = fopen($path,'w');
-        $h2 = fopen($path2,'w');
-        fwrite($h,$csvText);
-        fclose($h);
+        $inputHandle = fopen($inputFile,'w');
+        fwrite($inputHandle,$csvText);
+        fclose($inputHandle);
 
-        $reader = new \Csv_Reader($path, new \Csv_Dialect());
-        $writer = new \Csv_Writer($path2, new \Csv_Dialect());
+        $processedHandle = fopen($processedFile,'w');
+
+        $reader = new \Csv_Reader($inputFile, new \Csv_Dialect());
+        $writer = new \Csv_Writer($processedFile, new \Csv_Dialect());
         while($row = $reader->getAssociativeRow()) {
             if(isset($row['categories'])) {
                 $row['categories'] = explode(';', $row['categories']);
@@ -41,14 +42,14 @@ class Importer
                     $rows[] = $row + array('categories'=>$category);
                 }
                 foreach($rows as $row) {
-                    fputcsv($h2, $row);
+                    fputcsv($processedHandle, $row);
                 }
             } else {
-                fputcsv($h2, $row);
+                fputcsv($processedHandle, $row);
             }
         }
 
-        $sql = "LOAD DATA INFILE '".$path2."' INTO TABLE `import`
+        $sql = "LOAD DATA INFILE '".$processedFile."' INTO TABLE `import`
         FIELDS TERMINATED BY ','
          OPTIONALLY ENCLOSED BY '\"'
 
