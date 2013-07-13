@@ -76,7 +76,12 @@ class Importer
             if($i==1) {
                 continue;
             }
-            fputcsv($this->productHandle, $row);
+            fputcsv($this->productHandle, array(
+                'sku'=>$row['sku'],
+                'name'=>$row['name'],
+                'base_price'=>isset($row['base_price']) ? $row['base_price'] : '',
+                'attributes'=>isset($row['attributes']) ? $row['attributes'] : '',
+            ));
 
             $categories = $this->explodeCategories($row);
             foreach($categories as $category) {

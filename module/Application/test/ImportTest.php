@@ -40,6 +40,17 @@ class ImportTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->productExists('123'), 'should import product');
     }
 
+    function testShouldImportDifferentOrder()
+    {
+        $csv = "name,sku\n";
+        $csv.= "name,123";
+
+        $importer = new Importer($this->db);
+        $importer->importFromText($csv);
+
+        $this->assertTrue($this->productExists('123'), 'should import fields in any order');
+    }
+
     function testShouldImportName()
     {
         $csv = "sku,name\n";
