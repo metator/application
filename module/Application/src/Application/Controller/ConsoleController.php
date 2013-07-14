@@ -11,6 +11,7 @@ use Zend\Console\Request as ConsoleRequest;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Console\ColorInterface;
 use Metator\Product\Importer;
+use BjyProfiler\Db\Profiler\Profiler;
 
 class ConsoleController extends AbstractActionController
 {
@@ -27,6 +28,12 @@ class ConsoleController extends AbstractActionController
         $start = microtime(true);
 
         $db = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+
+        // turn off the profiler because it'll eat up memory otherwise!
+        if(is_object($db->getProfiler())) {
+            $db->getProfiler()->disable();
+        }
+
         $attributeDataMapper = new \Metator\Product\Attribute\DataMapper($db);
         $attributeDataMapper->index();
 
@@ -34,6 +41,8 @@ class ConsoleController extends AbstractActionController
 
         $console = $this->getServiceLocator()->get('console');
         $console->write('All Done. Took '.sprintf('%.4fs', $end - $start).'', ColorInterface::YELLOW);
+        echo "\n";
+        $console->write('Memory: '.sprintf('%.1fMB', memory_get_peak_usage()/1024/1024), ColorInterface::YELLOW);
         echo "\n";
     }
 
@@ -58,6 +67,8 @@ class ConsoleController extends AbstractActionController
         $console->write('Created '.number_format($products) .' sample products', ColorInterface::LIGHT_CYAN);
         echo "\n";
         $console->write('All Done. Took '.sprintf('%.4fs', $end - $start).'', ColorInterface::YELLOW);
+        echo "\n";
+        $console->write('Memory: '.sprintf('%.4fs', memory_get_peak_usage()).'', ColorInterface::YELLOW);
         echo "\n";
     }
 
