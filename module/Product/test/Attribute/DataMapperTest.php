@@ -124,6 +124,25 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['blue','red'], $attribute_mapper->listValues('color'), 'should list new values');
     }
 
+    function testShouldIndexMultipleValuesAtOnce()
+    {
+        $product_mapper = new ProductDataMapper($this->db);
+        $attribute_mapper = new AttributeDataMapper($this->db);
+
+        $product_mapper->save(new Product(array(
+            'sku'=>'111',
+            'attributes'=>['color'=>'red']
+        )));
+
+        $product_mapper->save(new Product(array(
+            'sku'=>'112',
+            'attributes'=>['color'=>'blue']
+        )));
+        $attribute_mapper->index();
+
+        $this->assertEquals(['blue','red'], $attribute_mapper->listValues('color'), 'should index multiple values at once');
+    }
+
     function testShouldNotDuplicateValuesOnReindex()
     {
         $product_mapper = new ProductDataMapper($this->db);

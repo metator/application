@@ -28,13 +28,14 @@ class DataMapper
         $attributes = array();
         $attribute_values = array();
 
+
         foreach($products as $product) {
             foreach($product->attributes() as $attribute=>$value) {
                 if(!in_array($attribute, $attributes)) {
                     array_push($attributes, $attribute);
                 }
                 if(!in_array($value, $attribute_values)) {
-                    $attribute_values[$attribute] = $value;
+                    $attribute_values[$attribute][] = $value;
                 }
             }
         }
@@ -52,17 +53,19 @@ class DataMapper
             $attribute_ids[$attribute] = $this->attributeTable->getLastInsertValue();
         }
 
-        foreach($attribute_values as $attribute=>$value) {
-            $rowset = $this->attributeValuesTable->select(array(
-                'attribute_id'=>$attribute_ids[$attribute],
-                'name'=>$value
-            ));
-
-            if($rowset->count() == 0 ) {
-                $this->attributeValuesTable->insert(array(
+        foreach($attributes as $attribute) {
+            foreach($attribute_values[$attribute] as $value) {
+                $rowset = $this->attributeValuesTable->select(array(
                     'attribute_id'=>$attribute_ids[$attribute],
                     'name'=>$value
                 ));
+
+                if($rowset->count() == 0 ) {
+                    $this->attributeValuesTable->insert(array(
+                        'attribute_id'=>$attribute_ids[$attribute],
+                        'name'=>$value
+                    ));
+                }
             }
         }
     }
