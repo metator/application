@@ -1,9 +1,14 @@
+<div class="well sidebar-nav">
 <?php
+echo '<ul class="nav nav-list">';
 foreach($attributes as $attribute) {
-    echo '<strong>'.$this->escapeHTML($attribute).'</strong>';
-    echo '<ul>';
+    echo '<li><strong>'.$this->escapeHTML($attribute).'</strong></li>';
+    echo '<ul class="nav nav-list">';
     foreach($values[$attribute] as $value) {
-        echo '<li>'.$this->escapeHTML($value).'</li>';
+        echo '<li><a href="#">'.$this->escapeHTML($value).'</a></li>';
     }
     echo '</ul>';
 }
+echo '</ul>';
+?>
+</div>
