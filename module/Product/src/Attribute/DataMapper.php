@@ -7,29 +7,34 @@
 namespace Metator\Product\Attribute;
 
 use Zend\Db\TableGateway\TableGateway;
+use \Metator\Product\Product;
+use \Metator\Product\DataMapper as ProductDataMapper;
 
 class DataMapper
 {
     protected $db;
-    protected $attributeTable, $attributeValuesTable;
+    protected $attributeTable, $attributeValuesTable, $productTable;
 
     function __construct($db)
     {
         $this->db = $db;
         $this->attributeTable = new TableGateway('attribute', $this->db);
         $this->attributeValuesTable = new TableGateway('attribute_values', $this->db);
+        $this->productTable = new TableGateway('product', $this->db);
     }
 
     function index()
     {
-        $productDataMapper = new \Metator\Product\DataMapper($this->db);
-        $products = $productDataMapper->find();
+        $dataMapper = new ProductDataMapper($this->db);
+        $products = $this->productTable->select();
 
         $attributes = array();
         $attribute_values = array();
 
 
-        foreach($products as $product) {
+        while($productRow = $products->current()) {
+            $product = $dataMapper->load($productRow['id']);
+
             foreach($product->attributes() as $attribute=>$value) {
                 if(!in_array($attribute, $attributes)) {
                     array_push($attributes, $attribute);
@@ -41,6 +46,8 @@ class DataMapper
                     $attribute_values[$attribute][] = $value;
                 }
             }
+            unset($product);
+            echo '.';
         }
 
         $attribute_ids = array();
