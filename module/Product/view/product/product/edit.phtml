@@ -9,11 +9,11 @@ $this->headScript()->appendFile('/js/jquery.metadata.pack.js');
 
 $form->addElement('submit','save',[
     'label'=>'Save',
-    'class'=>'btn'
+    'class'=>'btn btn-success'
 ]);
 $form->addElement('submit','save_and_continue',[
     'label'=>'Save & Continue',
-    'class'=>'btn'
+    'class'=>'btn btn-success'
 ]);
 
 foreach($form->getElements() as $element) {
