@@ -68,10 +68,13 @@ class ConsoleController extends AbstractActionController
 
         $csv = "sku,active,name,attributes,categories\n";
         for($i=0; $i<$products; $i++) {
-            $attributes = array(
-                'size'=>$sizes[rand(0,2)],
-                'color'=>$colors[rand(0,2)],
-            );
+            $attributes = array();
+            if(rand(1,2)==1) {
+                $attributes['size'] = $sizes[rand(0,2)];
+            }
+            if(rand(1,2)==1) {
+                $attributes['color'] = $colors[rand(0,2)];
+            }
 
             $attributes = \Zend\Json\Json::encode($attributes);
             $attributes = str_replace('"', '\\"', $attributes);
