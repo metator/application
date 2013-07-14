@@ -420,4 +420,22 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         ));
         $this->assertEquals(1, count($products), 'should find by attribute');
     }
+
+    function testShouldCountByAttributeValue()
+    {
+        $product_mapper = new DataMapper($this->db);
+
+        $product = new Product(array('sku'=>'foo1'));
+        $product->setAttributeValue('color','red');
+        $product_mapper->save($product);
+
+        $product = new Product(array('sku'=>'foo2'));
+        $product->setAttributeValue('color','blue');
+        $product_mapper->save($product);
+
+        $count = $product_mapper->count(array(
+            'attributes'=>['color'=>'red']
+        ));
+        $this->assertEquals(1, $count, 'should count by attribute');
+    }
 }

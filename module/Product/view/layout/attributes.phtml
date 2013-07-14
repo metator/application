@@ -4,8 +4,16 @@ echo '<ul class="nav nav-list">';
 foreach($attributes as $attribute) {
     echo '<li><strong>'.$this->escapeHTML($attribute).'</strong></li>';
     echo '<ul class="nav nav-list">';
+
+    $params = $_GET;
+    unset($params['page']);
+    unset($params[$attribute]);
+    echo '<li><a href="?' . http_build_query($params) . '">All</a></li>';
+
     foreach($values[$attribute] as $value) {
-        echo '<li><a href="#">'.$this->escapeHTML($value).'</a></li>';
+        $params = array($attribute=>$value) + $_GET;
+        unset($params['page']);
+        echo '<li><a href="?' . http_build_query($params) . '">'.$this->escapeHTML($value).'</a></li>';
     }
     echo '</ul>';
 }

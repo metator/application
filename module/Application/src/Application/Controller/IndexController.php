@@ -24,8 +24,14 @@ class IndexController extends AbstractActionController
         $perpage = 6;
         $offset = ($page * $perpage)-$perpage;
 
-        $products = $this->productMapper()->find(['active'=>1], $offset, $perpage);
-        $productCount = $this->productMapper()->count();
+        if($this->params()->fromQuery('color')) {
+            $attributes = ['color'=>$this->params()->fromQuery('color')];
+        } else {
+            $attributes = [];
+        }
+
+        $products = $this->productMapper()->find(['attributes'=>$attributes,'active'=>1], $offset, $perpage);
+        $productCount = $this->productMapper()->count(['attributes'=>$attributes]);
 
         $pageAdapter = new \Zend\Paginator\Adapter\Null($productCount);
         $paginator = new \Zend\Paginator\Paginator($pageAdapter);

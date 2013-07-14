@@ -126,9 +126,19 @@ class DataMapper
         return $products;
     }
 
-    function count()
+    function count($params = array())
     {
-        $result = $this->db->query("SELECT count(*) FROM `product` WHERE `active` = 1", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        if(!isset($params['attributes']) || !count($params['attributes'])) {
+            $result = $this->db->query("SELECT count(*) FROM `product` WHERE `active` = 1", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+            return current($result->toArray()[0]);
+        }
+
+        $matchString = '1';
+        foreach($params['attributes'] as $attribute=>$value) {
+            $pattern = sprintf('"%s":"%s"', mysql_real_escape_string($attribute), mysql_real_escape_string($value));
+            $matchString .= " && attributes LIKE '%$pattern%'";
+        }
+        $result = $this->db->query("SELECT count(*) FROM `product` WHERE `active` = 1 && $matchString", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
         return current($result->toArray()[0]);
     }
 
