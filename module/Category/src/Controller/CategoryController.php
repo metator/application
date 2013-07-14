@@ -19,7 +19,9 @@ class CategoryController extends AbstractActionController
             throw new \Exception('You cant go past 100 pages for performance reasons');
         }
 
-        $category = $this->categoryMapper()->load($this->params('id'));
+        if($this->params('id')) {
+            $category = $this->categoryMapper()->load($this->params('id'));
+        }
 
         $page = $this->params()->fromQuery('page',1);
         $perpage = 6;
@@ -33,8 +35,17 @@ class CategoryController extends AbstractActionController
             }
         }
 
-        $products = $this->productMapper()->find(['attributes'=>$attributes,'category'=>$this->params('id'),'active'=>1], $offset, $perpage);
-        $productCount = $this->productMapper()->count(['attributes'=>$attributes,'category'=>$this->params('id'),'active'=>1]);
+        $criteria = array(
+            'attributes'=>$attributes,
+            'active'=>1
+        );
+
+        if($this->params('id')) {
+            $criteria['category'] = $this->params('id');
+        }
+
+        $products = $this->productMapper()->find($criteria, $offset, $perpage);
+        $productCount = $this->productMapper()->count($criteria);
 
         $pageAdapter = new \Zend\Paginator\Adapter\Null($productCount);
         $paginator = new \Zend\Paginator\Paginator($pageAdapter);
@@ -48,7 +59,7 @@ class CategoryController extends AbstractActionController
         }
 
         return array(
-            'category'=>$category['name'],
+            'category'=>$this->params('id') ? $category['name'] : '',
             'start'=>$offset+1,
             'end'=>$end,
             'total'=>$productCount,
