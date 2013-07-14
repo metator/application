@@ -107,18 +107,19 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
     function testShouldListNewValues()
     {
         $product_mapper = new ProductDataMapper($this->db);
-        $attribute_mapper = new AttributeDataMapper($this->db);
 
         $product_mapper->save(new Product(array(
             'sku'=>'111',
             'attributes'=>['color'=>'red']
         )));
+        $attribute_mapper = new AttributeDataMapper($this->db);
         $attribute_mapper->index();
 
         $product_mapper->save(new Product(array(
             'sku'=>'112',
             'attributes'=>['color'=>'blue']
         )));
+        $attribute_mapper = new AttributeDataMapper($this->db);
         $attribute_mapper->index();
 
         $this->assertEquals(['blue','red'], $attribute_mapper->listValues('color'), 'should list new values');
@@ -156,4 +157,5 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $attribute_mapper->index();
         $this->assertEquals(['red'], $attribute_mapper->listValues('color'), 'should not duplicate values on reindex');
     }
+
 }

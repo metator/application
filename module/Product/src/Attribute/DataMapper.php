@@ -49,8 +49,11 @@ class DataMapper
                 $this->attributeTable->insert(array(
                     'name'=>$attribute
                 ));
+                $attribute_ids[$attribute] = $this->attributeTable->getLastInsertValue();
+            } else {
+                $attribute_ids[$attribute] = $rowset->toArray()[0]['id'];
             }
-            $attribute_ids[$attribute] = $this->attributeTable->getLastInsertValue();
+
         }
 
         foreach($attributes as $attribute) {
@@ -59,7 +62,6 @@ class DataMapper
                     'attribute_id'=>$attribute_ids[$attribute],
                     'name'=>$value
                 ));
-
                 if($rowset->count() == 0 ) {
                     $this->attributeValuesTable->insert(array(
                         'attribute_id'=>$attribute_ids[$attribute],
