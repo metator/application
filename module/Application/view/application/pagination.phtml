@@ -5,52 +5,64 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-if ($this->pageCount): ?>
+if ($this->pageCount) {
+    ?>
     <div class="pagination pagination-centered">
         <ul>
             <!-- Previous page link -->
-            <?php if (isset($this->previous)): ?>
+            <?php
+            if (isset($this->previous)) {
+                $params = array('page'=>$this->previous) + $_GET;
+                ?>
                 <li>
-                    <a href="?page=<?php echo $this->previous; ?>">
-                        <<
-                    </a>
+                    <a href="?<?=http_build_query($params)?>"><<</a>
                 </li>
-            <?php else: ?>
+                <?php
+            } else {
+                ?>
                 <li class="disabled">
-                    <a href="#">
-                        <<
-                    </a>
+                    <a href="#"><<</a>
                 </li>
-            <?php endif; ?>
+                <?php
+            }
+            ?>
+
             <!-- Numbered page links -->
-            <?php foreach ($this->pagesInRange as $page): ?>
-                <?php if ($page != $this->current): ?>
+            <?php
+            foreach ($this->pagesInRange as $page) {
+                if ($page != $this->current) {
+                    $params = array('page'=>$page) + $_GET;
+                    ?>
                     <li>
-                        <a href="?page=<?php echo $page; ?>">
-                            <?php echo $page; ?>
-                        </a>
+                        <a href="?<?=http_build_query($params)?>"><?php echo $page; ?></a>
                     </li>
-                <?php else: ?>
-                    <li class="active">
-                        <a href="#"><?php echo $page; ?></a>
-                    </li>
-                <?php endif; ?>
-            <?php endforeach; ?>
+                    <?php
+                } else {
+                    ?>
+                    <li class="active"><a href="#"><?php echo $page; ?></a></li>
+                    <?php
+                }
+            }
+            ?>
 
             <!-- Next page link -->
-            <?php if (isset($this->next)): ?>
+            <?php
+            if (isset($this->next)) {
+                $params = array('page'=>$this->next) + $_GET;
+                ?>
                 <li>
-                    <a href="?page=<?php echo $this->next; ?>">
-                        >>
-                    </a>
+                    <a href="?<?=http_build_query($params)?>">>></a>
                 </li>
-            <?php else: ?>
+                <?php
+            } else {
+                ?>
                 <li class="disabled">
-                    <a href="#">
-                        >>
-                    </a>
+                    <a href="#">>></a>
                 </li>
-            <?php endif; ?>
+                <?php
+            }
+            ?>
         </ul>
     </div>
-<?php endif; ?>
+    <?php
+}
