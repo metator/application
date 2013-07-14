@@ -4,8 +4,10 @@
  * @copyright  Copyright (c) 2013 Vehicle Fits, llc
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-use \Application\Importer;
+
+use Metator\Product\Importer;
 use Metator\Product\DataMapper as ProductDataMapper;
+
 class ImportTest extends PHPUnit_Framework_TestCase
 {
     function setUp()

@@ -52,7 +52,7 @@
             <directory>module/Order/test</directory>
         </testsuite>
         <testsuite name="performance">
-            <directory>module/Application/test_performance</directory>
+            <directory>module/Product/test_performance</directory>
         </testsuite>
     </testsuites>
 

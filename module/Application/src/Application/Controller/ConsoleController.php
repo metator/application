@@ -7,10 +7,10 @@
 
 namespace Application\Controller;
 
-use Zend\Console\Request as ConsoleRequest,
-    Zend\Mvc\Controller\AbstractActionController,
-    Zend\Console\ColorInterface;
-use \Application\Importer;
+use Zend\Console\Request as ConsoleRequest;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Console\ColorInterface;
+use Metator\Product\Importer;
 
 class ConsoleController extends AbstractActionController
 {
