@@ -39,4 +39,21 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $attribute_mapper->index();
         $this->assertEquals(['color','size'], $attribute_mapper->listAttributes(), 'should list attributes');
     }
+
+    function testShouldNotListDuplicateAttributes()
+    {
+        $product_mapper = new ProductDataMapper($this->db);
+        $product_mapper->save(new Product(array(
+            'sku'=>'111',
+            'attributes'=>['color'=>'red']
+        )));
+        $product_mapper->save(new Product(array(
+            'sku'=>'112',
+            'attributes'=>['color'=>'blue']
+        )));
+
+        $attribute_mapper = new AttributeDataMapper($this->db);
+        $attribute_mapper->index();
+        $this->assertEquals(['color'], $attribute_mapper->listAttributes(), 'should not list duplicate attributes');
+    }
 }
