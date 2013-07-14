@@ -48,7 +48,7 @@ class ConsoleController extends AbstractActionController
         }
 
         $products = preg_replace('/[^0-9]/','',$this->params('number'));
-        $categories = preg_replace('/[^0-9]/','',$this->params('categories', 0));
+        $categories = preg_replace('/[^0-9]/','',$this->params('categories', 1));
 
         $start = microtime(true);
         $this->create($products, $categories);
@@ -66,24 +66,19 @@ class ConsoleController extends AbstractActionController
         $colors = ['red','blue','green'];
         $sizes = ['small','medium','large'];
 
-        if(!$categories) {
-            $csv = "sku,active,name,attributes\n";
-            for($i=0; $i<$products; $i++) {
-                $json = array(
-                    'size'=>$sizes[rand(0,2)],
-                    'color'=>$colors[rand(0,2)],
-                );
-                
-                $json = \Zend\Json\Json::encode($json);
-                $json = str_replace('"', '\\"', $json);
-                $csv.= "sku-$i,1,name-$i,\"$json\"\n";
-            }
-        } else {
-            $csv = "sku,active,name,categories\n";
-            for($i=0; $i<$products; $i++) {
-                $j = rand(1,$categories);
-                $csv.= "sku-$i,1,name-$i,category-$j\n";
-            }
+        $csv = "sku,active,name,attributes,categories\n";
+        for($i=0; $i<$products; $i++) {
+            $attributes = array(
+                'size'=>$sizes[rand(0,2)],
+                'color'=>$colors[rand(0,2)],
+            );
+
+            $attributes = \Zend\Json\Json::encode($attributes);
+            $attributes = str_replace('"', '\\"', $attributes);
+
+            $category = rand(1,$categories);
+
+            $csv.= "sku-$i,1,name-$i,\"$attributes\",category-$category\n";
         }
 
         $db = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
