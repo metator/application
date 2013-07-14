@@ -49,7 +49,7 @@ class Attributes extends AbstractHelper implements ServiceLocatorAwareInterface
             'attributes'=> $attributes,
             'values' => $values
         ));
-        $sidebar->setTemplate('layout/attributes');
+        $sidebar->setTemplate('product/product/attributes');
 
         $htmlOutput = $sm->get('viewrenderer')
             ->render($sidebar);
