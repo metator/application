@@ -76,15 +76,21 @@ class ProductController extends AbstractActionController
         }
 
         if($this->getRequest()->isPost() && $form->isValid($this->params()->fromPost())) {
+            //print_r($_POST);exit;
+            /**
+             * Save the uploaded image ... [if there is one]
+             */
             $image_hash_to_add = false;
             $file = $_FILES['image_to_add']['tmp_name'];
-
             if($file) {
                 $saver = new Saver(file_get_contents($file));
                 $saver->save();
                 $image_hash_to_add = $saver->getHash();
             }
 
+            /**
+             * Set scalar properties & default image
+             */
             $product->setSku($form->getValue('sku'));
             $product->setName($form->getValue('name'));
             $product->setDescription($form->getValue('description'));
@@ -92,10 +98,28 @@ class ProductController extends AbstractActionController
             $product->setCategories($form->getValue('categories'));
             $product->setDefaultImageHash($this->params()->fromPost('default_image'));
 
+            /**
+             * Add new image ... [if one was uploaded]
+             */
             if($image_hash_to_add) {
                 $product->addImageHash($image_hash_to_add);
             }
 
+            /**
+             * Update existing attributes
+             */
+            foreach($product->attributes() as $attribute=>$existingValue) {
+                $newValue = $this->params()->fromPost("attribute_$attribute");
+                $product->setAttributeValue($attribute, $newValue);
+            }
+
+            if($this->params()->fromPost('new_attribute_label') && $this->params()->fromPost('new_attribute_value')) {
+                $product->setAttributeValue($this->params()->fromPost('new_attribute_label'), $this->params()->fromPost('new_attribute_value'));
+            }
+
+            /**
+             * Save & redirect
+             */
             $this->productMapper()->save($product);
             if(!$this->params()->fromPost('save_and_continue')) {
                 return $this->redirect()->toRoute('product_manage');

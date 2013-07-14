@@ -6,7 +6,6 @@
  */
 $this->headTitle('Edit Product');
 $this->headScript()->appendFile('/js/jquery.metadata.pack.js');
-$this->headScript()->appendFile('/js/product-form.js');
 
 $form->addElement('submit','save',[
     'label'=>'Save',
@@ -32,6 +31,7 @@ foreach($form->getElements() as $element) {
     <ul class="nav nav-tabs" id="productTabs">
         <li><a href="#general" data-toggle="tab">General</a></li>
         <li><a href="#images" data-toggle="tab">Images</a></li>
+        <li><a href="#attributes" data-toggle="tab">Attributes</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="general">
@@ -67,6 +67,28 @@ foreach($form->getElements() as $element) {
             <?php
             echo $form->image_to_add;
             ?>
+        </div>
+        <div class="tab-pane" id="attributes">
+            <strong>Existing Attributes</strong>
+            <?php
+            foreach($product->attributes() as $attribute => $value) {
+                ?>
+                <dt>
+                    <label for="attribute_<?=$this->escapeHtmlAttr($attribute)?>"><?=$this->escapeHTML($attribute)?></label>
+                </dt>
+                <dd>
+                    <input type="text" name="attribute_<?=$this->escapeHtmlAttr($attribute)?>" value="<?=$this->escapeHtmlAttr($value)?>" />
+                    <!--<input type="checkbox" name="delete_<?=$this->escapeHtmlAttr($attribute)?>" value="1" /> Delete?-->
+                </dd>
+                <?php
+            }
+            ?>
+            <hr />
+            <strong>Add New Attribute</strong>
+            <dt><label for="new_attribute_label">Label</label></dt>
+                <dd><input type="text" name="new_attribute_label" value="" /></dd>
+            <dt><label for="new_attribute_value">Value</label></dt>
+            <dd><input type="text" name="new_attribute_value" value="" /></dd>
         </div>
     </div>
 
