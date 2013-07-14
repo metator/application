@@ -14,7 +14,7 @@ use Metator\Cart\CheckoutForm;
 
 class AbstractActionController extends ZendController
 {
-    protected $productMapper, $attributeMapper;
+    protected $productMapper, $attributeMapper, $categoryMapper;
 
     /** @return \Metator\Product\DataMapper */
     function productMapper()

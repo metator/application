@@ -13,18 +13,28 @@ use Metator\Category\Form;
 
 class CategoryController extends AbstractActionController
 {
-    protected $categoryMapper,$productMapper;
-
     function viewAction()
     {
+        if( $this->params()->fromQuery('page') > 100 ) {
+            throw new \Exception('You cant go past 100 pages for performance reasons');
+        }
+
         $category = $this->categoryMapper()->load($this->params('id'));
 
         $page = $this->params()->fromQuery('page',1);
         $perpage = 6;
         $offset = ($page * $perpage)-$perpage;
 
-        $products = $this->productMapper()->find(['category'=>$this->params('id')], $offset, $perpage);
-        $productCount = $this->productMapper()->count(['category'=>$this->params('id')]);
+        $attributes = array();
+        $allowed_attributes = $this->attributeMapper()->listAttributes();
+        foreach($allowed_attributes as $attribute) {
+            if($this->params()->fromQuery($attribute)) {
+                $attributes[$attribute] = $this->params()->fromQuery($attribute);
+            }
+        }
+
+        $products = $this->productMapper()->find(['attributes'=>$attributes,'category'=>$this->params('id'),'active'=>1], $offset, $perpage);
+        $productCount = $this->productMapper()->count(['attributes'=>$attributes,'category'=>$this->params('id'),'active'=>1]);
 
         $pageAdapter = new \Zend\Paginator\Adapter\Null($productCount);
         $paginator = new \Zend\Paginator\Paginator($pageAdapter);

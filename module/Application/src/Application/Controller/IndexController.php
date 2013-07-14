@@ -12,7 +12,7 @@ use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
 {
-    public function indexAction()
+    function indexAction()
     {
         if( $this->params()->fromQuery('page') > 100 ) {
             throw new \Exception('You cant go past 100 pages for performance reasons');
@@ -31,7 +31,7 @@ class IndexController extends AbstractActionController
         }
 
         $products = $this->productMapper()->find(['attributes'=>$attributes,'active'=>1], $offset, $perpage);
-        $productCount = $this->productMapper()->count(['attributes'=>$attributes]);
+        $productCount = $this->productMapper()->count(['attributes'=>$attributes,'active'=>1]);
 
         $pageAdapter = new \Zend\Paginator\Adapter\Null($productCount);
         $paginator = new \Zend\Paginator\Paginator($pageAdapter);
