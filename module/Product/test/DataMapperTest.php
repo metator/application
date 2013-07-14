@@ -202,7 +202,7 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $product_mapper->save(new Product(array('sku'=>1, 'name'=>'foo', 'categories'=>[1])));
         $product_mapper->save(new Product(array('sku'=>2, 'name'=>'bar', 'categories'=>[1])));
         $product_mapper->save(new Product(array('sku'=>3, 'name'=>'bar', 'categories'=>[2])));
-        $count = $product_mapper->countByCategory(1);
+        $count = $product_mapper->count(['category'=>1]);
         $this->assertEquals(2, $count, 'should count products by category');
     }
 
@@ -212,7 +212,7 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $product_mapper->save(new Product(array('sku'=>1, 'name'=>'foo', 'categories'=>[1])));
         $id = $product_mapper->save(new Product(array('sku'=>2, 'name'=>'bar', 'categories'=>[1])));
         $product_mapper->deactivate($id);
-        $count = $product_mapper->countByCategory(1);
+        $count = $product_mapper->count(['category'=>1]);
         $this->assertEquals(1, $count, 'should count products by category');
     }
 
@@ -359,7 +359,7 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $product->setCategories(array(1));
         $product_mapper->save($product);
 
-        $products = $product_mapper->findByCategory(1);
+        $products = $product_mapper->find(['category'=>1]);
 
         $this->assertEquals(1,count($products));
         $this->assertEquals($product->id(), $products[0]->id(), 'should find products by category');
@@ -373,7 +373,7 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $product_mapper->save(new Product(array('sku'=>3, 'name'=>'foo3', 'categories'=>[77])));
         $product_mapper->save(new Product(array('sku'=>4, 'name'=>'foo4', 'categories'=>[77])));
         $product_mapper->save(new Product(array('sku'=>5, 'name'=>'foo5', 'categories'=>[77])));
-        $list = $product_mapper->findByCategory(77, 1, 3);
+        $list = $product_mapper->find(['category'=>77], 1, 3);
 
         $this->assertEquals(3,count($list),'should list products');
         $this->assertEquals('foo2',$list[0]->getName(),'should list 2nd product');
@@ -403,7 +403,7 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
 
         $product_mapper->deactivate($product->id());
 
-        $products = $product_mapper->findByCategory(1);
+        $products = $product_mapper->find(['active'=>1,'category'=>1]);
         $this->assertEquals(0,count($products));
     }
 

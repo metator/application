@@ -138,9 +138,11 @@ class DataMapper
 
     function count($params = array())
     {
-        if(!isset($params['attributes']) || !count($params['attributes'])) {
-            $result = $this->db->query("SELECT count(*) FROM `product` WHERE `active` = 1", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
-            return current($result->toArray()[0]);
+        if(isset($params['attributes'])) {
+            $attributes = $params['attributes'];
+            unset($params['attributes']);
+        } else {
+            $attributes = array();
         }
 
         if(isset($params['category'])) {
@@ -151,7 +153,7 @@ class DataMapper
         }
 
         $matchString = '1';
-        foreach($params['attributes'] as $attribute=>$value) {
+        foreach($attributes as $attribute=>$value) {
             $pattern = sprintf('"%s":"%s"', mysql_real_escape_string($attribute), mysql_real_escape_string($value));
             $matchString .= " && attributes LIKE '%$pattern%'";
         }
@@ -162,28 +164,6 @@ class DataMapper
         }
         $result = $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
         return current($result->toArray()[0]);
-    }
-
-    function countByCategory($id)
-    {
-        $result = $this->db->query("SELECT count(*) FROM `product` WHERE `active` = 1 && `id` IN (SELECT `product_id` FROM `product_categories` WHERE `category_id` = $id)", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
-        return current($result->toArray()[0]);
-    }
-
-    function findByCategory($id, $offset=null, $limit=null)
-    {
-        $id = (int)$id;
-        $rowset = $this->productTable->select(function (Select $select) use ($id,$limit,$offset) {
-            $select->where("`active` = 1 && `id` IN (SELECT `product_id` FROM `product_categories` WHERE `category_id` = $id)");
-            if($limit || $offset) {
-                $select->offset($offset)->limit($limit);
-            }
-        });
-        $products = array();
-        while($row = $rowset->current()) {
-            $products[] = $this->doLoad($row);
-        }
-        return $products;
     }
 
     function findBySKu($sku)

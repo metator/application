@@ -23,8 +23,8 @@ class CategoryController extends AbstractActionController
         $perpage = 6;
         $offset = ($page * $perpage)-$perpage;
 
-        $products = $this->productMapper()->findByCategory($this->params('id'), $offset, $perpage);
-        $productCount = $this->productMapper()->countByCategory($this->params('id'));
+        $products = $this->productMapper()->find(['category'=>$this->params('id')], $offset, $perpage);
+        $productCount = $this->productMapper()->count(['category'=>$this->params('id')]);
 
         $pageAdapter = new \Zend\Paginator\Adapter\Null($productCount);
         $paginator = new \Zend\Paginator\Paginator($pageAdapter);
