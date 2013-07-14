@@ -47,7 +47,7 @@ class DataMapper
             $this->productTable->update(array(
                 'sku'=>$product->getSku(),
                 'name'=>$product->getName(),
-                //'attributes'=>$this->serializeAttributes($product->attributes()),
+                'attributes'=>$this->serializeAttributes($product->attributes()),
                 'base_price'=>$product->getBasePrice(),
                 'description'=>$product->getDescription(),
             ), array('id'=>$product->id()));
@@ -176,6 +176,7 @@ class DataMapper
         return $this->doLoad($data);
     }
 
+    /** @return \Metator\Product\Product */
     function load($product_id)
     {
         $rowset = $this->productTable->select(array(

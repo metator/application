@@ -258,6 +258,21 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('red', $loaded_product->attributeValue('color'), 'should save attribute');
     }
 
+    function testShouldChangeExistingAttribute()
+    {
+        $product = new Product(array('name'=>'widget'));
+        $product->setAttributeValue('color', 'red');
+
+        $product_mapper = new DataMapper($this->db);
+        $id = $product_mapper->save($product);
+
+        $product->setAttributeValue('color', 'red-edited');
+        $id = $product_mapper->save($product);
+
+        $loaded_product = $product_mapper->load($id);
+        $this->assertEquals('red-edited', $loaded_product->attributeValue('color'), 'should change existing attribute');
+    }
+
     function testShouldPopulateAttributes()
     {
         $product = new Product(array('name'=>'widget'));
