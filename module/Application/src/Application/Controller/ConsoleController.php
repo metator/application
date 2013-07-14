@@ -16,9 +16,25 @@ class ConsoleController extends AbstractActionController
 {
     function indexattributesAction()
     {
+        /**
+         * Enforce valid console request
+         */
+        $request = $this->getRequest();
+        if (!$request instanceof ConsoleRequest) {
+            throw new \RuntimeException('You can only use this action from a console!');
+        }
+
+        $start = microtime(true);
+
         $db = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
         $attributeDataMapper = new \Metator\Product\Attribute\DataMapper($db);
         $attributeDataMapper->index();
+
+        $end = microtime(true);
+
+        $console = $this->getServiceLocator()->get('console');
+        $console->write('All Done. Took '.sprintf('%.4fs', $end - $start).'', ColorInterface::YELLOW);
+        echo "\n";
     }
 
     function sampleproductsAction()
