@@ -20,6 +20,16 @@ return array(
                         ),
                     ),
                 ),
+
+                'index_attributes' => array(
+                    'options' => array(
+                        'route'    => 'index attributes',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\Console',
+                            'action'     => 'indexattributes',
+                        ),
+                    ),
+                ),
             ),
         ),
     ),

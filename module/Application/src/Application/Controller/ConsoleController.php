@@ -14,6 +14,12 @@ use Metator\Product\Importer;
 
 class ConsoleController extends AbstractActionController
 {
+    function indexattributesAction()
+    {
+        $db = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $attributeDataMapper = new \Metator\Product\Attribute\DataMapper($db);
+        $attributeDataMapper->index();
+    }
 
     function sampleproductsAction()
     {
@@ -42,9 +48,15 @@ class ConsoleController extends AbstractActionController
     function create($products, $categories)
     {
         if(!$categories) {
-            $csv = "sku,active,name\n";
+            $csv = "sku,active,name,attributes\n";
             for($i=0; $i<$products; $i++) {
-                $csv.= "sku-$i,1,name-$i\n";
+                $json = array(
+                    'size'=>rand(1,3),
+                    'color'=>rand(1,10),
+                );
+                $json = \Zend\Json\Json::encode($json);
+                $json = str_replace('"', '\\"', $json);
+                $csv.= "sku-$i,1,name-$i,\"$json\"\n";
             }
         } else {
             $csv = "sku,active,name,categories\n";
