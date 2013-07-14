@@ -63,13 +63,17 @@ class ConsoleController extends AbstractActionController
 
     function create($products, $categories)
     {
+        $colors = ['red','blue','green'];
+        $sizes = ['small','medium','large'];
+
         if(!$categories) {
             $csv = "sku,active,name,attributes\n";
             for($i=0; $i<$products; $i++) {
                 $json = array(
-                    'size'=>rand(1,3),
-                    'color'=>rand(1,10),
+                    'size'=>$sizes[rand(0,2)],
+                    'color'=>$colors[rand(0,2)],
                 );
+                
                 $json = \Zend\Json\Json::encode($json);
                 $json = str_replace('"', '\\"', $json);
                 $csv.= "sku-$i,1,name-$i,\"$json\"\n";
