@@ -24,7 +24,7 @@ class IndexController extends AbstractActionController
         $perpage = 6;
         $offset = ($page * $perpage)-$perpage;
 
-        $products = $this->productMapper()->find(array(), $offset, $perpage);
+        $products = $this->productMapper()->find(['active'=>1], $offset, $perpage);
         $productCount = $this->productMapper()->count();
 
         $pageAdapter = new \Zend\Paginator\Adapter\Null($productCount);
