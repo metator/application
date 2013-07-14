@@ -34,6 +34,9 @@ class DataMapper
                 if(!in_array($attribute, $attributes)) {
                     array_push($attributes, $attribute);
                 }
+                if(!isset($attribute_values[$attribute])) {
+                    $attribute_values[$attribute] = array();
+                }
                 if(!in_array($value, $attribute_values[$attribute])) {
                     $attribute_values[$attribute][] = $value;
                 }
