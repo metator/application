@@ -23,24 +23,40 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $this->db->getDriver()->getConnection()->rollback();
     }
 
-    function testShouldListAttributes()
+    function testShouldListAttribute()
     {
         $product_mapper = new ProductDataMapper($this->db);
         $product_mapper->save(new Product(array(
             'sku'=>'111',
             'attributes'=>['color'=>'red']
         )));
+
+        $attribute_mapper = new AttributeDataMapper($this->db);
+        $attribute_mapper->index();
+        $this->assertEquals(['color'], $attribute_mapper->listAttributes(), 'should list attribute');
+    }
+
+    function testShouldAddNewAttributes()
+    {
+        $product_mapper = new ProductDataMapper($this->db);
+        $attribute_mapper = new AttributeDataMapper($this->db);
+
+        $product_mapper->save(new Product(array(
+            'sku'=>'111',
+            'attributes'=>['color'=>'red']
+        )));
+        $attribute_mapper->index();
+
         $product_mapper->save(new Product(array(
             'sku'=>'112',
             'attributes'=>['size'=>'medium']
         )));
-
-        $attribute_mapper = new AttributeDataMapper($this->db);
         $attribute_mapper->index();
-        $this->assertEquals(['color','size'], $attribute_mapper->listAttributes(), 'should list attributes');
+
+        $this->assertEquals(['color','size'], $attribute_mapper->listAttributes(), 'should add new attributes');
     }
 
-    function testShouldNotListDuplicateAttributes()
+    function testShouldNotListDuplicateAttributesFromMultipleProducts()
     {
         $product_mapper = new ProductDataMapper($this->db);
         $product_mapper->save(new Product(array(
@@ -54,7 +70,21 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
 
         $attribute_mapper = new AttributeDataMapper($this->db);
         $attribute_mapper->index();
-        $this->assertEquals(['color'], $attribute_mapper->listAttributes(), 'should not list duplicate attributes');
+        $this->assertEquals(['color'], $attribute_mapper->listAttributes(), 'should not list duplicate attributes from multiple products');
+    }
+
+    function testShouldNotListDuplicateAttributesFromReindex()
+    {
+        $product_mapper = new ProductDataMapper($this->db);
+        $product_mapper->save(new Product(array(
+            'sku'=>'111',
+            'attributes'=>['color'=>'red']
+        )));
+
+        $attribute_mapper = new AttributeDataMapper($this->db);
+        $attribute_mapper->index();
+        $attribute_mapper->index();
+        $this->assertEquals(['color'], $attribute_mapper->listAttributes(), 'should not list duplicate attributes from reindexing');
     }
 
     function testShouldListValues()
@@ -72,5 +102,39 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $attribute_mapper = new AttributeDataMapper($this->db);
         $attribute_mapper->index();
         $this->assertEquals(['red'], $attribute_mapper->listValues('color'), 'should list values');
+    }
+
+    function testShouldListNewValues()
+    {
+        $product_mapper = new ProductDataMapper($this->db);
+        $attribute_mapper = new AttributeDataMapper($this->db);
+
+        $product_mapper->save(new Product(array(
+            'sku'=>'111',
+            'attributes'=>['color'=>'red']
+        )));
+        $attribute_mapper->index();
+
+        $product_mapper->save(new Product(array(
+            'sku'=>'112',
+            'attributes'=>['color'=>'blue']
+        )));
+        $attribute_mapper->index();
+
+        $this->assertEquals(['blue','red'], $attribute_mapper->listValues('color'), 'should list new values');
+    }
+
+    function testShouldNotDuplicateValuesOnReindex()
+    {
+        $product_mapper = new ProductDataMapper($this->db);
+        $product_mapper->save(new Product(array(
+            'sku'=>'111',
+            'attributes'=>['color'=>'red']
+        )));
+
+        $attribute_mapper = new AttributeDataMapper($this->db);
+        $attribute_mapper->index();
+        $attribute_mapper->index();
+        $this->assertEquals(['red'], $attribute_mapper->listValues('color'), 'should not duplicate values on reindex');
     }
 }
