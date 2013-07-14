@@ -109,11 +109,21 @@ class DataMapper
             $attributes = array();
         }
 
-        $rowset = $this->productTable->select(function (Select $select) use ($params,$limit,$offset,$attributes) {
+        if(isset($params['category'])) {
+            $category = (int)$params['category'];
+            unset($params['category']);
+        } else {
+            $category = null;
+        }
+
+        $rowset = $this->productTable->select(function (Select $select) use ($params,$limit,$offset,$attributes,$category) {
             $select->where($params);
             foreach($attributes as $attribute=>$value) {
                 $matchString = sprintf('"%s":"%s"', mysql_real_escape_string($attribute), mysql_real_escape_string($value));
                 $select->where("attributes LIKE '%$matchString%'");
+            }
+            if($category) {
+                $select->where("`id` IN (SELECT `product_id` FROM `product_categories` WHERE `category_id` = $category)");
             }
             if($limit || $offset) {
                 $select->offset($offset)->limit($limit);
@@ -133,12 +143,24 @@ class DataMapper
             return current($result->toArray()[0]);
         }
 
+        if(isset($params['category'])) {
+            $category = (int)$params['category'];
+            unset($params['category']);
+        } else {
+            $category = null;
+        }
+
         $matchString = '1';
         foreach($params['attributes'] as $attribute=>$value) {
             $pattern = sprintf('"%s":"%s"', mysql_real_escape_string($attribute), mysql_real_escape_string($value));
             $matchString .= " && attributes LIKE '%$pattern%'";
         }
-        $result = $this->db->query("SELECT count(*) FROM `product` WHERE `active` = 1 && $matchString", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+
+        $sql = "SELECT count(*) FROM `product` WHERE `active` = 1 && $matchString";
+        if($category) {
+            $sql .= " && `id` IN (SELECT `product_id` FROM `product_categories` WHERE `category_id` = $category)";
+        }
+        $result = $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
         return current($result->toArray()[0]);
     }
 

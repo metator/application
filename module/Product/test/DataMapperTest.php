@@ -404,7 +404,6 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $product_mapper->deactivate($product->id());
 
         $products = $product_mapper->findByCategory(1);
-
         $this->assertEquals(0,count($products));
     }
 
@@ -437,5 +436,65 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
             'attributes'=>['color'=>'red']
         ));
         $this->assertEquals(1, $count, 'should count by attribute');
+    }
+
+    function testShouldFindByCategoryAndAttribute()
+    {
+        $product_mapper = new DataMapper($this->db);
+
+        // should find
+        $product_mapper->save(new Product(array(
+            'sku'=>'foo1',
+            'categories'=>[1],
+            'attributes'=>['color'=>'red']
+        )));
+        // should not find
+        $product_mapper->save(new Product(array(
+            'sku'=>'foo2',
+            'categories'=>[2],
+            'attributes'=>['color'=>'red']
+        )));
+        // should not find
+        $product_mapper->save(new Product(array(
+            'sku'=>'foo3',
+            'categories'=>[1],
+            'attributes'=>['color'=>'blue']
+        )));
+
+        $products = $product_mapper->find(array(
+            'category'=>1,
+            'attributes'=>['color'=>'red']
+        ));
+        $this->assertEquals(1, count($products), 'should find by attribute & category');
+    }
+
+    function testShouldCountByCategoryAndAttribute()
+    {
+        $product_mapper = new DataMapper($this->db);
+
+        // should find
+        $product_mapper->save(new Product(array(
+            'sku'=>'foo1',
+            'categories'=>[1],
+            'attributes'=>['color'=>'red']
+        )));
+        // should not find
+        $product_mapper->save(new Product(array(
+            'sku'=>'foo2',
+            'categories'=>[2],
+            'attributes'=>['color'=>'red']
+        )));
+        // should not find
+        $product_mapper->save(new Product(array(
+            'sku'=>'foo3',
+            'categories'=>[1],
+            'attributes'=>['color'=>'blue']
+        )));
+
+        $count = $product_mapper->count(array(
+            'category'=>1,
+            'attributes'=>['color'=>'red']
+        ));
+        $this->assertEquals(1, $count, 'should count by attribute & category');
     }
 }
