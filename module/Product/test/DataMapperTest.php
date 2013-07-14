@@ -406,8 +406,6 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $product = new Product(array('sku'=>'foo'));
         $product->setAttributeValue('color','red');
         $product_mapper->save($product);
-
-        $product_mapper->deactivate($product->id());
         $products = $product_mapper->find(array(
             'attributes'=>['color'=>'red']
         ));
