@@ -97,3 +97,6 @@ table {
 .pagination {
     margin:0;
 }
+#description {
+    width:95%;
+}

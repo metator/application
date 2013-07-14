@@ -24,7 +24,11 @@ class Form extends \Zend_Form
 
         $this->addElement('textarea','description',array(
             'label'=>'Description',
-            'required'=>true
+            'required'=>true,
+            'attribs'=>array(
+                'rows'=>'5',
+                'cols'=>'50',
+            )
         ));
 
         $this->addElement('text','basePrice',array(
