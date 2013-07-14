@@ -9,7 +9,6 @@ namespace Metator\Product;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use Application\ProductMapper;
 
 class Module
 {
@@ -42,8 +41,11 @@ class Module
             'factories' => array(
                 'Product\DataMapper' => function ($sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-
                     return new DataMapper($dbAdapter);
+                },
+                'Product\Attribute\DataMapper' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    return new Attribute\DataMapper($dbAdapter);
                 }
             ),
         );
@@ -56,6 +58,7 @@ class Module
                 'product'=>'\Metator\Product\View\Helper\Product',
                 'productName'=>'\Metator\Product\Name',
                 'productURL'=>'\Metator\Product\URL',
+                'Attributes'=>'\Metator\Product\View\Helper\Attributes',
             )
         );
 

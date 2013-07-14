@@ -1,0 +1,9 @@
+<?php
+foreach($attributes as $attribute) {
+    echo '<strong>'.$this->escapeHTML($attribute).'</strong>';
+    echo '<ul>';
+    foreach($values[$attribute] as $value) {
+        echo '<li>'.$this->escapeHTML($value).'</li>';
+    }
+    echo '</ul>';
+}
