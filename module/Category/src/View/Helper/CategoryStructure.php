@@ -42,7 +42,7 @@ class CategoryStructure extends AbstractHelper implements ServiceLocatorAwareInt
         $sidebar = new ViewModel(array(
             'categories'=> $categoryMapper->findStructuredAll()
         ));
-        $sidebar->setTemplate('layout/categories');
+        $sidebar->setTemplate('category/category/categories');
 
         $htmlOutput = $sm->get('viewrenderer')
             ->render($sidebar);
