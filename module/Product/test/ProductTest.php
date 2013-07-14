@@ -116,4 +116,19 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $product->attributes(), 'should get attributes');
     }
 
+    function testShouldSetAttributesThroughConstructor()
+    {
+        $product = new Product(array(
+            'attributes'=>array(
+                'color'=>'red',
+                'size'=>'small'
+            )
+        ));
+        $expected = array(
+            'color'=>'red',
+            'size'=>'small'
+        );
+        $this->assertEquals($expected, $product->attributes(), 'should set attributes through constructor');
+    }
+
 }

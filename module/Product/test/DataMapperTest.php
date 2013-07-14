@@ -6,11 +6,8 @@
  */
 namespace Metator\Product;
 
-use \Application\AttributeMapper;
-
 class DataMapperTest extends \PHPUnit_Framework_TestCase
 {
-
     function setUp()
     {
         $this->db = \phpunit_bootstrap::getServiceManager()->get('Zend\Db\Adapter\Adapter');
@@ -259,6 +256,18 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
 
         $loaded_product = $product_mapper->load($id);
         $this->assertEquals('red', $loaded_product->attributeValue('color'), 'should save attribute');
+    }
+
+    function testShouldPopulateAttributes()
+    {
+        $product = new Product(array('name'=>'widget'));
+        $product->setAttributeValue('color', 'red');
+
+        $product_mapper = new DataMapper($this->db);
+        $id = $product_mapper->save($product);
+
+        $loaded_product = $product_mapper->load($id);
+        $this->assertEquals(array('color'=>'red'), $loaded_product->attributes(), 'should save attribute');
     }
 
     function testShouldFindBySKU()

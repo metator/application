@@ -9,11 +9,8 @@ namespace Metator\Product;
 use Application\AttributeMapper;
 use \Zend\Json\Json;
 use Zend\Db\TableGateway\TableGateway;
-
 use Zend\Db\ResultSet\ResultSet;
-
 use Zend\Db\Sql\Select;
-use Zend\Paginator\Adapter\DbSelect;
 use Zend\Paginator\Paginator;
 
 class DataMapper

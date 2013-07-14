@@ -14,7 +14,6 @@ class Product
     protected $id;
     protected $name;
     protected $description;
-    protected $attributes = array();
     protected $categories = array();
     protected $attribute_values = array();
     protected $price_modifiers = array();
@@ -28,6 +27,7 @@ class Product
         $this->name = isset($params['name']) ? $params['name'] : '';
         $this->description = isset($params['description']) ? $params['description'] : '';
         $this->categories = isset($params['categories']) ? $params['categories'] : array();
+        $this->attribute_values = isset($params['attributes']) && is_array($params['attributes']) ? $params['attributes'] : array();
         if(isset($params['basePrice'])) {
             $this->price = $params['basePrice'];
         } else {
