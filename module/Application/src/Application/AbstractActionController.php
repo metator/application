@@ -14,6 +14,8 @@ use Metator\Cart\CheckoutForm;
 
 class AbstractActionController extends ZendController
 {
+    protected $productMapper, $attributeMapper;
+
     /** @return \Metator\Product\DataMapper */
     function productMapper()
     {
@@ -22,6 +24,16 @@ class AbstractActionController extends ZendController
             $this->productMapper = $sm->get('Product\DataMapper');
         }
         return $this->productMapper;
+    }
+
+    /** @return \Metator\Product\Attribute\DataMapper */
+    function attributeMapper()
+    {
+        if (!$this->attributeMapper) {
+            $sm = $this->getServiceLocator();
+            $this->attributeMapper = $sm->get('Product\Attribute\DataMapper');
+        }
+        return $this->attributeMapper;
     }
 
     /** @return \Metator\Order\DataMapper */

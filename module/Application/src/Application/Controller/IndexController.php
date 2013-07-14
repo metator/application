@@ -12,8 +12,6 @@ use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
 {
-    protected $productMapper;
-
     public function indexAction()
     {
         if( $this->params()->fromQuery('page') > 100 ) {
@@ -24,10 +22,12 @@ class IndexController extends AbstractActionController
         $perpage = 6;
         $offset = ($page * $perpage)-$perpage;
 
-        if($this->params()->fromQuery('color')) {
-            $attributes = ['color'=>$this->params()->fromQuery('color')];
-        } else {
-            $attributes = [];
+        $attributes = array();
+        $allowed_attributes = $this->attributeMapper()->listAttributes();
+        foreach($allowed_attributes as $attribute) {
+            if($this->params()->fromQuery($attribute)) {
+                $attributes[$attribute] = $this->params()->fromQuery($attribute);
+            }
         }
 
         $products = $this->productMapper()->find(['attributes'=>$attributes,'active'=>1], $offset, $perpage);
