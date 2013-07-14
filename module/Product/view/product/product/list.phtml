@@ -28,6 +28,11 @@ foreach($this->products as $product) {
         ?>
         <p><?=$this->currencyFormat($product->getBasePrice())?></p></a>
         <p><?=$this->escapeHTML($product->getDescription())?></p>
+        <?php
+        foreach($product->attributes() as $attribute=>$value) {
+            printf('<p><strong>%s</strong>: %s</p>', $this->escapeHTML($attribute), $this->escapeHTML($value));
+        }
+        ?>
         <p>
             <a class="btn btn-success" href="<?=$this->url('cart_add',array('id'=>$product->id()))?>">
                 <i class="icon-shopping-cart icon-white icon-large"></i>
