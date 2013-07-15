@@ -13,24 +13,31 @@ use \Metator\Product\DataMapper as ProductDataMapper;
 class DataMapper
 {
     protected $db;
-    protected $attributeTable, $attributeValuesTable, $productTable;
+    protected $attributeTable, $attributeValuesTable, $attributeEAVTable, $productTable;
 
     function __construct($db)
     {
         $this->db = $db;
         $this->attributeTable = new TableGateway('attribute', $this->db);
         $this->attributeValuesTable = new TableGateway('attribute_values', $this->db);
+        $this->attributeEAVTable = new TableGateway('attributes_eav', $this->db);
         $this->productTable = new TableGateway('product', $this->db);
     }
 
-    function index()
+    function index($output=false)
     {
-        $rowset = $this->db->query("SELECT DISTINCT(attributes) FROM `product`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $rowset = $this->db->query("SELECT id,attributes FROM `product`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
 
         $all_attributes = array();
         $attribute_values = array();
 
         while($row = $rowset->current()) {
+
+            /** Delete the existing EAV index for this product */
+            $this->attributeEAVTable->delete(array(
+                'product_id'=>$row['id'],
+            ));
+
             $attributes = Json::decode($row['attributes']);
 
             foreach($attributes as $attribute=>$value) {
@@ -44,9 +51,16 @@ class DataMapper
                 if(!in_array($value, $attribute_values[$attribute])) {
                     $attribute_values[$attribute][] = $value;
                 }
+
+                $this->attributeEAVTable->insert(array(
+                    'product_id'=>$row['id'],
+                    'attribute'=>$attribute,
+                    'value'=>$value
+                ));
             }
-            unset($product);
-            echo '.';
+            if($output) {
+                echo '.';
+            }
         }
 
         $attribute_ids = array();
@@ -91,8 +105,25 @@ class DataMapper
         return $all_attributes;
     }
 
-    function listValues($attribute)
+    function listValues($attribute, $criteria=[])
     {
+        if(count($criteria)) {
+            $attribute = mysql_real_escape_string($attribute);
+
+            $sql = "select distinct(value) from attributes_eav where attribute='$attribute' \n";
+            foreach($criteria as $filterAttribute => $filterValue) {
+                $filterAttribute = mysql_real_escape_string($filterAttribute);
+                $filterValue = mysql_real_escape_string($filterValue);
+                $sql .= "&& product_id IN (SELECT DISTINCT (product_id)
+                FROM attributes_eav
+                WHERE attribute =  '$filterAttribute' && value =  '$filterValue')";
+            }
+            $rowset = $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+            $attributes = array();
+            while($attributes[] = $rowset->current()['value']) {}
+            array_pop($attributes);
+            return $attributes;
+        }
         $rowset = $this->attributeTable->select(array(
             'name'=>$attribute
         ));

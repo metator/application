@@ -40,9 +40,17 @@ class Attributes extends AbstractHelper implements ServiceLocatorAwareInterface
         $dataMapper = $sm->get('Product\Attribute\DataMapper');
 
         $attributes = $dataMapper->listAttributes();
+
+        $criteria = array();
+        foreach($attributes as $attribute) {
+            if(isset($_GET[$attribute])) {
+                $criteria[$attribute] = $_GET[$attribute];
+            }
+        }
+
         $values = array();
         foreach($attributes as $attribute) {
-            $values[$attribute] = $dataMapper->listValues($attribute);
+            $values[$attribute] = $dataMapper->listValues($attribute, $criteria);
         }
 
         $sidebar = new ViewModel(array(

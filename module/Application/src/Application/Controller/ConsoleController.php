@@ -35,7 +35,7 @@ class ConsoleController extends AbstractActionController
         }
 
         $attributeDataMapper = new \Metator\Product\Attribute\DataMapper($db);
-        $attributeDataMapper->index();
+        $attributeDataMapper->index(true);
 
         $end = microtime(true);
 
