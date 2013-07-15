@@ -81,4 +81,9 @@ if(file_exists('vendor/zendframework/zend-developer-tools')) {
     $config['modules'][] = 'ZendDeveloperTools';
 }
 
+if(is_readable('config/autoload/application.config.local.php')){
+    $localAppConfig = require 'config/autoload/application.config.local.php';
+    $config = array_merge_recursive($config,$localAppConfig);
+}
+
 return $config;
