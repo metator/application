@@ -7,7 +7,7 @@
 namespace Metator\Product\Attribute;
 
 use Zend\Db\TableGateway\TableGateway;
-use \Metator\Product\Product;
+use \Zend\Json\Json;
 use \Metator\Product\DataMapper as ProductDataMapper;
 
 class DataMapper
@@ -25,19 +25,18 @@ class DataMapper
 
     function index()
     {
-        $dataMapper = new ProductDataMapper($this->db);
-        $products = $this->productTable->select();
+        $rowset = $this->db->query("SELECT DISTINCT(attributes) FROM `product`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
 
-        $attributes = array();
+        $all_attributes = array();
         $attribute_values = array();
 
+        while($row = $rowset->current()) {
+            $attributes = Json::decode($row['attributes']);
 
-        while($productRow = $products->current()) {
-            $product = $dataMapper->load($productRow['id']);
+            foreach($attributes as $attribute=>$value) {
 
-            foreach($product->attributes() as $attribute=>$value) {
-                if(!in_array($attribute, $attributes)) {
-                    array_push($attributes, $attribute);
+                if(!in_array($attribute, $all_attributes)) {
+                    array_push($all_attributes, $attribute);
                 }
                 if(!isset($attribute_values[$attribute])) {
                     $attribute_values[$attribute] = array();
@@ -51,7 +50,7 @@ class DataMapper
         }
 
         $attribute_ids = array();
-        foreach($attributes as $attribute) {
+        foreach($all_attributes as $attribute) {
             $rowset = $this->attributeTable->select(array(
                 'name'=>$attribute
             ));
@@ -66,7 +65,7 @@ class DataMapper
 
         }
 
-        foreach($attributes as $attribute) {
+        foreach($all_attributes as $attribute) {
             foreach($attribute_values[$attribute] as $value) {
                 $rowset = $this->attributeValuesTable->select(array(
                     'attribute_id'=>$attribute_ids[$attribute],
@@ -85,11 +84,11 @@ class DataMapper
     function listAttributes()
     {
         $rowset = $this->attributeTable->select(array());
-        $attributes = array();
+        $all_attributes = array();
         foreach($rowset->toArray() as $attribute) {
-            array_push($attributes, $attribute['name']);
+            array_push($all_attributes, $attribute['name']);
         }
-        return $attributes;
+        return $all_attributes;
     }
 
     function listValues($attribute)
@@ -102,10 +101,10 @@ class DataMapper
         $rowset = $this->attributeValuesTable->select(array(
             'attribute_id'=>$attribute_id
         ));
-        $attributes = array();
+        $all_attributes = array();
         foreach($rowset->toArray() as $attribute) {
-            array_push($attributes, $attribute['name']);
+            array_push($all_attributes, $attribute['name']);
         }
-        return $attributes;
+        return $all_attributes;
     }
 }
