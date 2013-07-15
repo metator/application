@@ -50,11 +50,15 @@ class Attributes extends AbstractHelper implements ServiceLocatorAwareInterface
 
         $values = array();
         foreach($attributes as $attribute) {
-            $values[$attribute] = $dataMapper->listValues($attribute, $criteria);
+            $attributeValues = $dataMapper->listValues($attribute, $criteria);
+
+            if(count($attributeValues)) {
+                $values[$attribute] = $attributeValues;
+            }
         }
 
         $sidebar = new ViewModel(array(
-            'attributes'=> $attributes,
+            'attributes'=> array_keys($values),
             'values' => $values,
             'hasSelection' => count($criteria)
         ));
