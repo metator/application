@@ -81,7 +81,7 @@ foreach($form->getElements() as $element) {
                             <label for="attribute_<?=$this->escapeHtmlAttr($attribute)?>"><?=$this->escapeHTML($attribute)?></label>
                         </dt>
                         <dd>
-                            <input type="text" name="attribute_<?=$this->escapeHtmlAttr($attribute)?>" value="<?=$this->escapeHtmlAttr($value)?>" />
+                            <input type="text" name="attribute_<?=$this->escapeHtmlAttr($attribute)?>" value="<?=$this->escapeHtmlAttr(isset($_POST["attribute_$attribute"]) ? $_POST["attribute_$attribute"] : $value)?>" />
                             <!--<input type="checkbox" name="delete_<?=$this->escapeHtmlAttr($attribute)?>" value="1" /> Delete?-->
                         </dd>
                         <?php
@@ -91,9 +91,9 @@ foreach($form->getElements() as $element) {
                 <div class="span6">
                     <strong>Add New Attribute</strong>
                     <dt><label for="new_attribute_label">Label</label></dt>
-                        <dd><input type="text" name="new_attribute_label" value="" /></dd>
+                        <dd><input type="text" name="new_attribute_label" value="<?=$this->escapeHTML(isset($_POST['new_attribute_label']) ? $_POST['new_attribute_label'] : '')?>" /></dd>
                     <dt><label for="new_attribute_value">Value</label></dt>
-                    <dd><input type="text" name="new_attribute_value" value="" /></dd>
+                    <dd><input type="text" name="new_attribute_value" value="<?=$this->escapeHTML(isset($_POST['new_attribute_value']) ? $_POST['new_attribute_value'] : '')?>" /></dd>
                 </div>
             </div>
         </div>
@@ -102,7 +102,22 @@ foreach($form->getElements() as $element) {
 </form>
 
 <script>
-    $(function () {
-        $('#productTabs a:first').tab('show');
-    })
+    $(function()
+    {
+        $('a[data-toggle="tab"]').on('shown', function () {
+            //save the latest tab; use cookies if you like 'em better:
+            localStorage.setItem('lastTab', $(this).attr('href'));
+        });
+
+        //go to the latest tab, if it exists:
+        var lastTab = localStorage.getItem('lastTab');
+        if (lastTab) {
+            $('a[href=' + lastTab + ']').tab('show');
+        }
+        else
+        {
+            // Set the first tab if cookie do not exist
+            $('a[data-toggle="tab"]:first').tab('show');
+        }
+    });
 </script>
