@@ -1,0 +1,29 @@
+<?php
+use \Zend\Mvc\Controller\Plugin\FlashMessenger;
+$flashMessenger = new FlashMessenger();
+
+$flashMessenger->setNamespace('success');
+if ($flashMessenger->hasMessages()) {
+    ?>
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <i class="icon-ok-sign"></i>
+        <?php foreach ($flashMessenger->getMessages() as $msg): ?>
+            <?php echo $msg ?>
+        <?php endforeach; ?>
+    </div>
+<?php
+}
+
+$flashMessenger->setNamespace('error');
+if ($flashMessenger->hasMessages()) {
+    ?>
+    <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <i class="icon-exclamation-sign"></i>
+        <?php foreach ($flashMessenger->getMessages() as $msg): ?>
+            <?php echo $msg ?>
+        <?php endforeach; ?>
+    </div>
+<?php
+}

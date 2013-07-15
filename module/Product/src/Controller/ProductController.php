@@ -121,8 +121,19 @@ class ProductController extends AbstractActionController
              * Save & redirect
              */
             $this->productMapper()->save($product);
+
+            $this->flashMessenger()
+                ->setNamespace('success')
+                ->addMessage('Saved Product');
+
             if(!$this->params()->fromPost('save_and_continue')) {
                 return $this->redirect()->toRoute('product_manage');
+            }
+        } else {
+            if($this->getRequest()->isPost()) {
+                $this->flashMessenger()
+                    ->setNamespace('error')
+                    ->addMessage('One of the fields is not valid. Product NOT saved.');
             }
         }
 
