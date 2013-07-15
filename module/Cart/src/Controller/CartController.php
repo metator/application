@@ -35,6 +35,9 @@ class CartController extends AbstractActionController
                     $cart->setQuantity($item_id, $value);
                 }
             }
+            $this->flashMessenger()
+                ->setNamespace('success')
+                ->addMessage('Saved Cart');
         }
 
         return array(
@@ -44,11 +47,16 @@ class CartController extends AbstractActionController
 
     function addAction()
     {
+        $this->flashMessenger()
+            ->setNamespace('success')
+            ->addMessage('Added Item To Cart');
+
         $id = $this->params('id');
         $price = $this->productMapper()->load($id)->getBasePrice();
 
         $this->cart()->add($id, $price);
-        $this->redirect()->toRoute('cart');
+
+        return $this->redirect()->toRoute('cart');
     }
 
 }
