@@ -122,7 +122,7 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $attribute_mapper = new AttributeDataMapper($this->db);
         $attribute_mapper->index();
 
-        $this->assertEquals(['red','blue'], $attribute_mapper->listValues('color'), 'should list new values');
+        $this->assertEquals(['blue','red'], $attribute_mapper->listValues('color'), 'should list new values');
     }
 
     function testShouldIndexMultipleValuesAtOnce()
@@ -141,7 +141,7 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         )));
         $attribute_mapper->index();
 
-        $this->assertEquals(['red','blue'], $attribute_mapper->listValues('color'), 'should index multiple values at once');
+        $this->assertEquals(['blue','red'], $attribute_mapper->listValues('color'), 'should index multiple values at once');
     }
 
     function testShouldNotDuplicateValuesOnReindex()
