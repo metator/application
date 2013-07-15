@@ -7,7 +7,7 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-return array(
+$config = array(
     'console' => Array(
         'router' => array(
             'routes' => array(
@@ -106,3 +106,8 @@ return array(
         'category'=>'layout/layout-2col-left.phtml',
     )
 );
+
+foreach(glob('./themes/*') as $theme_directory) {
+    $config['view_manager']['template_path_stack'][] = $theme_directory;
+}
+return $config;
