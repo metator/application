@@ -30,7 +30,7 @@ class ImportPerformanceTest extends PHPUnit_Framework_TestCase
         $this->db->query("delete from `product_categories`", \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
     }
 
-    function testShouldUseSingleQuery()
+    function testShouldUseBatchQuery()
     {
         $profiler = $this->db->getProfiler();
         $queryProfiles = $profiler->getQueryProfiles();
@@ -44,7 +44,7 @@ class ImportPerformanceTest extends PHPUnit_Framework_TestCase
         $queryProfiles = $profiler->getQueryProfiles();
         $afterCount = count($queryProfiles);
 
-        $this->assertLessThanOrEqual(10, $afterCount-$beforeCount, 'should use <=10 queries to import >=100 products');
+        $this->assertLessThanOrEqual(15, $afterCount-$beforeCount, 'should use <=15 queries to import >=100 products');
     }
 
     function testShouldUpdateCount()

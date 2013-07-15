@@ -205,6 +205,26 @@ class ImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(4, count($products), 'should not re-import previous imports (should cleanup import table when done');
     }
 
+    function testShouldNotChangeIDOfExistingSKUs()
+    {
+        $csv = "sku,name\n";
+        $csv.= "123,name";
+
+        $importer = new Importer($this->db);
+        $importer->importFromText($csv);
+
+        $products1 = $this->productDataMapper()->find();
+
+        $csv = "sku,name\n";
+        $csv.= "123,name-new";
+
+        $importer = new Importer($this->db);
+        $importer->importFromText($csv);
+
+        $products2 = $this->productDataMapper()->find();
+        $this->assertEquals($products1[0]->id(), $products2[0]->id(), 'should not change ID of existing products on re-import');
+    }
+
     function productExists($sku)
     {
         return $this->productDataMapper()->productExists($sku);
