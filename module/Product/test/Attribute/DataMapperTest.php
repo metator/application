@@ -122,7 +122,7 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $attribute_mapper = new AttributeDataMapper($this->db);
         $attribute_mapper->index();
 
-        $this->assertEquals(['blue','red'], $attribute_mapper->listValues('color'), 'should list new values');
+        $this->assertEquals(['red','blue'], $attribute_mapper->listValues('color'), 'should list new values');
     }
 
     function testShouldIndexMultipleValuesAtOnce()
@@ -141,7 +141,7 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         )));
         $attribute_mapper->index();
 
-        $this->assertEquals(['blue','red'], $attribute_mapper->listValues('color'), 'should index multiple values at once');
+        $this->assertEquals(['red','blue'], $attribute_mapper->listValues('color'), 'should index multiple values at once');
     }
 
     function testShouldNotDuplicateValuesOnReindex()
@@ -178,5 +178,24 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $attribute_mapper->index();
 
         $this->assertEquals(['red'], $attribute_mapper->listValues('color',['size'=>'medium']), 'should list colors of products that have size=medium');
+    }
+
+    function testShouldRemoveValuesOnReindex()
+    {
+        $product = new Product(array(
+            'sku'=>'111',
+            'attributes'=>['color'=>'red']
+        ));
+
+        $product_mapper = new ProductDataMapper($this->db);
+        $product_mapper->save($product);
+
+        $attribute_mapper = new AttributeDataMapper($this->db);
+        $attribute_mapper->index();
+
+        $product->setAttributeValue('color','blue');
+        $product_mapper->save($product);
+        $attribute_mapper->index();
+        $this->assertEquals(['blue'], $attribute_mapper->listValues('color'), 'should remove values on reindex');
     }
 }

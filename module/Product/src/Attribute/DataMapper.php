@@ -107,35 +107,20 @@ class DataMapper
 
     function listValues($attribute, $criteria=[])
     {
-        if(count($criteria)) {
-            $attribute = mysql_real_escape_string($attribute);
+        $attribute = mysql_real_escape_string($attribute);
 
-            $sql = "select distinct(value) from attributes_eav where attribute='$attribute' \n";
-            foreach($criteria as $filterAttribute => $filterValue) {
-                $filterAttribute = mysql_real_escape_string($filterAttribute);
-                $filterValue = mysql_real_escape_string($filterValue);
-                $sql .= "&& product_id IN (SELECT DISTINCT (product_id)
-                FROM attributes_eav
-                WHERE attribute =  '$filterAttribute' && value =  '$filterValue')";
-            }
-            $rowset = $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
-            $attributes = array();
-            while($attributes[] = $rowset->current()['value']) {}
-            array_pop($attributes);
-            return $attributes;
+        $sql = "select distinct(value) from attributes_eav where attribute='$attribute' \n";
+        foreach($criteria as $filterAttribute => $filterValue) {
+            $filterAttribute = mysql_real_escape_string($filterAttribute);
+            $filterValue = mysql_real_escape_string($filterValue);
+            $sql .= "&& product_id IN (SELECT DISTINCT (product_id)
+            FROM attributes_eav
+            WHERE attribute =  '$filterAttribute' && value =  '$filterValue')";
         }
-        $rowset = $this->attributeTable->select(array(
-            'name'=>$attribute
-        ));
-        $attribute_id = $rowset->toArray()[0]['id'];
-
-        $rowset = $this->attributeValuesTable->select(array(
-            'attribute_id'=>$attribute_id
-        ));
-        $all_attributes = array();
-        foreach($rowset->toArray() as $attribute) {
-            array_push($all_attributes, $attribute['name']);
-        }
-        return $all_attributes;
+        $rowset = $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        $attributes = array();
+        while($attributes[] = $rowset->current()['value']) {}
+        array_pop($attributes);
+        return $attributes;
     }
 }
