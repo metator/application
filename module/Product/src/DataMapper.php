@@ -125,6 +125,7 @@ class DataMapper
             if($category) {
                 $select->where("`id` IN (SELECT `product_id` FROM `product_categories` WHERE `category_id` = $category)");
             }
+            $this->doSelect($select);
             if($limit || $offset) {
                 $select->offset($offset)->limit($limit);
             }
@@ -134,6 +135,10 @@ class DataMapper
             $products[] = $this->doLoad($row);
         }
         return $products;
+    }
+
+    function doSelect($select)
+    {
     }
 
     function count($params = array())
@@ -162,8 +167,14 @@ class DataMapper
         if($category) {
             $sql .= " && `id` IN (SELECT `product_id` FROM `product_categories` WHERE `category_id` = $category)";
         }
+        $sql = $this->doCount($sql);
         $result = $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
         return current($result->toArray()[0]);
+    }
+
+    function doCount($sql)
+    {
+        return $sql;
     }
 
     function findBySKu($sku)
