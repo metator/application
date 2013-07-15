@@ -1,22 +1,46 @@
 <div class="well sidebar-nav">
 <?php
 echo '<ul class="nav nav-list">';
-foreach($attributes as $attribute) {
-    echo '<li><strong>'.$this->escapeHTML($attribute).'</strong></li>';
-    echo '<ul class="nav nav-list">';
 
-    $params = $_GET;
-    unset($params['page']);
-    unset($params[$attribute]);
-    echo '<li><a href="?' . http_build_query($params) . '">All</a></li>';
-
-    foreach($values[$attribute] as $value) {
-        $params = array($attribute=>$value) + $_GET;
-        unset($params['page']);
-        echo '<li><a href="?' . http_build_query($params) . '">'.$this->escapeHTML($value).'</a></li>';
+    /**
+     * Output the current selection
+     */
+    if($hasSelection) {
+        echo '<li><strong>Selection</strong><ul>';
+            foreach($attributes as $attribute) {
+                if(!isset($_GET[$attribute])) {
+                    continue;
+                }
+                echo '<li><strong>'.$attribute.'</strong><ul>';
+                    echo '<li>';
+                        echo $this->escapeHTML($_GET[$attribute]);
+                        $params = $_GET;
+                        unset($params['page']);
+                        unset($params[$attribute]);
+                        echo ' <a href="?' . http_build_query($params) . '"><i class="icon-remove-sign"></i></a>';
+                    echo '</li>';
+                echo '</ul></li>';
+            }
+        echo '</ul></li>';
     }
-    echo '</ul>';
-}
+
+    /**
+     * Output available items to select
+     */
+    foreach($attributes as $attribute) {
+        if(isset($_GET[$attribute])) {
+            continue;
+        }
+        echo '<li><strong>'.$this->escapeHTML($attribute).'</strong>';
+        echo '<ul class="nav nav-list">';
+
+        foreach($values[$attribute] as $value) {
+            $params = array($attribute=>$value) + $_GET;
+            unset($params['page']);
+            echo '<li><a href="?' . http_build_query($params) . '">'.$this->escapeHTML($value).'</a></li>';
+        }
+        echo '</li></ul>';
+    }
 echo '</ul>';
 ?>
 </div>

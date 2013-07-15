@@ -55,7 +55,8 @@ class Attributes extends AbstractHelper implements ServiceLocatorAwareInterface
 
         $sidebar = new ViewModel(array(
             'attributes'=> $attributes,
-            'values' => $values
+            'values' => $values,
+            'hasSelection' => count($criteria)
         ));
         $sidebar->setTemplate('product/product/attributes');
 
