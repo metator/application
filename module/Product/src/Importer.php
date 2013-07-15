@@ -37,6 +37,8 @@ class Importer
         /** Insert the products & update the product IDs in the categories table afterwards */
         $this->query("UPDATE product_import i, product p SET i.product_id = p.id WHERE i.sku = p.sku");
         $this->query("INSERT INTO `product` (`sku`, `active`, `name`, `base_price`, `attributes`) SELECT `sku`, `active`, `name`, `base_price`,`attributes` FROM `product_import` i WHERE i.product_id=0");
+        $this->query("UPDATE `product` p, `product_import` i SET p.name = i.name WHERE p.sku = i.sku");
+
         $this->query("UPDATE product_categories_import i, product p SET i.product_id = p.id WHERE i.product_sku = p.sku");
 
         /** Insert the new categories & update their category ID after */
