@@ -22,6 +22,7 @@ $config = array(
         'module_paths' => array(
             './module',
             './vendor',
+            './extensions',
             'Metator\Product'=>'./module/Product/',
             'Metator\Category'=>'./module/Category/',
             'Metator\Cart'=>'./module/Cart/',

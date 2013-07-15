@@ -37,7 +37,8 @@
             "module/Category/src/",
             "module/Cart/src/",
             "module/Image/src/",
-            "module/Order/src/"
+            "module/Order/src/",
+            "extensions/"
         ]
     }
 }
