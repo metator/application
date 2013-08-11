@@ -54,7 +54,7 @@ class DataMapper
         $select = $sql->select()
             ->from('category')
             ->join('category_structure', 'category.id = category_structure.category_id',array())
-            ->where(array('parent_id'=>$parent_id));
+            ->where(array('path'=>$parent_id));
 
         $string = $sql->getSqlStringForSqlObject($select);
         $result = $this->db->query($string, $adapter::QUERY_MODE_EXECUTE);
@@ -128,7 +128,7 @@ class DataMapper
             'name'=>$category['name']
         ));
         $category['id'] = $this->categoryTable->getLastInsertValue();
-        $this->insertParents($category);
+        $this->insertPaths($category);
         return $category['id'];
     }
 
@@ -140,11 +140,11 @@ class DataMapper
         $this->categoryStructureTable->delete(array(
             'category_id'=>$category['id']
         ));
-        $this->insertParents($category);
+        $this->insertPaths($category);
         return $category['id'];
     }
 
-    function insertParents($category)
+    function insertPaths($category)
     {
         if(!isset($category['parents'])) {
             return;
@@ -152,7 +152,7 @@ class DataMapper
         foreach($category['parents'] as $parent) {
             $this->categoryStructureTable->insert(array(
                 'category_id'=>$category['id'],
-                'parent_id'=>$parent
+                'path'=>$parent
             ));
         }
     }
@@ -164,7 +164,7 @@ class DataMapper
             'category_id'=>$id
         ));
         while($row = $rowset->current()) {
-            $parents[] = $row['parent_id'];
+            $parents[] = $row['path'];
         }
         return $parents;
     }
