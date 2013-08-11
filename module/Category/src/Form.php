@@ -17,9 +17,9 @@ class Form extends \Zend_Form
             'required'=>true
         ));
 
-        $this->addElement('multiCheckbox','parents',array(
+        $this->addElement('multiCheckbox','paths',array(
             'label'=>'Parents',
-            'multiOptions'=>$mapper ? $mapper->listForForm() : array(),
+            'multiOptions'=>$mapper ? $mapper->listForCategoryForm() : array(),
             'separator'=>''
         ));
     }

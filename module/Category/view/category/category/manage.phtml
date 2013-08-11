@@ -21,7 +21,7 @@
         <tr>
             <td><?=$this->escapeHTML($category['id'])?></td>
             <td><?=$this->escapeHTML($category['name'])?></td>
-            <td><?=$this->escapeHTML(implode(',',$category['parents']))?></td>
+            <td><?=$this->escapeHTML(implode(',',$category['paths']))?></td>
         </tr>
         <?php
     }

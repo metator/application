@@ -5,7 +5,7 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-namespace Metator\Category;
+namespace Metator\Product;
 
 class FormTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,37 +20,32 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->db->getDriver()->getConnection()->rollback();
     }
 
-    function testShouldSetNameToCategory()
+    function testShouldListPossibleCategories()
     {
-        $form = new Form(null);
-
-        $this->assertTrue($form->isValid([
-            'name'=>'wheels'
-        ]));
-
-        $category = $form->getValues();
-        $this->assertEquals('wheels',$category['name'],'should copy name from form to category');
-    }
-
-    function testShouldListPossibleParents()
-    {
-        $mapper = new DataMapper($this->db);
+        $mapper = new \Metator\Category\DataMapper($this->db);
         $parent1_id = $mapper->save(array(
             'name'=>'Parent 1'
         ));
 
-        $mapper = new DataMapper($this->db);
+        $mapper = new \Metator\Category\DataMapper($this->db);
         $parent2_id = $mapper->save(array(
-            'name'=>'Parent 1a',
+            'name'=>'Parent 2',
             'paths'=>array($parent1_id)
+        ));
+
+        $mapper = new \Metator\Category\DataMapper($this->db);
+        $parent3_id = $mapper->save(array(
+            'name'=>'Parent 3',
+            'paths'=>array($parent1_id.'/'.$parent2_id)
         ));
 
         $form = new Form($mapper);
 
         $expected = array(
             $parent1_id=>'Parent 1',
-            $parent1_id.'/'.$parent2_id=>'Parent 1a',
+            $parent2_id=>'-Parent 2',
+            $parent3_id=>'--Parent 3',
         );
-        $this->assertEquals($expected, $form->getElement('paths')->getMultiOptions());
+        $this->assertEquals($expected, $form->getElement('categories')->getMultiOptions());
     }
 }

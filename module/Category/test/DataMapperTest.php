@@ -56,10 +56,28 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         ));
         $wheel_id = $mapper->save(array(
             'name'=>'wheel',
-            'parents'=>array($car_id,$truck_id)
+            'paths'=>array($car_id,$truck_id)
         ));
         $category = $mapper->load($wheel_id);
-        $this->assertEquals(array($car_id,$truck_id), $category['parents'], 'should have parents');
+        $this->assertEquals(array($car_id,$truck_id), $category['paths'], 'should have paths');
+    }
+
+    function testShouldHaveNestedPath()
+    {
+        $mapper = new DataMapper($this->db);
+        $foo_id = $mapper->save(array(
+            'name'=>'foo'
+        ));
+        $bar_id = $mapper->save(array(
+            'name'=>'bar',
+            'paths'=>array($foo_id)
+        ));
+        $baz_id = $mapper->save(array(
+            'name'=>'baz',
+            'paths'=>array($foo_id.'/'.$bar_id)
+        ));
+        $category = $mapper->load($baz_id);
+        $this->assertEquals(array($foo_id.'/'.$bar_id), $category['paths'], 'should have nested path');
     }
 
     function testShouldUpdateParents()
@@ -73,15 +91,15 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         ));
         $wheel_id = $mapper->save(array(
             'name'=>'wheel',
-            'parents'=>array($car_id,$truck_id)
+            'paths'=>array($car_id,$truck_id)
         ));
         $mapper->save(array(
             'id'=>$wheel_id,
             'name'=>'wheel',
-            'parents'=>array($car_id)
+            'paths'=>array($car_id)
         ));
         $category = $mapper->load($wheel_id);
-        $this->assertEquals(array($car_id), $category['parents'], 'should update parents');
+        $this->assertEquals(array($car_id), $category['paths'], 'should update paths');
     }
 
     function testShouldRemoveParents()
@@ -92,15 +110,15 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         ));
         $wheel_id = $mapper->save(array(
             'name'=>'wheel',
-            'parents'=>array($truck_id)
+            'paths'=>array($truck_id)
         ));
         $mapper->save(array(
             'id'=>$wheel_id,
             'name'=>'wheel',
-            'parents'=>array()
+            'paths'=>array()
         ));
         $category = $mapper->load($wheel_id);
-        $this->assertEquals(array(), $category['parents'], 'should remove parents');
+        $this->assertEquals(array(), $category['paths'], 'should remove paths');
     }
 
     function testShouldFindAll()
@@ -114,7 +132,7 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         ));
         $wheel_id = $mapper->save(array(
             'name'=>'wheel',
-            'parents'=>array($car_id,$truck_id)
+            'paths'=>array($car_id,$truck_id)
         ));
         $categories = $mapper->findAll();
 
@@ -122,17 +140,17 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
             array(
                 'id'=>$car_id,
                 'name'=>'car',
-                'parents'=>array()
+                'paths'=>array()
             ),
             array(
                 'id'=>$truck_id,
                 'name'=>'truck',
-                'parents'=>array()
+                'paths'=>array()
             ),
             array(
                 'id'=>$wheel_id,
                 'name'=>'wheel',
-                'parents'=>array($car_id,$truck_id)
+                'paths'=>array($car_id,$truck_id)
             ),
 
         );
@@ -148,7 +166,7 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         ));
         $truck_id = $mapper->save(array(
             'name'=>'truck',
-            'parents'=>array($vehicle_id)
+            'paths'=>array($vehicle_id)
         ));
 
         $categories = $mapper->findChildren($vehicle_id);
@@ -159,90 +177,41 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
     function testShouldFindStructured()
     {
         $mapper = new DataMapper($this->db);
-        $car_id = $mapper->save(array(
-            'name'=>'car'
+        $foo_id = $mapper->save(array(
+            'name'=>'foo'
         ));
-        $truck_id = $mapper->save(array(
-            'name'=>'truck'
+        $bar_id = $mapper->save(array(
+            'name'=>'bar',
+            'paths'=>array($foo_id)
         ));
-        $wheel_id = $mapper->save(array(
-            'name'=>'wheel',
-            'parents'=>array($car_id,$truck_id)
-        ));
-        $categories = $mapper->findStructuredAll();
-
-        $expected = array(
-            array(
-                'id'=>$car_id,
-                'name'=>'car',
-                'parents'=>array(),
-                'children'=>array(
-                    array(
-                        'id'=>$wheel_id,
-                        'name'=>'wheel',
-                        'parents'=>array($car_id,$truck_id),
-                        'children'=>array()
-                    ),
-                )
-            ),
-            array(
-                'id'=>$truck_id,
-                'name'=>'truck',
-                'parents'=>array(),
-                'children'=>array(
-                    array(
-                        'id'=>$wheel_id,
-                        'name'=>'wheel',
-                        'parents'=>array($car_id,$truck_id),
-                        'children'=>array()
-                    ),
-                )
-            ),
-
-        );
-
-        $this->assertEquals($expected, $categories);
-    }
-
-    function testShouldFindStructured_2Levels()
-    {
-        $mapper = new DataMapper($this->db);
-        $vehicle_id = $mapper->save(array(
-            'name'=>'vehicle'
-        ));
-        $truck_id = $mapper->save(array(
-            'name'=>'truck',
-            'parents'=>array($vehicle_id)
-        ));
-        $wheel_id = $mapper->save(array(
-            'name'=>'wheel',
-            'parents'=>array($truck_id)
+        $baz_id = $mapper->save(array(
+            'name'=>'baz',
+            'paths'=>array($foo_id.'/'.$bar_id)
         ));
         $categories = $mapper->findStructuredAll();
 
         $expected = array(
             array(
-                'id'=>$vehicle_id,
-                'name'=>'vehicle',
-                'parents'=>array(),
+                'id'=>$foo_id,
+                'name'=>'foo',
+                'paths'=>array(),
                 'children'=>array(
                     array(
-                        'id'=>$truck_id,
-                        'name'=>'truck',
-                        'parents'=>array($vehicle_id),
+                        'id'=>$bar_id,
+                        'name'=>'bar',
+                        'paths'=>array($foo_id),
                         'children'=>array(
                             array(
-                                'id'=>$wheel_id,
-                                'name'=>'wheel',
-                                'parents'=>array($truck_id),
+                                'id'=>$baz_id,
+                                'name'=>'baz',
+                                'paths'=>array($foo_id.'/'.$bar_id),
                                 'children'=>array()
                             ),
                         )
-                    )
+                    ),
                 )
-            ),
+            )
         );
-
         $this->assertEquals($expected, $categories);
     }
 }

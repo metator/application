@@ -21,11 +21,30 @@ class DataMapper
         $this->categoryStructureTable = new TableGateway('category_structure', $this->db);
     }
 
-    function listForForm()
+    function listForProductForm()
     {
         $categories = array();
         foreach($this->findAll() as $category) {
-            $categories[$category['id']] = $category['name'];
+            if($category['paths']) {
+                $prefix = str_repeat('-', count(explode('/',$category['paths'][0])));
+            } else {
+                $prefix = '';
+            }
+            $categories[$category['id']] = $prefix . $category['name'];
+        }
+        return $categories;
+    }
+
+    function listForCategoryForm()
+    {
+        $categories = array();
+        foreach($this->findAll() as $category) {
+            if(!$category['paths']) {
+                $path = $category['id'];
+            } else {
+                $path = $category['paths'][0] . '/' . $category['id'];
+            }
+            $categories[$path] = $category['name'];
         }
         return $categories;
     }
@@ -35,7 +54,7 @@ class DataMapper
         $categories = $this->findAll();
         $top_level = array();
         foreach($categories as $category) {
-            if(!$parent && !count($category['parents'])) {
+            if(!$parent && !count($category['paths'])) {
                 $top_level[] = $category;
             }
         }
@@ -46,7 +65,7 @@ class DataMapper
         return $top_level;
     }
 
-    function findChildren($parent_id, $recursion=false)
+    function findChildren($path, $recursion=false)
     {
         $adapter = $this->db;
 
@@ -54,19 +73,19 @@ class DataMapper
         $select = $sql->select()
             ->from('category')
             ->join('category_structure', 'category.id = category_structure.category_id',array())
-            ->where(array('path'=>$parent_id));
+            ->where(array('path'=>$path));
 
         $string = $sql->getSqlStringForSqlObject($select);
         $result = $this->db->query($string, $adapter::QUERY_MODE_EXECUTE);
         $result = (array)$result->toArray();
 
         foreach($result as $key=>$row) {
-            $result[$key]['parents'] = $this->loadParents($row['id']);
+            $result[$key]['paths'] = $this->loadParents($row['id']);
         }
 
         if($recursion) {
             foreach($result as $key=>$category) {
-                $result[$key]['children'] = $this->findChildren($category['id'],true);
+                $result[$key]['children'] = $this->findChildren($path.'/'.$category['id'],true);
             }
         }
 
@@ -118,7 +137,7 @@ class DataMapper
     {
         $rowset = $this->categoryTable->select(array('id'=>$id));
         $category = (array)$rowset->current();
-        $category['parents'] = $this->loadParents($id);
+        $category['paths'] = $this->loadParents($id);
         return $category;
     }
 
@@ -146,10 +165,10 @@ class DataMapper
 
     function insertPaths($category)
     {
-        if(!isset($category['parents'])) {
+        if(!isset($category['paths'])) {
             return;
         }
-        foreach($category['parents'] as $parent) {
+        foreach($category['paths'] as $parent) {
             $this->categoryStructureTable->insert(array(
                 'category_id'=>$category['id'],
                 'path'=>$parent

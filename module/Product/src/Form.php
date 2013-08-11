@@ -37,7 +37,7 @@ class Form extends \Zend_Form
 
         $this->addElement('multiCheckbox','categories',array(
             'label'=>'Categories',
-            'multiOptions'=>$categoryMapper ? $categoryMapper->listForForm() : array(),
+            'multiOptions'=>$categoryMapper ? $categoryMapper->listForProductForm() : array(),
             'separator'=>''
         ));
 
