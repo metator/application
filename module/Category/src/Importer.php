@@ -52,7 +52,7 @@ class Importer
 
             fputcsv($this->categoriesHandle, array(
                 'id' => isset($row['id']) ? $row['id'] : 0,
-                'path'=>$row['name'],
+                'path'=>isset($row['path']) ? $row['path'] : '',
                 'name'=>$row['name'],
             ));
         }
