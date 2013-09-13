@@ -94,7 +94,7 @@ class DataMapper
 
     function findAll()
     {
-        $rows = $this->categoryTable->select();
+        $rows = $this->categoryTable->select(['active'=>1]);
         $categories = array();
         while($row = $rows->current()) {
             $categories[] = $this->load($row['id']);
@@ -144,7 +144,8 @@ class DataMapper
     function insert($category)
     {
         $this->categoryTable->insert(array(
-            'name'=>$category['name']
+            'name'=>$category['name'],
+            'active'=>isset($category['active']) ? $category['active'] : 1,
         ));
         $category['id'] = $this->categoryTable->getLastInsertValue();
         $this->insertPaths($category);
@@ -186,5 +187,10 @@ class DataMapper
             $parents[] = $row['path'];
         }
         return $parents;
+    }
+
+    function deactivate($id)
+    {
+        $this->categoryTable->update(['active'=>0], ['id'=>$id]);
     }
 }

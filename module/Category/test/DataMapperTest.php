@@ -140,22 +140,37 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
             array(
                 'id'=>$car_id,
                 'name'=>'car',
-                'paths'=>array()
+                'paths'=>array(),
+                'active'=>1,
             ),
             array(
                 'id'=>$truck_id,
                 'name'=>'truck',
-                'paths'=>array()
+                'paths'=>array(),
+                'active'=>1,
             ),
             array(
                 'id'=>$wheel_id,
                 'name'=>'wheel',
-                'paths'=>array($car_id,$truck_id)
+                'paths'=>array($car_id,$truck_id),
+                'active'=>1,
             ),
 
         );
 
         $this->assertEquals($expected, $categories);
+    }
+
+    function testShouldDeactivate()
+    {
+        $mapper = new DataMapper($this->db);
+        $id = $mapper->save(array(
+            'name'=>'car',
+        ));
+        $mapper->deactivate($id);
+
+        $categories = $mapper->findAll();
+        $this->assertEquals(array(), $categories, 'should deactivate');
     }
 
     function testShouldFindChildren()
@@ -195,17 +210,20 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
                 'id'=>$foo_id,
                 'name'=>'foo',
                 'paths'=>array(),
+                'active'=>1,
                 'children'=>array(
                     array(
                         'id'=>$bar_id,
                         'name'=>'bar',
                         'paths'=>array($foo_id),
+                        'active'=>1,
                         'children'=>array(
                             array(
                                 'id'=>$baz_id,
                                 'name'=>'baz',
                                 'paths'=>array($foo_id.'/'.$bar_id),
-                                'children'=>array()
+                                'active'=>1,
+                                'children'=>array(),
                             ),
                         )
                     ),

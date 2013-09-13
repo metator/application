@@ -10,6 +10,7 @@
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
+            <th></th>
             <th>ID</th>
             <th>Name</th>
             <th>Parents</th>
@@ -19,6 +20,10 @@
     foreach($this->categories as $category) {
         ?>
         <tr>
+            <td>
+                <a href="<?=$this->url('category_edit',array('id'=>$category['id']))?>" class="btn"><i class="icon-pencil"></i> Edit</a>
+                <a href="<?=$this->url('category_deactivate',array('id'=>$category['id']))?>" class="btn btn-danger"><i class="icon-remove-sign"></i> Deactivate</a>
+            </td>
             <td><?=$this->escapeHTML($category['id'])?></td>
             <td><?=$this->escapeHTML($category['name'])?></td>
             <td><?=$this->escapeHTML(implode(',',$category['paths']))?></td>

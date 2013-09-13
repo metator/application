@@ -45,6 +45,28 @@ return array(
                 ),
             ),
 
+            'category_edit' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/category/edit/:id',
+                    'defaults' => array(
+                        'controller' => 'Category\Controller\Category',
+                        'action'     => 'edit',
+                    ),
+                ),
+            ),
+
+            'category_deactivate' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/category/deactivate/:id',
+                    'defaults' => array(
+                        'controller' => 'Category\Controller\Category',
+                        'action'     => 'deactivate',
+                    ),
+                ),
+            ),
+
         ),
     ),
     'controllers' => array(

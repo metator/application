@@ -90,4 +90,11 @@ class CategoryController extends AbstractActionController
         );
     }
 
+    function deactivateAction()
+    {
+        $id = $this->params('id');
+        $this->categoryMapper()->deactivate($id);
+        return $this->redirect()->toRoute('category_manage');
+    }
+
 }
