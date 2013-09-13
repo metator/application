@@ -8,7 +8,6 @@ $config = array(
         'Metator\Cart',
         'Metator\Image',
         'Metator\Order',
-        'PhinxModule',
         'ZfcBase',
         'ZfcUser',
     ),
