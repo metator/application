@@ -46,7 +46,7 @@ class AbstractActionController extends ZendController
         return $this->orderMapper;
     }
 
-    /** @return \Application\CategoryMapper */
+    /** @return \Metator\Category\DataMapper */
     function categoryMapper()
     {
         if (!$this->categoryMapper) {

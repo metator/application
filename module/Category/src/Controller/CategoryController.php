@@ -80,6 +80,12 @@ class CategoryController extends AbstractActionController
     {
         $form = new Form($this->categoryMapper());
 
+        $id = $this->params()->fromRoute('id');
+        if($id) {
+            $category = $this->categoryMapper()->load($id);
+            $form->getElement('name')->setValue($category['name']);
+        }
+
         if($this->getRequest()->isPost() && $form->isValid($this->params()->fromPost())) {
             $this->categoryMapper()->save($form->getValues());
             return $this->redirect()->toRoute('category_manage');
