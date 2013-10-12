@@ -125,6 +125,9 @@ class Product
 
     function setCategories($categories)
     {
+        if(is_null($categories)) {
+            $categories = array();
+        }
         $this->categories = $categories;
     }
 

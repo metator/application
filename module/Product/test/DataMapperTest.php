@@ -376,6 +376,17 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(), $product->getCategories(), 'should default to empty array of categories');
     }
 
+    function testShouldConvertNullToEmptyCategories()
+    {
+        $product_mapper = new DataMapper($this->db);
+
+        $product = new Product(array('sku'=>'foo2'));
+        $product->setCategories(null);
+        $product_mapper->save($product);
+        $product = $product_mapper->load($product->id());
+        $this->assertEquals(array(), $product->getCategories(), 'should convert NULL to empty categories');
+    }
+
     function testShouldFindByCategory()
     {
         $product_mapper = new DataMapper($this->db);
