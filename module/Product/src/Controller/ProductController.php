@@ -22,6 +22,16 @@ class ProductController extends AbstractActionController
         return array('product'=>$product);
     }
 
+    function exportAction()
+    {
+        $exporter = $this->productExporter();
+
+        header('Content-Disposition: attachment; filename="export.csv"');
+        header("Content-Type: application/download");
+        echo $exporter->exportToText();
+        exit;
+    }
+
     function manageAction()
     {
         $page = $this->params()->fromQuery('page',1);

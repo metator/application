@@ -64,6 +64,17 @@ return array(
                 ),
             ),
 
+            'product_export' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/product/export',
+                    'defaults' => array(
+                        'controller' => 'Product\Controller\Product',
+                        'action'     => 'export',
+                    ),
+                ),
+            ),
+
         ),
     ),
 
