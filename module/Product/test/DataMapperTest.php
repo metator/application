@@ -366,6 +366,16 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(1,2), $product->getCategories(), 'should update product categories');
     }
 
+    function testShouldDefaultToEmptyArrayOfCategories()
+    {
+        $product_mapper = new DataMapper($this->db);
+
+        $product = new Product(array('sku'=>'foo2'));
+        $product_mapper->save($product);
+        $product = $product_mapper->load($product->id());
+        $this->assertEquals(array(), $product->getCategories(), 'should default to empty array of categories');
+    }
+
     function testShouldFindByCategory()
     {
         $product_mapper = new DataMapper($this->db);
