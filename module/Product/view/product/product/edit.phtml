@@ -62,10 +62,11 @@ foreach($form->getElements() as $element) {
             <ul>
             <?php
             foreach($product->getImageHashes() as $image_hash) {
+                $isDefault = $image_hash == $product->getDefaultImageHash() ? 'checked="checked"':'';
                 ?>
                 <li>
                     <a href="/image/<?=$image_hash?>"><img src="/image/150x150/<?=$image_hash?>" /></a>
-                    <input type="radio" name="default_image" value="<?=$image_hash?>" /> Is Default?
+                    <input type="radio" name="default_image" value="<?=$image_hash?>" <?=$isDefault?> /> Is Default?
                 </li>
                 <?php
             }
