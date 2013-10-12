@@ -147,6 +147,6 @@ class Importer
 
     function query($sql)
     {
-        $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        return $this->db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
     }
 }
